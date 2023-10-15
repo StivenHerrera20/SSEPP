@@ -10,8 +10,8 @@ const Router = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/parametrizacion" element={<IndexParametrizacion />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Index />} />
+          <Route index element={<Login />} />
+          <Route path="/inicio" element={<Index />} />
         </Routes>
       </BrowserRouter>
     </>

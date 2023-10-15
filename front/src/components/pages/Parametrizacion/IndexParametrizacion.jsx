@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import Sector from "./Sector";
 import Entidad from "./Entidad";
 import DocumentosAdopcion from "./DocumentosAdopcion";
