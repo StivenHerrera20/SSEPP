@@ -23,11 +23,11 @@ const IndexParametrizacion = () => {
     <>
       <div id="wrapper">
         <ul
-          className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+          className="navbar-nav bg-primary sidebar sidebar-dark accordion"
           id="accordionSidebar"
         >
           <a
-            className="sidebar-brand d-flex align-items-center justify-content-center"
+            className="sidebar-brand d-flex align-items-center justify-content-center "
             href="index.html"
           >
             <div className="sidebar-brand-icon rotate-n-15">logo</div>
@@ -51,7 +51,7 @@ const IndexParametrizacion = () => {
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -77,7 +77,7 @@ const IndexParametrizacion = () => {
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -90,7 +90,7 @@ const IndexParametrizacion = () => {
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -102,8 +102,14 @@ const IndexParametrizacion = () => {
             </a>
           </li>
           <li className="nav-item">
-            <a
-              className="nav-link"
+            <select class="nav-link " aria-label="Default select example">
+              <option value="1">Enfoque Nivel 1</option>
+              <option value="2">Enfoque Nivel 2</option>
+              <option value="2">Enfoque Nivel 3</option>
+              <option value="2">Enfoque Nivel 4</option>
+            </select>
+            {/* <a
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -112,11 +118,11 @@ const IndexParametrizacion = () => {
             >
               <i className="fas fa-fw fa-tachometer-alt"></i>
               <span>Enfoque</span>
-            </a>
+            </a> */}
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -129,7 +135,7 @@ const IndexParametrizacion = () => {
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -142,7 +148,7 @@ const IndexParametrizacion = () => {
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -155,7 +161,7 @@ const IndexParametrizacion = () => {
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -168,7 +174,7 @@ const IndexParametrizacion = () => {
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -181,7 +187,7 @@ const IndexParametrizacion = () => {
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -194,7 +200,7 @@ const IndexParametrizacion = () => {
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -207,7 +213,7 @@ const IndexParametrizacion = () => {
           </li>
           <li className="nav-item">
             <a
-              className="nav-link"
+              className="nav-link "
               href=""
               onClick={(e) => {
                 e.preventDefault();
@@ -231,7 +237,7 @@ const IndexParametrizacion = () => {
 
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item dropdown no-arrow">
-                  <a href="#" className="btn btn-primary btn-icon-split">
+                  <a href="#" className="btn btn-icon-split btn-primary">
                     <span className="icon text-white-50">
                       <i className="fa fa-user"></i>
                     </span>

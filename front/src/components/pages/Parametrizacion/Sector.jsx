@@ -70,34 +70,42 @@ const Sector = () => {
             <Modal.Body>
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">
-                  Email address
+                  Nombre <b className="text-danger">*</b>
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   className="form-control"
-                  id="exampleInputEmail1"
+                  id="nombreSector"
                   aria-describedby="emailHelp"
                 />
-                <div id="emailHelp" className="form-text">
-                  We'll never share your email with anyone else.
-                </div>
               </div>
               <div className="mb-3">
                 <label for="exampleInputPassword1" className="form-label">
-                  Password
+                  Descripción
                 </label>
-                <input
-                  type="password"
+                <textarea
                   className="form-control"
-                  id="exampleInputPassword1"
-                />
+                  name=""
+                  id="descripcionSector"
+                  rows="5"
+                  style={{ resize: "none" }}
+                ></textarea>
+              </div>
+              <div className="mb-3">
+                <label for="" className="form-label">
+                  Estado
+                </label>
+                <select class="form-select" aria-label="Default select example">
+                  <option value="1">Activo</option>
+                  <option value="2">Inactivo</option>
+                </select>
               </div>
             </Modal.Body>
             <Modal.Footer>
               <Button type="submit" variant="primary" onClick={handleClose}>
                 Guardar
               </Button>
-              <Button variant="secondary" onClick={handleClose}>
+              <Button variant="danger" onClick={handleClose}>
                 Cancelar
               </Button>
             </Modal.Footer>
