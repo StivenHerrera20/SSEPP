@@ -24,12 +24,15 @@ const Router = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          {/* 
+          {/* <Route path="/login" element={<Login />} /> */}
+
           <Route index element={<Login />} />
-          <Route path="/inicio" element={<Index />} /> */}
+          <Route path="/inicio" element={<Index />} />
+          <Route path="/parametrizacion" element={<IndexParametrizacion />} />
         </Routes>
-        <div id="wrapper">
+
+        {/* Esta es la forma de prueba (Que pinte la url de cada componente) */}
+        {/* <div id="wrapper">
           <OpcionesNavegacion></OpcionesNavegacion>
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
@@ -98,7 +101,7 @@ const Router = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </BrowserRouter>
     </>
   );

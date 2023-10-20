@@ -44,7 +44,7 @@ const IndicadorPlanDesarrollo = () => {
                     organizaciones comunales, sociales y comunitarias
                   </td>
                   <td>Indicadores de producto plan de desarrollo distrital</td>
-                  <td>...mejor para todos</td>
+                  <td>... mejor para todos</td>
                   <td>ACTIVO</td>
                   <td className="text-center">
                     {" "}
