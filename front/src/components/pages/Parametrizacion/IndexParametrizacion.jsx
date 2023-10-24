@@ -38,7 +38,6 @@ const IndexParametrizacion = () => {
 
           <div
             style={{
-              width: "400px",
               height: "670px",
               overflow: "auto",
             }}
