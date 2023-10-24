@@ -38,7 +38,8 @@ const IndexParametrizacion = () => {
 
           <div
             style={{
-              height: "1rem",
+              scrollbarWidth: "none",
+              height: "500px",
               overflow: "auto",
             }}
           >
