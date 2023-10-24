@@ -85,25 +85,6 @@ const Index = () => {
                     </h3>
                   </div>
                 </a>
-
-                <a
-                  className="col-xl-4 col-md-6 mb-4 optionsCard"
-                  style={{ textDecoration: "none" }}
-                >
-                  <div className="card border-left-danger shadow h-100 py-2">
-                    <div className="card-body">
-                      <div className="row no-gutters align-items-center">
-                        <div className="col-auto text-center m-auto">
-                          <img src={portaPapeles} alt="" />
-                        </div>
-                      </div>
-                    </div>
-                    <h3 className="text-center text-secondary">
-                      Plan de acción
-                    </h3>
-                  </div>
-                </a>
-
                 <a
                   className="col-xl-4 col-md-6 mb-4 optionsCard"
                   style={{ textDecoration: "none" }}
@@ -119,6 +100,23 @@ const Index = () => {
                     </div>
                     <h3 className="text-center text-secondary">
                       Politica pública
+                    </h3>
+                  </div>
+                </a>
+                <a
+                  className="col-xl-4 col-md-6 mb-4 optionsCard"
+                  style={{ textDecoration: "none" }}
+                >
+                  <div className="card border-left-danger shadow h-100 py-2">
+                    <div className="card-body">
+                      <div className="row no-gutters align-items-center">
+                        <div className="col-auto text-center m-auto">
+                          <img src={portaPapeles} alt="" />
+                        </div>
+                      </div>
+                    </div>
+                    <h3 className="text-center text-secondary">
+                      Plan de acción
                     </h3>
                   </div>
                 </a>
