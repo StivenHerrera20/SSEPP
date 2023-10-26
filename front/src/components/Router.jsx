@@ -19,6 +19,7 @@ import NivelTerritorializacion from "./pages/Parametrizacion/NivelTerritorializa
 import PlanDesarrollo from "./pages/Parametrizacion/PlanDesarrollo";
 import IndicadorPlanDesarrollo from "./pages/Parametrizacion/IndicadorPlanDesarrollo";
 import Parametros from "./pages/Parametrizacion/Parametros";
+import IndexPoliticaPublica from "./pages/PoliticaPublica/IndexPoliticaPublica";
 const Router = () => {
   return (
     <>
@@ -28,7 +29,14 @@ const Router = () => {
 
           <Route index element={<Login />} />
           <Route path="/inicio" element={<Index />} />
-          <Route path="/parametrizacion" element={<IndexParametrizacion />} />
+          <Route
+            path="/inicio/parametrizacion"
+            element={<IndexParametrizacion />}
+          />
+          <Route
+            path="/inicio/politicasPublicas"
+            element={<IndexPoliticaPublica />}
+          />
         </Routes>
 
         {/* Esta es la forma de prueba (Que pinte la url de cada componente) */}

@@ -14,6 +14,9 @@ import NivelTerritorializacion from "./NivelTerritorializacion";
 import PlanDesarrollo from "./PlanDesarrollo";
 import IndicadorPlanDesarrollo from "./IndicadorPlanDesarrollo";
 import Parametros from "./Parametros";
+import EnfoqueDos from "./EnfoqueDos";
+import EnfoqueTres from "./EnfoqueTres";
+import EnfoqueCuatro from "./EnfoqueCuatro";
 
 const IndexParametrizacion = () => {
   const [control, setControl] = useState(0);
@@ -29,7 +32,7 @@ const IndexParametrizacion = () => {
         >
           <a
             className="sidebar-brand d-flex align-items-center justify-content-center "
-            href="index.html"
+            href="/inicio"
           >
             <div className="sidebar-brand-icon rotate-n-15">logo</div>
             <div className="sidebar-brand-text mx-3">SSEPP</div>
@@ -41,6 +44,7 @@ const IndexParametrizacion = () => {
             style={{
               scrollbarWidth: "none",
               overflow: "auto",
+              overflowX: "hidden",
             }}
           >
             <li className="nav-item">
@@ -116,6 +120,12 @@ const IndexParametrizacion = () => {
                 data-bs-target="#collapseExample"
                 aria-expanded="false"
                 aria-controls="collapseExample"
+                onClick={(e) => {
+                  e.preventDefault();
+                  control == 6 || control == 7 || control == 8 || control == 9
+                    ? setControl(0)
+                    : null;
+                }}
               >
                 <span>Enfoque</span>
               </button>
@@ -128,57 +138,46 @@ const IndexParametrizacion = () => {
                   href=""
                   onClick={(e) => {
                     e.preventDefault();
-                    control == 5 ? setControl(0) : setControl(5);
+                    control == 6 ? setControl(0) : setControl(6);
                   }}
                 >
-                  <i className="fas fa-fw fa-tachometer-alt"></i>
-                  <span>Nivel 1</span>
+                  <i className="bi bi-dash "></i>
+                  <span className="text-center">Nivel 1</span>
                 </a>
                 <a
                   className="nav-link w-100"
                   href=""
                   onClick={(e) => {
                     e.preventDefault();
-                    control == 5 ? setControl(0) : setControl(5);
+                    control == 7 ? setControl(0) : setControl(7);
                   }}
                 >
-                  <i className="fas fa-fw fa-tachometer-alt"></i>
-                  <span>Nivel 2</span>
+                  <i className="bi bi-dash "></i>
+                  <span className="text-center">Nivel 2</span>
                 </a>
                 <a
                   className="nav-link w-100"
                   href=""
                   onClick={(e) => {
                     e.preventDefault();
-                    control == 5 ? setControl(0) : setControl(5);
+                    control == 8 ? setControl(0) : setControl(8);
                   }}
                 >
-                  <i className="fas fa-fw fa-tachometer-alt"></i>
-                  <span>Nivel 3</span>
+                  <i className="bi bi-dash "></i>
+                  <span className="text-center">Nivel 3</span>
                 </a>
                 <a
                   className="nav-link w-100"
                   href=""
                   onClick={(e) => {
                     e.preventDefault();
-                    control == 5 ? setControl(0) : setControl(5);
+                    control == 9 ? setControl(0) : setControl(9);
                   }}
                 >
-                  <i className="fas fa-fw fa-tachometer-alt"></i>
-                  <span>Nivel 4</span>
+                  <i className="bi bi-dash "></i>
+                  <span className="text-center">Nivel 4</span>
                 </a>
               </div>
-              {/* <a
-              className="nav-link "
-              href=""
-              onClick={(e) => {
-                e.preventDefault();
-                control == 6 ? setControl(0) : setControl(6);
-              }}
-            >
-              <i className="fas fa-fw fa-tachometer-alt"></i>
-              <span>Enfoque</span>
-            </a> */}
             </li>
             <li className="nav-item">
               <a
@@ -186,7 +185,7 @@ const IndexParametrizacion = () => {
                 href=""
                 onClick={(e) => {
                   e.preventDefault();
-                  control == 7 ? setControl(0) : setControl(7);
+                  control == 10 ? setControl(0) : setControl(10);
                 }}
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -199,7 +198,7 @@ const IndexParametrizacion = () => {
                 href=""
                 onClick={(e) => {
                   e.preventDefault();
-                  control == 8 ? setControl(0) : setControl(8);
+                  control == 11 ? setControl(0) : setControl(11);
                 }}
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -212,7 +211,7 @@ const IndexParametrizacion = () => {
                 href=""
                 onClick={(e) => {
                   e.preventDefault();
-                  control == 9 ? setControl(0) : setControl(9);
+                  control == 12 ? setControl(0) : setControl(12);
                 }}
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -225,7 +224,7 @@ const IndexParametrizacion = () => {
                 href=""
                 onClick={(e) => {
                   e.preventDefault();
-                  control == 10 ? setControl(0) : setControl(10);
+                  control == 13 ? setControl(0) : setControl(13);
                 }}
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -238,7 +237,7 @@ const IndexParametrizacion = () => {
                 href=""
                 onClick={(e) => {
                   e.preventDefault();
-                  control == 11 ? setControl(0) : setControl(11);
+                  control == 14 ? setControl(0) : setControl(14);
                 }}
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -251,7 +250,7 @@ const IndexParametrizacion = () => {
                 href=""
                 onClick={(e) => {
                   e.preventDefault();
-                  control == 12 ? setControl(0) : setControl(12);
+                  control == 15 ? setControl(0) : setControl(15);
                 }}
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -264,7 +263,7 @@ const IndexParametrizacion = () => {
                 href=""
                 onClick={(e) => {
                   e.preventDefault();
-                  control == 13 ? setControl(0) : setControl(13);
+                  control == 16 ? setControl(0) : setControl(16);
                 }}
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -277,7 +276,7 @@ const IndexParametrizacion = () => {
                 href=""
                 onClick={(e) => {
                   e.preventDefault();
-                  control == 14 ? setControl(0) : setControl(14);
+                  control == 17 ? setControl(0) : setControl(17);
                 }}
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -289,12 +288,96 @@ const IndexParametrizacion = () => {
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
             <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-              <button
-                id="sidebarToggleTop"
-                className="btn btn-link d-md-none rounded-circle mr-3"
-              >
-                <i className="fa fa-bars"></i>
-              </button>
+              <h5 className="d-flex">
+                <a
+                  href="/inicio"
+                  className="text-secondary mx-0 px-1"
+                  style={{ textDecoration: "none" }}
+                >
+                  Inicio
+                </a>{" "}
+                <a
+                  href=""
+                  className="text-secondary mx-0 px-1"
+                  style={{ textDecoration: "none" }}
+                >
+                  / Parametrizacion{" "}
+                  {(() => {
+                    //Desicion para controlar el contenido del div de interacciones
+                    if (control == 0) {
+                      return "";
+                    } else {
+                      if (control == 1) {
+                        return "/ Sector";
+                      } else {
+                        if (control == 2) {
+                          return "/ Entidad";
+                        } else {
+                          if (control == 3) {
+                            return "/ Documentos de Adopción";
+                          } else {
+                            if (control == 4) {
+                              return "/ Unidades de Medida";
+                            } else {
+                              if (control == 5) {
+                                return "/ Rango Semáforo";
+                              } else {
+                                if (control == 6) {
+                                  return "/ Enfoque Nivel 1";
+                                } else {
+                                  if (control == 7) {
+                                    return "/ Enfoque Nivel 2";
+                                  } else {
+                                    if (control == 8) {
+                                      return "/ Enfoque Nivel 3";
+                                    } else {
+                                      if (control == 9) {
+                                        return "/ Enfoque Nivel 4";
+                                      } else {
+                                        if (control == 10) {
+                                          return "/ Meta ODS";
+                                        } else {
+                                          if (control == 11) {
+                                            return "/ Documentos Asociados";
+                                          } else {
+                                            if (control == 12) {
+                                              return "/ Fuentes Financiación";
+                                            } else {
+                                              if (control == 13) {
+                                                return "/ Objetivo de Desarrollo Sostenible";
+                                              } else {
+                                                if (control == 14) {
+                                                  return "/ Nivel de Territorialización";
+                                                } else {
+                                                  if (control == 15) {
+                                                    return "/ Plan de Desarrollo";
+                                                  } else {
+                                                    if (control == 16) {
+                                                      return "/ Indicador Plan de Desarrollo";
+                                                    } else {
+                                                      if (control == 17) {
+                                                        return "/ Parametros";
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  })()}
+                </a>{" "}
+              </h5>
 
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item dropdown no-arrow">
@@ -370,40 +453,54 @@ const IndexParametrizacion = () => {
                               return <Enfoque></Enfoque>;
                             } else {
                               if (control == 7) {
-                                return <MetaODS></MetaODS>;
+                                return <EnfoqueDos></EnfoqueDos>;
                               } else {
                                 if (control == 8) {
-                                  return (
-                                    <DocumentosAsociados></DocumentosAsociados>
-                                  );
+                                  return <EnfoqueTres></EnfoqueTres>;
                                 } else {
                                   if (control == 9) {
-                                    return (
-                                      <FuentesFinanciacion></FuentesFinanciacion>
-                                    );
+                                    return <EnfoqueCuatro></EnfoqueCuatro>;
                                   } else {
                                     if (control == 10) {
-                                      return (
-                                        <ObjetivoDesarrolloSostenible></ObjetivoDesarrolloSostenible>
-                                      );
+                                      return <MetaODS></MetaODS>;
                                     } else {
                                       if (control == 11) {
                                         return (
-                                          <NivelTerritorializacion></NivelTerritorializacion>
+                                          <DocumentosAsociados></DocumentosAsociados>
                                         );
                                       } else {
                                         if (control == 12) {
                                           return (
-                                            <PlanDesarrollo></PlanDesarrollo>
+                                            <FuentesFinanciacion></FuentesFinanciacion>
                                           );
                                         } else {
                                           if (control == 13) {
                                             return (
-                                              <IndicadorPlanDesarrollo></IndicadorPlanDesarrollo>
+                                              <ObjetivoDesarrolloSostenible></ObjetivoDesarrolloSostenible>
                                             );
                                           } else {
                                             if (control == 14) {
-                                              return <Parametros></Parametros>;
+                                              return (
+                                                <NivelTerritorializacion></NivelTerritorializacion>
+                                              );
+                                            } else {
+                                              if (control == 15) {
+                                                return (
+                                                  <PlanDesarrollo></PlanDesarrollo>
+                                                );
+                                              } else {
+                                                if (control == 16) {
+                                                  return (
+                                                    <IndicadorPlanDesarrollo></IndicadorPlanDesarrollo>
+                                                  );
+                                                } else {
+                                                  if (control == 17) {
+                                                    return (
+                                                      <Parametros></Parametros>
+                                                    );
+                                                  }
+                                                }
+                                              }
                                             }
                                           }
                                         }

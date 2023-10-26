@@ -68,7 +68,7 @@ const Index = () => {
               </div>
               <div className="row">
                 <a
-                  href="/parametrizacion"
+                  href="inicio/parametrizacion"
                   className="col-xl-4 col-md-6 mb-4 optionsCard"
                   style={{ textDecoration: "none" }}
                 >
@@ -86,6 +86,7 @@ const Index = () => {
                   </div>
                 </a>
                 <a
+                  href="inicio/politicasPublicas"
                   className="col-xl-4 col-md-6 mb-4 optionsCard"
                   style={{ textDecoration: "none" }}
                 >
