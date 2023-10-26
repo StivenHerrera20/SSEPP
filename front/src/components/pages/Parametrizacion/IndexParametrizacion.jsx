@@ -24,7 +24,7 @@ const IndexParametrizacion = () => {
       <div id="wrapper">
         <nav
           class="navbar-nav bg-primary sidebar sidebar-dark"
-          style={{ height: window.screen.height - 200 }}
+          style={{ height: window.innerHeight - 200 }}
           id="accordionSidebar"
         >
           <a
@@ -109,12 +109,65 @@ const IndexParametrizacion = () => {
               </a>
             </li>
             <li className="nav-item">
-              <select class="nav-link " aria-label="Default select example">
-                <option value="1">Enfoque Nivel 1</option>
-                <option value="2">Enfoque Nivel 2</option>
-                <option value="2">Enfoque Nivel 3</option>
-                <option value="2">Enfoque Nivel 4</option>
-              </select>
+              <button
+                class="nav-link"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseExample"
+                aria-expanded="false"
+                aria-controls="collapseExample"
+              >
+                <span>Enfoque</span>
+              </button>
+              <div
+                class="collapse w-100 my-0 mx-0 text-center"
+                id="collapseExample"
+              >
+                <a
+                  className="nav-link w-100"
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    control == 5 ? setControl(0) : setControl(5);
+                  }}
+                >
+                  <i className="fas fa-fw fa-tachometer-alt"></i>
+                  <span>Nivel 1</span>
+                </a>
+                <a
+                  className="nav-link w-100"
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    control == 5 ? setControl(0) : setControl(5);
+                  }}
+                >
+                  <i className="fas fa-fw fa-tachometer-alt"></i>
+                  <span>Nivel 2</span>
+                </a>
+                <a
+                  className="nav-link w-100"
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    control == 5 ? setControl(0) : setControl(5);
+                  }}
+                >
+                  <i className="fas fa-fw fa-tachometer-alt"></i>
+                  <span>Nivel 3</span>
+                </a>
+                <a
+                  className="nav-link w-100"
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    control == 5 ? setControl(0) : setControl(5);
+                  }}
+                >
+                  <i className="fas fa-fw fa-tachometer-alt"></i>
+                  <span>Nivel 4</span>
+                </a>
+              </div>
               {/* <a
               className="nav-link "
               href=""
