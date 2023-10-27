@@ -6,23 +6,6 @@ const DocumentosAsociados = () => {
   const [documentos, setDocumentos] = useState([]);
   const [insercion, setIncersion] = useState(false);
 
-  /*  const agregar = (req,res)=>{
-    fetch('http://127.0.0.1:3900/api/documentosAsociados/listar',{
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(req.body),
-      })
-      .then((response) => {
-        return response.json()
-      })
-      .then((res) => {
-        console.log(res)
-        setIncersion(true)
-      });
-  } */
-
   useEffect(() => {
     fetch("http://127.0.0.1:3900/api/documentosAsociados/listar")
       .then((response) => {

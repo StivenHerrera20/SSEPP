@@ -3,6 +3,26 @@ import { Button, Modal } from "react-bootstrap";
 
 const Sector = () => {
   const [show, setShow] = useState(false);
+  const [maxIdSector, setmaxIDSector] = useState([]);
+  const [sectores, setSectores] = useState([]);
+  const [insercionSector, setIncersionSector] = useState(false);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/sector/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setSectores(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/sector/maximo/id")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setmaxIDSector(doc.maximo);
+      });
+  }, []);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -26,10 +46,11 @@ const Sector = () => {
               className="table table-bordered"
               id="dataTable"
               width="100%"
-              cellspacing="0"
+              cellSpacing="0"
             >
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Nombre</th>
                   <th>Descripcion</th>
                   <th>Estado</th>
@@ -38,26 +59,20 @@ const Sector = () => {
               </thead>
 
               <tbody>
-                <tr>
-                  <td>Sector Administrativo de Gestión Juridica</td>
-                  <td>Sector</td>
-                  <td>ACTIVO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Sector Administrativo de Seguridad, Convivencia y Justicia
-                  </td>
-                  <td>Sector</td>
-                  <td>ACTIVO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
+                {sectores.map((res) => {
+                  return (
+                    <tr key={res.id}>
+                      <td>{res.id}</td>
+                      <td>{res.Nombre}</td>
+                      <td>{res.Descripcion}</td>
+                      <td>{res.Estado}</td>
+                      <td className="text-center">
+                        {" "}
+                        <button className="btn btn-success fa fa-pencil "></button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -66,10 +81,45 @@ const Sector = () => {
           <Modal.Header className="bg-light" closeButton>
             <Modal.Title>Agregar Sector</Modal.Title>
           </Modal.Header>
-          <form>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idSector");
+              let nombre = document.querySelector("#nombreSector");
+              let estado = document.querySelector("#estadoSector");
+              let descripcion = document.querySelector("#descripcionSector");
+              fetch("http://127.0.0.1:3900/api/sector/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionSector(true);
+                });
+            }}
+          >
             <Modal.Body>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idSector"
+                  disabled
+                  value={maxIdSector + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
                 <input
@@ -80,7 +130,7 @@ const Sector = () => {
                 />
               </div>
               <div className="mb-3">
-                <label for="exampleInputPassword1" className="form-label">
+                <label htmlFor="exampleInputPassword1" className="form-label">
                   Descripción
                 </label>
                 <textarea
@@ -92,12 +142,16 @@ const Sector = () => {
                 ></textarea>
               </div>
               <div className="mb-3">
-                <label for="" className="form-label">
+                <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select class="form-select" aria-label="Default select example">
-                  <option value="1">Activo</option>
-                  <option value="2">Inactivo</option>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoSector"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
                 </select>
               </div>
             </Modal.Body>
