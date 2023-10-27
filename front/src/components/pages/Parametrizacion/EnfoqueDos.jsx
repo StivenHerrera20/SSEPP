@@ -146,11 +146,7 @@ const EnfoqueDos = () => {
                   id="nivelUnoEnfoqueDos"
                 >
                   {Enfoque.map((element) => (
-                    <option
-                      key={element.id}
-                      value={element.Nombre}
-                      id="sectorEntidad"
-                    >
+                    <option key={element.id} value={element.Nombre}>
                       {element.Nombre}
                     </option>
                   ))}
