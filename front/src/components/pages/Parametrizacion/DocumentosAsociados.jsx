@@ -22,6 +22,7 @@ const DocumentosAsociados = () => {
         setIncersion(true)
       });
   } */
+
   const listar = () => {
     fetch("http://127.0.0.1:3900/api/documentosAsociados/listar")
       .then((response) => {
@@ -44,7 +45,6 @@ const DocumentosAsociados = () => {
     listar();
     maximoID();
   }, []);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
