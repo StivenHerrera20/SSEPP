@@ -7,6 +7,10 @@ const MetaODS = () => {
   const [insercionMetaODS, setIncersionMetaODS] = useState(false);
 
   useEffect(() => {
+    listar();
+    maxId();
+  }, []);
+  const listar = () => {
     fetch("http://127.0.0.1:3900/api/metaOds/listar")
       .then((response) => {
         return response.json();
@@ -14,6 +18,8 @@ const MetaODS = () => {
       .then((doc) => {
         setMetaODS(doc);
       });
+  };
+  const maxId = () => {
     fetch("http://127.0.0.1:3900/api/metaOds/maximo/id")
       .then((response) => {
         return response.json();
@@ -21,10 +27,13 @@ const MetaODS = () => {
       .then((doc) => {
         setmaxIdMetaODS(doc.maximo);
       });
-  }, []);
-
+  };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
   return (
     <>
       <div className="card shadow mb-4">
@@ -69,7 +78,10 @@ const MetaODS = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil "></button>
+                        <button
+                          className="btn btn-success fa fa-pencil"
+                          onClick={handleShowEdit}
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -81,6 +93,95 @@ const MetaODS = () => {
         <Modal show={show} onHide={handleClose}>
           <Modal.Header className="bg-light" closeButton>
             <Modal.Title>Agregar Meta ODS</Modal.Title>
+          </Modal.Header>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idMetaOds");
+              let nombre = document.querySelector("#nombreMetaODS");
+              let descripcion = document.querySelector("#descripcionMetaODS");
+              let estado = document.querySelector("#estadoMetaOds");
+              fetch("http://127.0.0.1:3900/api/metaOds/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionMetaODS(true);
+                  listar();
+                  maxId();
+                });
+            }}
+          >
+            <Modal.Body>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idMetaOds"
+                  disabled
+                  value={maxIdMetaODS + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Nombre <b className="text-danger">*</b>
+                </label>
+                <textarea
+                  className="form-control"
+                  name=""
+                  id="nombreMetaODS"
+                  rows="5"
+                  style={{ resize: "none" }}
+                ></textarea>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputPassword1" className="form-label">
+                  Descripción
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="descripcionMetaODS"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Estado
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoMetaOds"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit" variant="primary" onClick={handleClose}>
+                Guardar
+              </Button>
+              <Button variant="danger" onClick={handleClose}>
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+        <Modal show={showEdit} onHide={handleCloseEdit}>
+          <Modal.Header className="bg-light" closeButton>
+            <Modal.Title>Editar Meta ODS</Modal.Title>
           </Modal.Header>
           <form
             method="post"
@@ -156,10 +257,10 @@ const MetaODS = () => {
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" variant="primary" onClick={handleClose}>
+              <Button type="submit" variant="primary" onClick={handleCloseEdit}>
                 Guardar
               </Button>
-              <Button variant="danger" onClick={handleClose}>
+              <Button variant="danger" onClick={handleCloseEdit}>
                 Cancelar
               </Button>
             </Modal.Footer>

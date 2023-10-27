@@ -48,9 +48,9 @@ const DocumentosAsociados = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [showDos, setShowDos] = useState(false);
-  const handleCloseDos = () => setShowDos(false);
-  const handleShowDos = () => setShowDos(true);
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
   return (
     <>
       <div className="card shadow mb-4">
@@ -99,7 +99,7 @@ const DocumentosAsociados = () => {
                         <Button
                           className="btn btn-success fa fa-pencil "
                           variant="success"
-                          onClick={handleShowDos}
+                          onClick={handleShowEdit}
                         ></Button>
                       </td>
                     </tr>
@@ -211,9 +211,9 @@ const DocumentosAsociados = () => {
         </Modal>
 
         {/* Inicio Modal de editar */}
-        <Modal show={showDos} onHide={handleCloseDos}>
+        <Modal show={showEdit} onHide={handleCloseEdit}>
           <Modal.Header className="bg-light" closeButton>
-            <Modal.Title>Agregar Documento Asociado</Modal.Title>
+            <Modal.Title>Editar Documento Asociado</Modal.Title>
           </Modal.Header>
           <form method="" onSubmit={(e) => {}}>
             <Modal.Body>
@@ -266,10 +266,10 @@ const DocumentosAsociados = () => {
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" variant="primary" onClick={handleCloseDos}>
+              <Button type="submit" variant="primary" onClick={handleCloseEdit}>
                 Guardar
               </Button>
-              <Button variant="danger" onClick={handleCloseDos}>
+              <Button variant="danger" onClick={handleCloseEdit}>
                 Cancelar
               </Button>
             </Modal.Footer>

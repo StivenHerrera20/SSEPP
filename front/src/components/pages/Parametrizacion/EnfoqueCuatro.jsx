@@ -7,17 +7,12 @@ const EnfoqueCuatro = () => {
   const [EnfoqueCuatro, setEnfoqueCuatro] = useState([]);
   const [EnfoqueTres, setEnfoqueTres] = useState([]);
   const [EnfoqueDos, setEnfoqueDos] = useState([]);
-  const [insercionEnfoqueCuatro setIncersionEnfoqueCuatro] = useState(false);
+  const [insercionEnfoqueCuatro, setIncersionEnfoqueCuatro] = useState(false);
   const [Enfoque, setEnfoque] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3900/api/enfoqueNivelCuatro/listar")
-      .then((response) => {
-        return response.json();
-      })
-      .then((doc) => {
-        setEnfoqueCuatro(doc);
-      });
+    listar();
+    maxId();
     fetch("http://127.0.0.1:3900/api/enfoqueNivelTres/listar")
       .then((response) => {
         return response.json();
@@ -32,13 +27,7 @@ const EnfoqueCuatro = () => {
       .then((doc) => {
         setEnfoqueDos(doc);
       });
-    fetch("http://127.0.0.1:3900/api/enfoqueNivelCuatro/maximo/id")
-      .then((response) => {
-        return response.json();
-      })
-      .then((doc) => {
-        setmaxIdEnfoqueCuatro(doc.maximo);
-      });
+
     fetch("http://127.0.0.1:3900/api/enfoqueNivelUno/listar")
       .then((response) => {
         return response.json();
@@ -47,9 +36,30 @@ const EnfoqueCuatro = () => {
         setEnfoque(doc);
       });
   }, []);
-
+  const listar = () => {
+    fetch("http://127.0.0.1:3900/api/enfoqueNivelCuatro/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setEnfoqueCuatro(doc);
+      });
+  };
+  const maxId = () => {
+    fetch("http://127.0.0.1:3900/api/enfoqueNivelCuatro/maximo/id")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setmaxIdEnfoqueCuatro(doc.maximo);
+      });
+  };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
   return (
     <>
       <div className="card shadow mb-4">
@@ -96,7 +106,10 @@ const EnfoqueCuatro = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil "></button>
+                        <button
+                          className="btn btn-success fa fa-pencil "
+                          onClick={handleShowEdit}
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -131,7 +144,9 @@ const EnfoqueCuatro = () => {
                 })
                 .then((res) => {
                   console.log(res);
-                  setIncersionEnfoqueCuatrot(true);
+                  setIncersionEnfoqueCuatro(true);
+                  listar();
+                  maxId();
                 });
             }}
           >
@@ -226,6 +241,134 @@ const EnfoqueCuatro = () => {
                 Guardar
               </Button>
               <Button variant="danger" onClick={handleClose}>
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+        <Modal show={showEdit} onHide={handleCloseEdit}>
+          <Modal.Header className="bg-light" closeButton>
+            <Modal.Title>Editar Enfoque Nivel 4</Modal.Title>
+          </Modal.Header>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idEnfoqueCuatro");
+              let nombre = document.querySelector("#nombreEnfoqueNivelCuatro");
+              let nivelUno = document.querySelector("#nivelUnoEnfoqueCuatro");
+              let nivelDos = document.querySelector("#nivelDosEnfoqueCuatro");
+              let nivelTres = document.querySelector("#nivelTresEnfoqueCuatro");
+              let estado = document.querySelector("#estadoEnfoqueCuatro");
+              fetch("http://127.0.0.1:3900/api/enfoqueNivelCuatro/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Nivel_tres=${nivelTres.value}&Nivel_dos=${nivelDos.value}&Nivel_uno=${nivelUno.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionEnfoqueCuatro(true);
+                  listar();
+                  maxId();
+                });
+            }}
+          >
+            <Modal.Body>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idEnfoqueCuatro"
+                  disabled
+                  value={maxIdEnfoqueCuatro + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Nombre <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreEnfoqueNivelCuatro"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Nivel 1
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="nivelUnoEnfoqueCuatro"
+                >
+                  {Enfoque.map((element) => (
+                    <option key={element.id} value={element.Nombre}>
+                      {element.Nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Nivel 2
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="nivelDosEnfoqueCuatro"
+                >
+                  {EnfoqueDos.map((element) => (
+                    <option key={element.id} value={element.Nombre}>
+                      {element.Nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Nivel 3
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="nivelTresEnfoqueCuatro"
+                >
+                  {EnfoqueTres.map((element) => (
+                    <option key={element.id} value={element.Nombre}>
+                      {element.Nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Estado
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoEnfoqueCuatro"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit" variant="primary" onClick={handleCloseEdit}>
+                Guardar
+              </Button>
+              <Button variant="danger" onClick={handleCloseEdit}>
                 Cancelar
               </Button>
             </Modal.Footer>
