@@ -22,8 +22,7 @@ const DocumentosAsociados = () => {
         setIncersion(true)
       });
   } */
-
-  useEffect(() => {
+  const listar = () => {
     fetch("http://127.0.0.1:3900/api/documentosAsociados/listar")
       .then((response) => {
         return response.json();
@@ -31,6 +30,8 @@ const DocumentosAsociados = () => {
       .then((doc) => {
         setDocumentos(doc);
       });
+  };
+  const maximoID = () => {
     fetch("http://127.0.0.1:3900/api/documentosAsociados/maximo/id")
       .then((response) => {
         return response.json();
@@ -38,6 +39,10 @@ const DocumentosAsociados = () => {
       .then((doc) => {
         setmaxID(doc.maximo);
       });
+  };
+  useEffect(() => {
+    listar();
+    maximoID();
   }, []);
 
   const handleClose = () => setShow(false);
@@ -53,7 +58,10 @@ const DocumentosAsociados = () => {
           <Button
             className="btn btn-primary fa fa-plus"
             variant="primary"
-            onClick={handleShow}
+            onClick={() => {
+              maximoID();
+              handleShow();
+            }}
           ></Button>
 
           <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">
@@ -132,11 +140,13 @@ const DocumentosAsociados = () => {
                 .then((res) => {
                   console.log(res);
                   setIncersion(true);
+                  listar();
+                  maximoID();
+                  if (insercion == true) {
+                    alert("Agregado correctamente");
+                    setIncersion(false);
+                  }
                 });
-              if (insercion == true) {
-                alert("Agregado correctamente");
-                setIncersion(false);
-              }
             }}
           >
             <Modal.Body>
