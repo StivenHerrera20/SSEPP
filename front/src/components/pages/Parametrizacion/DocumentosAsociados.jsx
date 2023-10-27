@@ -2,7 +2,43 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 const DocumentosAsociados = () => {
   const [show, setShow] = useState(false);
+  const [maxId, setmaxID] = useState([]);
+  const [documentos, setDocumentos] = useState([]);
+  const [insercion, setIncersion] = useState(false);
 
+  /*  const agregar = (req,res)=>{
+    fetch('http://127.0.0.1:3900/api/documentosAsociados/listar',{
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(req.body),
+      })
+      .then((response) => {
+        return response.json()
+      })
+      .then((res) => {
+        console.log(res)
+        setIncersion(true)
+      });
+  } */
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/documentosAsociados/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setDocumentos(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/documentosAsociados/maximo/id")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setmaxID(doc.maximo);
+      });
+  }, []);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
@@ -25,10 +61,11 @@ const DocumentosAsociados = () => {
               className="table table-bordered"
               id="dataTable"
               width="100%"
-              cellspacing="0"
+              cellSpacing="0"
             >
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Nombre</th>
                   <th>Descripcion</th>
                   <th>Estado</th>
@@ -37,24 +74,20 @@ const DocumentosAsociados = () => {
               </thead>
 
               <tbody>
-                <tr>
-                  <td>Conceptos unificados</td>
-                  <td>Conceptos unificados</td>
-                  <td>ACTIVO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Decreto DER</td>
-                  <td>Decreto DER</td>
-                  <td>ACTIVO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
+                {documentos.map((res) => {
+                  return (
+                    <tr key={res.id}>
+                      <td>{res.id}</td>
+                      <td>{res.Nombre}</td>
+                      <td>{res.Descripcion}</td>
+                      <td>{res.Estado}</td>
+                      <td className="text-center">
+                        {" "}
+                        <button className="btn btn-success fa fa-pencil "></button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -63,10 +96,55 @@ const DocumentosAsociados = () => {
           <Modal.Header className="bg-light" closeButton>
             <Modal.Title>Agregar Documento Asociado</Modal.Title>
           </Modal.Header>
-          <form>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idDocumentosAsociados");
+              let nombre = document.querySelector("#nombreDocumentosAsociados");
+              let estado = document.querySelector("#estadoDocumentosAsociados");
+              let descripcion = document.querySelector(
+                "#descripcionDocumentosAsociados"
+              );
+              console.log(id.value);
+              console.log(nombre.value);
+              console.log(estado.value);
+              console.log(descripcion.value);
+              fetch("http://127.0.0.1:3900/api/documentosAsociados/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersion(true);
+                });
+              if (insercion == true) {
+                alert("Agregado correctamente");
+                setIncersion(false);
+              }
+            }}
+          >
             <Modal.Body>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idDocumentosAsociados"
+                  disabled
+                  value={maxId + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
                 <input
@@ -77,7 +155,7 @@ const DocumentosAsociados = () => {
                 />
               </div>
               <div className="mb-3">
-                <label for="exampleInputPassword1" className="form-label">
+                <label htmlFor="exampleInputPassword1" className="form-label">
                   Descripción
                 </label>
                 <textarea
@@ -89,12 +167,16 @@ const DocumentosAsociados = () => {
                 ></textarea>
               </div>
               <div className="mb-3">
-                <label for="" className="form-label">
+                <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select class="form-select" aria-label="Default select example">
-                  <option value="1">Activo</option>
-                  <option value="2">Inactivo</option>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoDocumentosAsociados"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
                 </select>
               </div>
             </Modal.Body>
