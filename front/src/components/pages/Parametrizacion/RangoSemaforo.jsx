@@ -2,6 +2,26 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 const RangoSemaforo = () => {
   const [show, setShow] = useState(false);
+  const [maxIdRangoSemaforo, setmaxIdRangoSemaforo] = useState([]);
+  const [RangoSemaforo, setRangoSemaforo] = useState([]);
+  const [insercionRangoSemaforo, setIncersionRangoSemaforo] = useState(false);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/rangoSemaforo/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setRangoSemaforo(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/unidadDeMedida/maximo/id")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setmaxIdRangoSemaforo(doc.maximo);
+      });
+  }, []);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -19,53 +39,39 @@ const RangoSemaforo = () => {
               className="table table-bordered"
               id="dataTable"
               width="100%"
-              cellspacing="0"
+              cellSpacing="0"
             >
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Nombre</th>
                   <th>Mes</th>
                   <th>Desde</th>
                   <th>Hasta</th>
                   <th>Color</th>
+                  <th>Estado</th>
                   <th className="text-center">Editar</th>
                 </tr>
               </thead>
 
               <tbody>
-                <tr>
-                  <td>01 ROJO</td>
-                  <td>ROJO</td>
-                  <td>1</td>
-                  <td>25</td>
-                  <td>ROJO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>02 AMARILLO</td>
-                  <td>AMARILLO</td>
-                  <td>26</td>
-                  <td>74</td>
-                  <td>AMARILLO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>03 VERDE</td>
-                  <td>VERDE</td>
-                  <td>75</td>
-                  <td>100</td>
-                  <td>VERDE</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
+                {RangoSemaforo.map((res) => {
+                  return (
+                    <tr key={res.id}>
+                      <td>{res.id}</td>
+                      <td>{res.Nombre}</td>
+                      <td>{res.Mes}</td>
+                      <td>{res.Desde}</td>
+                      <td>{res.Hasta}</td>
+                      <td>{res.Color}</td>
+                      <td>{res.Estado}</td>
+                      <td className="text-center">
+                        {" "}
+                        <button className="btn btn-success fa fa-pencil "></button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
