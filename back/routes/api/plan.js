@@ -29,4 +29,22 @@ router.delete("/eliminar/:id", async (req, res) => {
     mensaje: "Eliminado correctamente",
   });
 });
+router.get("/maximo/:campo", async (req, res) => {
+  const campo = req.params.campo;
+
+  Plan.max(campo)
+    .then((maxValue) => {
+      res.json({
+        status: "OK",
+        maximo: maxValue,
+      });
+    })
+    .catch((err) => {
+      console.error("Error al obtener el valor máximo:", err);
+      res.status(500).json({
+        status: "Error",
+        mensaje: "Hubo un problema al obtener el valor máximo.",
+      });
+    });
+});
 module.exports = router;

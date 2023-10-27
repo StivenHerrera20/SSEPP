@@ -1,6 +1,6 @@
 module.exports = (sequelize, type) => {
   return sequelize.define(
-    "indicador_plan_de_desarrollo_municipal",
+    "indicador_plan_de_desarroloo_municipal",
     {
       id: {
         type: type.INTEGER,
@@ -14,7 +14,7 @@ module.exports = (sequelize, type) => {
     },
     {
       timestamps: false, // Desactiva la funcionalidad de timestamps
-      tableName: "indicador_plan_de_desarrollo_municipal",
+      tableName: "indicador_plan_de_desarroloo_municipal",
     }
   );
 };

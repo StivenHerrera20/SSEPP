@@ -2,6 +2,26 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 const PlanDesarrollo = () => {
   const [show, setShow] = useState(false);
+  const [maxIdPlan, setmaxIdPlan] = useState([]);
+  const [Plan, setPlan] = useState([]);
+  const [insercionPlan, setIncersionPlan] = useState(false);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/plan/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setPlan(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/plan/maximo/id")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setmaxIdPlan(doc.maximo);
+      });
+  }, []);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -25,10 +45,11 @@ const PlanDesarrollo = () => {
               className="table table-bordered"
               id="dataTable"
               width="100%"
-              cellspacing="0"
+              cellSpacing="0"
             >
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Nombre</th>
                   <th>Descripción</th>
                   <th>Estado</th>
@@ -37,15 +58,20 @@ const PlanDesarrollo = () => {
               </thead>
 
               <tbody>
-                <tr>
-                  <td>... mejor para todos</td>
-                  <td>Plan de desarrollo distrital</td>
-                  <td>ACTIVO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
+                {Plan.map((res) => {
+                  return (
+                    <tr key={res.id}>
+                      <td>{res.id}</td>
+                      <td>{res.Nombre}</td>
+                      <td>{res.Descripcion}</td>
+                      <td>{res.Estado}</td>
+                      <td className="text-center">
+                        {" "}
+                        <button className="btn btn-success fa fa-pencil "></button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -54,10 +80,47 @@ const PlanDesarrollo = () => {
           <Modal.Header className="bg-light" closeButton>
             <Modal.Title>Agregar Plan de Desarrollo</Modal.Title>
           </Modal.Header>
-          <form>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idPlan");
+              let nombre = document.querySelector("#nombrePlanDesarrollo");
+              let descripcion = document.querySelector(
+                "#descripcionPlanDesarrollo"
+              );
+              let estado = document.querySelector("#estadoPlan");
+              fetch("http://127.0.0.1:3900/api/plan/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionPlan(true);
+                });
+            }}
+          >
             <Modal.Body>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idPlan"
+                  disabled
+                  value={maxIdPlan + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
                 <input
@@ -68,7 +131,7 @@ const PlanDesarrollo = () => {
                 />
               </div>
               <div className="mb-3">
-                <label for="exampleInputPassword1" className="form-label">
+                <label htmlFor="exampleInputPassword1" className="form-label">
                   Descripción
                 </label>
                 <textarea
@@ -80,12 +143,16 @@ const PlanDesarrollo = () => {
                 ></textarea>
               </div>
               <div className="mb-3">
-                <label for="" className="form-label">
+                <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select class="form-select" aria-label="Default select example">
-                  <option value="1">Activo</option>
-                  <option value="2">Inactivo</option>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoPlan"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
                 </select>
               </div>
             </Modal.Body>

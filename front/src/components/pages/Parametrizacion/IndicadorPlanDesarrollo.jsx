@@ -2,6 +2,34 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 const IndicadorPlanDesarrollo = () => {
   const [show, setShow] = useState(false);
+  const [maxIdIndicador, setmaxIdIndicador] = useState([]);
+  const [Indicador, setIndicador] = useState([]);
+  const [insercionIndicador, setIncersionIndicador] = useState(false);
+  const [Plan, setPlan] = useState([]);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/planDeDesarrollo/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setIndicador(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/plan/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setPlan(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/planDeDesarrollo/maximo/id")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setmaxIdIndicador(doc.maximo);
+      });
+  }, []);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -25,12 +53,14 @@ const IndicadorPlanDesarrollo = () => {
               className="table table-bordered"
               id="dataTable"
               width="100%"
-              cellspacing="0"
+              cellSpacing="0"
             >
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Nombre</th>
                   <th>Descripción</th>
+                  <th>Sector</th>
                   <th>Plan de Desarrollo</th>
                   <th>Estado</th>
                   <th className="text-center">Editar</th>
@@ -38,19 +68,22 @@ const IndicadorPlanDesarrollo = () => {
               </thead>
 
               <tbody>
-                <tr>
-                  <td>
-                    Acciones de participación ciudadana desarrolladas por
-                    organizaciones comunales, sociales y comunitarias
-                  </td>
-                  <td>Indicadores de producto plan de desarrollo distrital</td>
-                  <td>... mejor para todos</td>
-                  <td>ACTIVO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
+                {Indicador.map((res) => {
+                  return (
+                    <tr key={res.id}>
+                      <td>{res.id}</td>
+                      <td>{res.Nombre}</td>
+                      <td>{res.Descripcion}</td>
+                      <td>{res.Sector}</td>
+                      <td>{res.Plan_de_desarrollo}</td>
+                      <td>{res.Estado}</td>
+                      <td className="text-center">
+                        {" "}
+                        <button className="btn btn-success fa fa-pencil "></button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -59,10 +92,53 @@ const IndicadorPlanDesarrollo = () => {
           <Modal.Header className="bg-light" closeButton>
             <Modal.Title>Agregar Indicador Plan de Desarrollo</Modal.Title>
           </Modal.Header>
-          <form>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idIndicador");
+              let nombre = document.querySelector(
+                "#nombreIndicadorPlanDesarrollo"
+              );
+              let descripcion = document.querySelector(
+                "#descripcionIndicadorPlanDesarrollo"
+              );
+              let estado = document.querySelector("#estadoIndicador");
+              let planDes = document.querySelector("#planIndicador");
+              let sector = document.querySelector(
+                "#sectorIndicadorPlanDesarrollo"
+              );
+              fetch("http://127.0.0.1:3900/api/planDeDesarrollo/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Sector=${sector.value}&Plan_de_desarrollo=${planDes.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionIndicador(true);
+                });
+            }}
+          >
             <Modal.Body>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idIndicador"
+                  disabled
+                  value={maxIdIndicador + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
                 <input
@@ -73,7 +149,7 @@ const IndicadorPlanDesarrollo = () => {
                 />
               </div>
               <div className="mb-3">
-                <label for="exampleInputPassword1" className="form-label">
+                <label htmlFor="exampleInputPassword1" className="form-label">
                   Descripción
                 </label>
                 <textarea
@@ -85,20 +161,43 @@ const IndicadorPlanDesarrollo = () => {
                 ></textarea>
               </div>
               <div className="mb-3">
-                <label for="" className="form-label">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Sector <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="sectorIndicadorPlanDesarrollo"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
                   Plan de desarrollo
                 </label>
-                <select class="form-select" aria-label="Default select example">
-                  <option value="1">...mejor para todos</option>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="planIndicador"
+                >
+                  {Plan.map((element) => (
+                    <option key={element.id} value={element.Nombre}>
+                      {element.Nombre}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="mb-3">
-                <label for="" className="form-label">
+                <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select class="form-select" aria-label="Default select example">
-                  <option value="1">Activo</option>
-                  <option value="2">Inactivo</option>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoIndicador"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
                 </select>
               </div>
             </Modal.Body>

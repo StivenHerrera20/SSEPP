@@ -2,6 +2,26 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 const NivelTerritorializacion = () => {
   const [show, setShow] = useState(false);
+  const [maxIdNivel, setmaxIdNivel] = useState([]);
+  const [Nivel, setNivel] = useState([]);
+  const [insercionNivel, setIncersionNivel] = useState(false);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/nivelDeTerritorializacion/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setNivel(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/nivelDeTerritorializacion/maximo/id")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setmaxIdNivel(doc.maximo);
+      });
+  }, []);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -25,10 +45,11 @@ const NivelTerritorializacion = () => {
               className="table table-bordered"
               id="dataTable"
               width="100%"
-              cellspacing="0"
+              cellSpacing="0"
             >
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Nombre</th>
                   <th>Descripción</th>
                   <th>Estado</th>
@@ -37,24 +58,20 @@ const NivelTerritorializacion = () => {
               </thead>
 
               <tbody>
-                <tr>
-                  <td>Barrio</td>
-                  <td></td>
-                  <td>ACTIVO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Localidades</td>
-                  <td>División politico administrativa de ...</td>
-                  <td>ACTIVO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
+                {Nivel.map((res) => {
+                  return (
+                    <tr key={res.id}>
+                      <td>{res.id}</td>
+                      <td>{res.Nombre}</td>
+                      <td>{res.Descripcion}</td>
+                      <td>{res.Estado}</td>
+                      <td className="text-center">
+                        {" "}
+                        <button className="btn btn-success fa fa-pencil "></button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -63,10 +80,52 @@ const NivelTerritorializacion = () => {
           <Modal.Header className="bg-light" closeButton>
             <Modal.Title>Agregar Nivel de Territorializacion</Modal.Title>
           </Modal.Header>
-          <form>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idNivel");
+              let nombre = document.querySelector(
+                "#nombreNivelDeTerritorializacion"
+              );
+              let descripcion = document.querySelector(
+                "#descripcionNivelDeTerritorializacion"
+              );
+              let estado = document.querySelector("#estadoNivel");
+              fetch(
+                "http://127.0.0.1:3900/api/nivelDeTerritorializacion/agregar",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                  },
+                  body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
+                }
+              )
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionNivel(true);
+                });
+            }}
+          >
             <Modal.Body>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idNivel"
+                  disabled
+                  value={maxIdNivel + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
                 <input
@@ -77,7 +136,7 @@ const NivelTerritorializacion = () => {
                 />
               </div>
               <div className="mb-3">
-                <label for="exampleInputPassword1" className="form-label">
+                <label htmlFor="exampleInputPassword1" className="form-label">
                   Descripción
                 </label>
                 <textarea
@@ -89,12 +148,16 @@ const NivelTerritorializacion = () => {
                 ></textarea>
               </div>
               <div className="mb-3">
-                <label for="" className="form-label">
+                <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select class="form-select" aria-label="Default select example">
-                  <option value="1">Activo</option>
-                  <option value="2">Inactivo</option>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoNivel"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
                 </select>
               </div>
             </Modal.Body>
