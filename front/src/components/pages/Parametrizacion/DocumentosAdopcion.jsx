@@ -8,6 +8,10 @@ const DocumentosAdopcion = () => {
     useState(false);
 
   useEffect(() => {
+    listar();
+    maxId();
+  }, []);
+  const listar = () => {
     fetch("http://127.0.0.1:3900/api/documentosDeAdopcion/listar")
       .then((response) => {
         return response.json();
@@ -15,6 +19,8 @@ const DocumentosAdopcion = () => {
       .then((doc) => {
         setDocumentoDeAdopcion(doc);
       });
+  };
+  const maxId = () => {
     fetch("http://127.0.0.1:3900/api/documentosDeAdopcion/maximo/id")
       .then((response) => {
         return response.json();
@@ -22,10 +28,13 @@ const DocumentosAdopcion = () => {
       .then((doc) => {
         setmaxIDDocumentoDeAdopcion(doc.maximo);
       });
-  }, []);
-
+  };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
   return (
     <>
       <div className="card shadow mb-4">
@@ -68,7 +77,10 @@ const DocumentosAdopcion = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil "></button>
+                        <button
+                          className="btn btn-success fa fa-pencil "
+                          onClick={handleShowEdit}
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -106,6 +118,8 @@ const DocumentosAdopcion = () => {
                 .then((res) => {
                   console.log(res);
                   setIncersionDocumentoDeAdopcion(true);
+                  listar();
+                  maxId();
                 });
             }}
           >
@@ -164,6 +178,100 @@ const DocumentosAdopcion = () => {
                 Guardar
               </Button>
               <Button variant="danger" onClick={handleClose}>
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+        <Modal show={showEdit} onHide={handleCloseEdit}>
+          <Modal.Header className="bg-light" closeButton>
+            <Modal.Title>Editar Documento de Adopción</Modal.Title>
+          </Modal.Header>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idDocumentoDeAdopcion");
+              let nombre = document.querySelector("#nombreDocumentosAdopcion");
+              let estado = document.querySelector(
+                "#estadoDocumentosDeAdopcion"
+              );
+              let descripcion = document.querySelector(
+                "#descripcionDocumentosAdopcion"
+              );
+              fetch("http://127.0.0.1:3900/api/documentosDeAdopcion/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionDocumentoDeAdopcion(true);
+                  listar();
+                  maxId();
+                });
+            }}
+          >
+            <Modal.Body>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idDocumentoDeAdopcion"
+                  disabled
+                  value={maxIdDocumentoDeAdopcion + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Nombre <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreDocumentosAdopcion"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputPassword1" className="form-label">
+                  Descripción
+                </label>
+                <textarea
+                  className="form-control"
+                  name=""
+                  id="descripcionDocumentosAdopcion"
+                  rows="5"
+                  style={{ resize: "none" }}
+                ></textarea>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Estado
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoDocumentosDeAdopcion"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit" variant="primary" onClick={handleCloseEdit}>
+                Guardar
+              </Button>
+              <Button variant="danger" onClick={handleCloseEdit}>
                 Cancelar
               </Button>
             </Modal.Footer>

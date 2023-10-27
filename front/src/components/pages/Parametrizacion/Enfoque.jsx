@@ -8,6 +8,10 @@ const Enfoque = () => {
   const [insercionEnfoque, setIncersionEnfoque] = useState(false);
 
   useEffect(() => {
+    listar();
+    maxId();
+  }, []);
+  const listar = () => {
     fetch("http://127.0.0.1:3900/api/enfoqueNivelUno/listar")
       .then((response) => {
         return response.json();
@@ -15,6 +19,8 @@ const Enfoque = () => {
       .then((doc) => {
         setEnfoque(doc);
       });
+  };
+  const maxId = () => {
     fetch("http://127.0.0.1:3900/api/enfoqueNivelUno/maximo/id")
       .then((response) => {
         return response.json();
@@ -22,10 +28,13 @@ const Enfoque = () => {
       .then((doc) => {
         setmaxIdEnfoque(doc.maximo);
       });
-  }, []);
-
+  };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
   return (
     <>
       <div className="card shadow mb-4">
@@ -66,7 +75,10 @@ const Enfoque = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil "></button>
+                        <button
+                          className="btn btn-success fa fa-pencil "
+                          onClick={handleShowEdit}
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -99,6 +111,8 @@ const Enfoque = () => {
                 .then((res) => {
                   console.log(res);
                   setIncersionEnfoque(true);
+                  listar();
+                  maxId();
                 });
             }}
           >
@@ -145,6 +159,83 @@ const Enfoque = () => {
                 Guardar
               </Button>
               <Button variant="danger" onClick={handleClose}>
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+        <Modal show={showEdit} onHide={handleCloseEdit}>
+          <Modal.Header className="bg-light" closeButton>
+            <Modal.Title>Editar Enfoque Nivel 1</Modal.Title>
+          </Modal.Header>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idEnfoque");
+              let nombre = document.querySelector("#nombreEnfoqueNivelUno");
+              let estado = document.querySelector("#estadoEnfoque");
+              fetch("http://127.0.0.1:3900/api/enfoqueNivelUno/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionEnfoque(true);
+                  listar();
+                  maxId();
+                });
+            }}
+          >
+            <Modal.Body>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idEnfoque"
+                  disabled
+                  value={maxIdEnfoque + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Nombre <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreEnfoqueNivelUno"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Estado
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoEnfoque"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit" variant="primary" onClick={handleCloseEdit}>
+                Guardar
+              </Button>
+              <Button variant="danger" onClick={handleCloseEdit}>
                 Cancelar
               </Button>
             </Modal.Footer>
