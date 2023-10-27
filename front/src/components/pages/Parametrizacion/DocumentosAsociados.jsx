@@ -88,10 +88,11 @@ const DocumentosAsociados = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button
+                        <Button
                           className="btn btn-success fa fa-pencil "
+                          variant="success"
                           onClick={handleShowDos}
-                        ></button>
+                        ></Button>
                       </td>
                     </tr>
                   );
