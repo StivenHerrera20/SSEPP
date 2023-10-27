@@ -27,7 +27,7 @@ const IndexParametrizacion = () => {
       <div id="wrapper">
         <nav
           class="navbar-nav bg-primary sidebar sidebar-dark"
-          style={{ height: window.innerHeight - 200 }}
+          /* style={{ height: window.innerHeight - 200 }} */
           id="accordionSidebar"
         >
           <a
