@@ -7,6 +7,10 @@ const ObjetivoDesarrolloSostenible = () => {
   const [insercionObjetivo, setIncersionObjetivo] = useState(false);
 
   useEffect(() => {
+    listar();
+    maxId();
+  }, []);
+  const listar = () => {
     fetch("http://127.0.0.1:3900/api/desarrolloSostenible/listar")
       .then((response) => {
         return response.json();
@@ -14,6 +18,8 @@ const ObjetivoDesarrolloSostenible = () => {
       .then((doc) => {
         setObjetivo(doc);
       });
+  };
+  const maxId = () => {
     fetch("http://127.0.0.1:3900/api/desarrolloSostenible/maximo/id")
       .then((response) => {
         return response.json();
@@ -21,10 +27,13 @@ const ObjetivoDesarrolloSostenible = () => {
       .then((doc) => {
         setmaxIdObjetivo(doc.maximo);
       });
-  }, []);
-
+  };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
   return (
     <>
       <div className="card shadow mb-4">
@@ -67,7 +76,10 @@ const ObjetivoDesarrolloSostenible = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil "></button>
+                        <button
+                          className="btn btn-success fa fa-pencil"
+                          onClick={handleShowEdit}
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -105,6 +117,8 @@ const ObjetivoDesarrolloSostenible = () => {
                 .then((res) => {
                   console.log(res);
                   setIncersionObjetivo(true);
+                  listar();
+                  maxId();
                 });
             }}
           >
@@ -163,6 +177,100 @@ const ObjetivoDesarrolloSostenible = () => {
                 Guardar
               </Button>
               <Button variant="danger" onClick={handleClose}>
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+        <Modal show={showEdit} onHide={handleCloseEdit}>
+          <Modal.Header className="bg-light" closeButton>
+            <Modal.Title>Editar Objetivo de Desarrollo Sostenible</Modal.Title>
+          </Modal.Header>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idObjetivo");
+              let nombre = document.querySelector(
+                "#nombreObjetivoDesarrolloSostenible"
+              );
+              let descripcion = document.querySelector(
+                "#descripcionObjetivoDesarrolloSostenible"
+              );
+              let estado = document.querySelector("#estadoObjetivo");
+              fetch("http://127.0.0.1:3900/api/desarrolloSostenible/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionObjetivo(true);
+                  listar();
+                  maxId();
+                });
+            }}
+          >
+            <Modal.Body>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idObjetivo"
+                  disabled
+                  value={maxIdObjetivo + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Nombre <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreObjetivoDesarrolloSostenible"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputPassword1" className="form-label">
+                  Descripción
+                </label>
+                <textarea
+                  className="form-control"
+                  name=""
+                  id="descripcionObjetivoDesarrolloSostenible"
+                  rows="5"
+                  style={{ resize: "none" }}
+                ></textarea>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Estado
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoObjetivo"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit" variant="primary" onClick={handleCloseEdit}>
+                Guardar
+              </Button>
+              <Button variant="danger" onClick={handleCloseEdit}>
                 Cancelar
               </Button>
             </Modal.Footer>

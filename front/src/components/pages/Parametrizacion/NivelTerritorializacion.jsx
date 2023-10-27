@@ -7,6 +7,10 @@ const NivelTerritorializacion = () => {
   const [insercionNivel, setIncersionNivel] = useState(false);
 
   useEffect(() => {
+    listar();
+    maxId();
+  }, []);
+  const listar = () => {
     fetch("http://127.0.0.1:3900/api/nivelDeTerritorializacion/listar")
       .then((response) => {
         return response.json();
@@ -14,6 +18,8 @@ const NivelTerritorializacion = () => {
       .then((doc) => {
         setNivel(doc);
       });
+  };
+  const maxId = () => {
     fetch("http://127.0.0.1:3900/api/nivelDeTerritorializacion/maximo/id")
       .then((response) => {
         return response.json();
@@ -21,10 +27,13 @@ const NivelTerritorializacion = () => {
       .then((doc) => {
         setmaxIdNivel(doc.maximo);
       });
-  }, []);
-
+  };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
   return (
     <>
       <div className="card shadow mb-4">
@@ -67,7 +76,10 @@ const NivelTerritorializacion = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil "></button>
+                        <button
+                          className="btn btn-success fa fa-pencil"
+                          onClick={handleShowEdit}
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -108,6 +120,8 @@ const NivelTerritorializacion = () => {
                 .then((res) => {
                   console.log(res);
                   setIncersionNivel(true);
+                  listar();
+                  maxId();
                 });
             }}
           >
@@ -166,6 +180,103 @@ const NivelTerritorializacion = () => {
                 Guardar
               </Button>
               <Button variant="danger" onClick={handleClose}>
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+        <Modal show={showEdit} onHide={handleCloseEdit}>
+          <Modal.Header className="bg-light" closeButton>
+            <Modal.Title>Editar Nivel de Territorializacion</Modal.Title>
+          </Modal.Header>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idNivel");
+              let nombre = document.querySelector(
+                "#nombreNivelDeTerritorializacion"
+              );
+              let descripcion = document.querySelector(
+                "#descripcionNivelDeTerritorializacion"
+              );
+              let estado = document.querySelector("#estadoNivel");
+              fetch(
+                "http://127.0.0.1:3900/api/nivelDeTerritorializacion/agregar",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                  },
+                  body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
+                }
+              )
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionNivel(true);
+                  listar();
+                  maxId();
+                });
+            }}
+          >
+            <Modal.Body>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idNivel"
+                  disabled
+                  value={maxIdNivel + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Nombre <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreNivelDeTerritorializacion"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputPassword1" className="form-label">
+                  Descripción
+                </label>
+                <textarea
+                  className="form-control"
+                  name=""
+                  id="descripcionNivelDeTerritorializacion"
+                  rows="5"
+                  style={{ resize: "none" }}
+                ></textarea>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Estado
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoNivel"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit" variant="primary" onClick={handleCloseEdit}>
+                Guardar
+              </Button>
+              <Button variant="danger" onClick={handleCloseEdit}>
                 Cancelar
               </Button>
             </Modal.Footer>
