@@ -2,6 +2,27 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 const DocumentosAdopcion = () => {
   const [show, setShow] = useState(false);
+  const [maxIdDocumentoDeAdopcion, setmaxIDDocumentoDeAdopcion] = useState([]);
+  const [documentoDeAdopcion, setDocumentoDeAdopcion] = useState([]);
+  const [insercionDocumentoDeAdopcion, setIncersionDocumentoDeAdopcion] =
+    useState(false);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/documentosDeAdopcion/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setDocumentoDeAdopcion(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/documentosDeAdopcion/maximo/id")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setmaxIDDocumentoDeAdopcion(doc.maximo);
+      });
+  }, []);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -25,10 +46,11 @@ const DocumentosAdopcion = () => {
               className="table table-bordered"
               id="dataTable"
               width="100%"
-              cellspacing="0"
+              cellSpacing="0"
             >
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Nombre</th>
                   <th>Descripcion</th>
                   <th>Estado</th>
@@ -37,24 +59,20 @@ const DocumentosAdopcion = () => {
               </thead>
 
               <tbody>
-                <tr>
-                  <td>Acuerdo Distrital</td>
-                  <td>Documentos de adopción de la politica publica</td>
-                  <td>ACTIVO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Decreto Distrital</td>
-                  <td>Documentos de adopción de la politica publica</td>
-                  <td>ACTIVO</td>
-                  <td className="text-center">
-                    {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
-                  </td>
-                </tr>
+                {documentoDeAdopcion.map((res) => {
+                  return (
+                    <tr key={res.id}>
+                      <td>{res.id}</td>
+                      <td>{res.Nombre}</td>
+                      <td>{res.Descripcion}</td>
+                      <td>{res.Estado}</td>
+                      <td className="text-center">
+                        {" "}
+                        <button className="btn btn-success fa fa-pencil "></button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -63,10 +81,49 @@ const DocumentosAdopcion = () => {
           <Modal.Header className="bg-light" closeButton>
             <Modal.Title>Agregar Documento de Adopción</Modal.Title>
           </Modal.Header>
-          <form>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idDocumentoDeAdopcion");
+              let nombre = document.querySelector("#nombreDocumentosAdopcion");
+              let estado = document.querySelector(
+                "#estadoDocumentosDeAdopcion"
+              );
+              let descripcion = document.querySelector(
+                "#descripcionDocumentosAdopcion"
+              );
+              fetch("http://127.0.0.1:3900/api/documentosDeAdopcion/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionDocumentoDeAdopcion(true);
+                });
+            }}
+          >
             <Modal.Body>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idDocumentoDeAdopcion"
+                  disabled
+                  value={maxIdDocumentoDeAdopcion + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
                 <input
@@ -77,7 +134,7 @@ const DocumentosAdopcion = () => {
                 />
               </div>
               <div className="mb-3">
-                <label for="exampleInputPassword1" className="form-label">
+                <label htmlFor="exampleInputPassword1" className="form-label">
                   Descripción
                 </label>
                 <textarea
@@ -89,12 +146,16 @@ const DocumentosAdopcion = () => {
                 ></textarea>
               </div>
               <div className="mb-3">
-                <label for="" className="form-label">
+                <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select class="form-select" aria-label="Default select example">
-                  <option value="1">Activo</option>
-                  <option value="2">Inactivo</option>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoDocumentosDeAdopcion"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
                 </select>
               </div>
             </Modal.Body>
