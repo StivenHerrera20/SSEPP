@@ -7,13 +7,7 @@ const RangoSemaforo = () => {
   const [insercionRangoSemaforo, setIncersionRangoSemaforo] = useState(false);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3900/api/rangoSemaforo/listar")
-      .then((response) => {
-        return response.json();
-      })
-      .then((doc) => {
-        setRangoSemaforo(doc);
-      });
+    listar();
     fetch("http://127.0.0.1:3900/api/unidadDeMedida/maximo/id")
       .then((response) => {
         return response.json();
@@ -22,9 +16,21 @@ const RangoSemaforo = () => {
         setmaxIdRangoSemaforo(doc.maximo);
       });
   }, []);
-
+  const listar = () => {
+    fetch("http://127.0.0.1:3900/api/rangoSemaforo/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setRangoSemaforo(doc);
+      });
+  };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
   return (
     <>
       <div className="card shadow mb-4">
@@ -67,7 +73,10 @@ const RangoSemaforo = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil "></button>
+                        <button
+                          className="btn btn-success fa fa-pencil "
+                          onClick={handleShowEdit}
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -76,6 +85,99 @@ const RangoSemaforo = () => {
             </table>
           </div>
         </div>
+        <Modal show={showEdit} onHide={handleCloseEdit}>
+          <Modal.Header className="bg-light" closeButton>
+            <Modal.Title>Editar Rango Semáforo</Modal.Title>
+          </Modal.Header>
+          <form method="post" onSubmit={(e) => {}}>
+            <Modal.Body>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idRangoSemaforoEdit"
+                  disabled
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Nombre <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreDocumentosAdopcion"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Mes <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="mesRangoSemaforoEdit"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Desde <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="desdeRangoSemaforoEdit"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Hasta <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="hastaRangoSemaforoEdit"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Color <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="colorRangoSemaforoEdit"
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Estado
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoDocumentosDeAdopcion"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit" variant="primary" onClick={handleCloseEdit}>
+                Guardar
+              </Button>
+              <Button variant="danger" onClick={handleCloseEdit}>
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
       </div>
     </>
   );

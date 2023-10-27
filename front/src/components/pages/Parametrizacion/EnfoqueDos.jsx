@@ -8,20 +8,8 @@ const EnfoqueDos = () => {
   const [Enfoque, setEnfoque] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3900/api/enfoqueNivelDos/listar")
-      .then((response) => {
-        return response.json();
-      })
-      .then((doc) => {
-        setEnfoqueDos(doc);
-      });
-    fetch("http://127.0.0.1:3900/api/enfoqueNivelDos/maximo/id")
-      .then((response) => {
-        return response.json();
-      })
-      .then((doc) => {
-        setmaxIdEnfoqueDos(doc.maximo);
-      });
+    listar();
+    maxId();
     fetch("http://127.0.0.1:3900/api/enfoqueNivelUno/listar")
       .then((response) => {
         return response.json();
@@ -30,9 +18,30 @@ const EnfoqueDos = () => {
         setEnfoque(doc);
       });
   }, []);
-
+  const listar = () => {
+    fetch("http://127.0.0.1:3900/api/enfoqueNivelDos/listar")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setEnfoqueDos(doc);
+      });
+  };
+  const maxId = () => {
+    fetch("http://127.0.0.1:3900/api/enfoqueNivelDos/maximo/id")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setmaxIdEnfoqueDos(doc.maximo);
+      });
+  };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
   return (
     <>
       <div className="card shadow mb-4">
@@ -75,7 +84,10 @@ const EnfoqueDos = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil "></button>
+                        <button
+                          className="btn btn-success fa fa-pencil"
+                          onClick={handleShowEdit}
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -109,6 +121,8 @@ const EnfoqueDos = () => {
                 .then((res) => {
                   console.log(res);
                   setIncersionEnfoqueDos(true);
+                  listar();
+                  maxId();
                 });
             }}
           >
@@ -171,6 +185,104 @@ const EnfoqueDos = () => {
                 Guardar
               </Button>
               <Button variant="danger" onClick={handleClose}>
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+        <Modal show={showEdit} onHide={handleCloseEdit}>
+          <Modal.Header className="bg-light" closeButton>
+            <Modal.Title>Editar Enfoque Nivel 2</Modal.Title>
+          </Modal.Header>
+          <form
+            method="post"
+            onSubmit={(e) => {
+              e.preventDefault();
+              let id = document.querySelector("#idEnfoqueDos");
+              let nombre = document.querySelector("#nombreEnfoqueNivelDos");
+              let nivelUno = document.querySelector("#nivelUnoEnfoqueDos");
+              let estado = document.querySelector("#estadoEnfoqueDos");
+              fetch("http://127.0.0.1:3900/api/enfoqueNivelDos/agregar", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${id.value}&Nombre=${nombre.value}&Nivel_uno=${nivelUno.value}&Estado=${estado.value}`,
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIncersionEnfoqueDos(true);
+                  listar();
+                  maxId();
+                });
+            }}
+          >
+            <Modal.Body>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  id <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idEnfoqueDos"
+                  disabled
+                  value={maxIdEnfoqueDos + 1}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Nombre <b className="text-danger">*</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreEnfoqueNivelDos"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Nivel 1
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="nivelUnoEnfoqueDos"
+                >
+                  {Enfoque.map((element) => (
+                    <option
+                      key={element.id}
+                      value={element.Nombre}
+                      id="sectorEntidad"
+                    >
+                      {element.Nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  Estado
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoEnfoqueDos"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit" variant="primary" onClick={handleCloseEdit}>
+                Guardar
+              </Button>
+              <Button variant="danger" onClick={handleCloseEdit}>
                 Cancelar
               </Button>
             </Modal.Footer>
