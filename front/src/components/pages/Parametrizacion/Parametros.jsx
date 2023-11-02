@@ -109,7 +109,7 @@ const Parametros = () => {
                 headers: {
                   "Content-Type": "application/x-www-form-urlencoded",
                 },
-                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Valor=${valor.value}&Estado=${estado.value}`,
+                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Valor=${valor.value} &Estado=${estado.value}`,
               })
                 .then((response) => {
                   return response.json();
