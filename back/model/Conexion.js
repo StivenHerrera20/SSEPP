@@ -40,10 +40,7 @@ const Plan = planModel(sequelize, Sequelize);
 const rangoSemaforo = rangoSemaforoModel(sequelize, Sequelize);
 const Sector = sectorModel(sequelize, Sequelize);
 const unidadDeMedida = unidadDeMedidaModel(sequelize, Sequelize);
-const nivelDeTerritorializacion = nivelDeTerritorializacionModel(
-  sequelize,
-  Sequelize
-);
+const nivelDeTerritorializacion = nivelDeTerritorializacionModel(sequelize, Sequelize);
 sequelize.sync({ force: false }).then(() => {
   console.log("Melo hasta aqui");
 });
