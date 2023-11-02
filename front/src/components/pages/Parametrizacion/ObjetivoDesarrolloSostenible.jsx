@@ -5,14 +5,21 @@ const ObjetivoDesarrolloSostenible = () => {
   const [maxIdObjetivo, setmaxIdObjetivo] = useState([]);
   const [Objetivo, setObjetivo] = useState([]);
   const [insercionObjetivo, setIncersionObjetivo] = useState(false);
+  const [pagina, setPagina] = useState(0);
+  const [fila, setFila] = useState(0);
+  const [busqueda, setBusqueda] = useState(0);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3900/api/desarrolloSostenible/listar")
+    fetch(
+      "http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=" +
+        pagina +
+        "&size=5"
+    )
       .then((response) => {
         return response.json();
       })
       .then((doc) => {
-        setObjetivo(doc);
+        setObjetivo(doc.desarrollo);
       });
     fetch("http://127.0.0.1:3900/api/desarrolloSostenible/maximo/id")
       .then((response) => {
@@ -34,10 +41,78 @@ const ObjetivoDesarrolloSostenible = () => {
             variant="primary"
             onClick={handleShow}
           ></Button>
-
+          <div>
+            <select
+              name=""
+              id="numeroFilas"
+              onChangeCapture={() => {
+                let numeroFilas = document.querySelector("#numeroFilas");
+                setFila(parseInt(numeroFilas.value));
+                fetch(
+                  "http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=" +
+                    pagina +
+                    "&size=" +
+                    fila
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((doc) => {
+                    setObjetivo(doc.desarrollo);
+                    console.log(doc);
+                  });
+              }}
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
           <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">
             Objetivo de Desarrollo Sostenible
           </h2>
+          <div>
+            <input
+              type="text"
+              name=""
+              id="txtTabla"
+              onChange={() => {
+                let txtTabla = document.querySelector("#txtTabla");
+                setBusqueda(txtTabla.value);
+                fetch(
+                  "http://127.0.0.1:3900/api/desarrolloSostenible/listarEscrito?Nombre=" +
+                    busqueda
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((doc) => {
+                    console.log(doc);
+                    setObjetivo(doc.resultado);
+                  });
+                if (busqueda.length == 0) {
+                  fetch(
+                    "http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=" +
+                      pagina +
+                      "&size=5"
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setObjetivo(doc.desarrollo);
+                    });
+                }
+              }}
+            />
+          </div>
         </div>
         <div className="card-body">
           <div className="table-responsive">
@@ -56,8 +131,7 @@ const ObjetivoDesarrolloSostenible = () => {
                   <th className="text-center">Editar</th>
                 </tr>
               </thead>
-
-              <tbody>
+              <tbody id="tablaObjetivo">
                 {Objetivo.map((res) => {
                   return (
                     <tr key={res.id}>

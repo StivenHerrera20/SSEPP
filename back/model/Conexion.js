@@ -49,6 +49,7 @@ sequelize.sync({ force: false }).then(() => {
 });
 
 module.exports = {
+  sequelize,
   DocumentoAsociado,
   DocumentoDeAdopcion,
   enfoqueNivelCuatro,
