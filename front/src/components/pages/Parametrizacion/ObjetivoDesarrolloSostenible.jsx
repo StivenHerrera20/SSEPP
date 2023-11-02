@@ -10,14 +10,46 @@ const ObjetivoDesarrolloSostenible = () => {
   const [busqueda, setBusqueda] = useState(0);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3900/api/desarrolloSostenible/listar")
+    /* fetch("http://127.0.0.1:3900/api/desarrolloSostenible/listar")
       .then((response) => {
         return response.json();
       })
       .then((doc) => {
         setObjetivo(doc.desarrollo);
+      }); */
+    let numeroFilas = document.querySelector("#numeroFilas");
+    setFila(parseInt(numeroFilas.value));
+    fetch(
+      "http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=" +
+        pagina +
+        "&size=" +
+        fila
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setObjetivo(doc.desarrollo);
+        console.log(doc);
       });
   });
+  const selectPagina = () => {
+    let numeroFilas = document.querySelector("#numeroFilas");
+    setFila(parseInt(numeroFilas.value));
+    fetch(
+      "http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=" +
+        pagina +
+        "&size=" +
+        fila
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setObjetivo(doc.desarrollo);
+        console.log(doc);
+      });
+  };
   const maxId = () => {
     fetch("http://127.0.0.1:3900/api/desarrolloSostenible/maximo/id")
       .then((response) => {
@@ -46,29 +78,16 @@ const ObjetivoDesarrolloSostenible = () => {
             <select
               name=""
               id="numeroFilas"
-              onChangeCapture={() => {
-                let numeroFilas = document.querySelector("#numeroFilas");
-                setFila(parseInt(numeroFilas.value));
-                fetch(
-                  "http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=" +
-                    pagina +
-                    "&size=" +
-                    fila
-                )
-                  .then((response) => {
-                    return response.json();
-                  })
-                  .then((doc) => {
-                    setObjetivo(doc.desarrollo);
-                    console.log(doc);
-                  });
-              }}
+              className="form-select ms-3"
+              onChange={selectPagina}
             >
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
-              <option value="5">5</option>
+              <option selected value="5">
+                5
+              </option>
               <option value="6">6</option>
               <option value="7">7</option>
               <option value="8">8</option>
@@ -83,6 +102,8 @@ const ObjetivoDesarrolloSostenible = () => {
             <input
               type="text"
               name=""
+              className="form-control"
+              placeholder="Buscar..."
               id="txtTabla"
               onChange={() => {
                 let txtTabla = document.querySelector("#txtTabla");
