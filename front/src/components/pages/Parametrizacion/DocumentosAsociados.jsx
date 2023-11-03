@@ -5,33 +5,12 @@ const DocumentosAsociados = () => {
   const [maxId, setmaxID] = useState([]);
   const [documentos, setDocumentos] = useState([]);
   const [insercion, setIncersion] = useState(false);
+  const [pagina, setPagina] = useState(0);
+  const [fila, setFila] = useState(5);
+  const [busqueda, setBusqueda] = useState(0);
+  const [totalRegistros, setTotalRegistros] = useState(0);
+  const [totalPaginas, setTotalPaginas] = useState(0);
 
-  /*  const agregar = (req,res)=>{
-    fetch('http://127.0.0.1:3900/api/documentosAsociados/listar',{
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(req.body),
-      })
-      .then((response) => {
-        return response.json()
-      })
-      .then((res) => {
-        console.log(res)
-        setIncersion(true)
-      });
-  } */
-
-  const listar = () => {
-    fetch("http://127.0.0.1:3900/api/documentosAsociados/listar")
-      .then((response) => {
-        return response.json();
-      })
-      .then((doc) => {
-        setDocumentos(doc);
-      });
-  };
   const maximoID = () => {
     fetch("http://127.0.0.1:3900/api/documentosAsociados/maximo/id")
       .then((response) => {
@@ -42,9 +21,17 @@ const DocumentosAsociados = () => {
       });
   };
   useEffect(() => {
-    listar();
+    fetch(
+      `http://127.0.0.1:3900/api/documentosAsociados/listar?page=${pagina}&size=${fila}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setDocumentos(doc.desarrollo);
+      });
     maximoID();
-  }, []);
+  }, [pagina, fila]);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 

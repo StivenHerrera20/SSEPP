@@ -11,7 +11,9 @@ const ObjetivoDesarrolloSostenible = () => {
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
   useEffect(() => {
-    fetch(`http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=${pagina}&size=${fila}`)
+    fetch(
+      `http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=${pagina}&size=${fila}`
+    )
       .then((response) => {
         return response.json();
       })
@@ -20,13 +22,25 @@ const ObjetivoDesarrolloSostenible = () => {
         setObjetivo(doc.desarrollo);
         setTotalRegistros(doc.total);
       });
+    fetch("http://127.0.0.1:3900/api/desarrolloSostenible/maximo/id")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setmaxIdObjetivo(doc.maximo);
+      });
   }, [pagina, fila]);
   const selectPagina = (e) => {
     const selectedValue = e.target.value;
     let nRegistros = totalRegistros;
     let nRegistrosPP = selectedValue;
     setTotalPaginas(Math.ceil(nRegistros / nRegistrosPP));
-    fetch("http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=" + pagina + "&size=" + selectedValue)
+    fetch(
+      "http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=" +
+        pagina +
+        "&size=" +
+        selectedValue
+    )
       .then((response) => {
         return response.json();
       })
@@ -36,21 +50,14 @@ const ObjetivoDesarrolloSostenible = () => {
         console.log(doc);
       });
   };
-  const maxId = () => {
-    fetch("http://127.0.0.1:3900/api/desarrolloSostenible/maximo/id")
-      .then((response) => {
-        return response.json();
-      })
-      .then((doc) => {
-        setmaxIdObjetivo(doc.maximo);
-      });
-  };
   const handleSearch = (event) => {
     const searchText = event.target.value;
     setBusqueda(searchText); // Actualiza el estado inmediatamente
     if (searchText.length != 0) {
       // Realiza la búsqueda solo si el texto no está vacío
-      fetch(`http://127.0.0.1:3900/api/desarrolloSostenible/listarEscrito?Nombre=${searchText}`)
+      fetch(
+        `http://127.0.0.1:3900/api/desarrolloSostenible/listarEscrito?Nombre=${searchText}`
+      )
         .then((response) => {
           return response.json();
         })
@@ -60,7 +67,9 @@ const ObjetivoDesarrolloSostenible = () => {
         });
     } else {
       // Si el texto está vacío, vuelve a cargar los datos originales
-      fetch(`http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=0&size=5`)
+      fetch(
+        `http://127.0.0.1:3900/api/desarrolloSostenible/listar?page=0&size=5`
+      )
         .then((response) => {
           return response.json();
         })
@@ -90,9 +99,18 @@ const ObjetivoDesarrolloSostenible = () => {
     <>
       <div className="card shadow mb-4">
         <div className="card-header py-3 d-flex">
-          <Button className="btn btn-primary fa fa-plus" variant="primary" onClick={handleShow}></Button>
+          <Button
+            className="btn btn-primary fa fa-plus"
+            variant="primary"
+            onClick={handleShow}
+          ></Button>
           <div>
-            <select name="" id="numeroFilas" className="form-select ms-3" onChange={selectPagina}>
+            <select
+              name=""
+              id="numeroFilas"
+              className="form-select ms-3"
+              onChange={selectPagina}
+            >
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -107,14 +125,28 @@ const ObjetivoDesarrolloSostenible = () => {
               <option value="10">10</option>
             </select>
           </div>
-          <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">Objetivo de Desarrollo Sostenible</h2>
+          <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">
+            Objetivo de Desarrollo Sostenible
+          </h2>
           <div>
-            <input type="text" name="" className="form-control" placeholder="Buscar..." id="txtTabla" onChange={handleSearch} />
+            <input
+              type="text"
+              name=""
+              className="form-control"
+              placeholder="Buscar..."
+              id="txtTabla"
+              onChange={handleSearch}
+            />
           </div>
         </div>
         <div className="card-body">
           <div className="table-responsive">
-            <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
+            <table
+              className="table table-bordered"
+              id="dataTable"
+              width="100%"
+              cellSpacing="0"
+            >
               <thead>
                 <tr>
                   <th>#</th>
@@ -134,7 +166,10 @@ const ObjetivoDesarrolloSostenible = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil" onClick={handleShowEdit}></button>
+                        <button
+                          className="btn btn-success fa fa-pencil"
+                          onClick={handleShowEdit}
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -142,10 +177,18 @@ const ObjetivoDesarrolloSostenible = () => {
               </tbody>
             </table>
           </div>
-          <Button className="btn btn-primary" variant="primary" onClick={handleAnterior}>
+          <Button
+            className="btn btn-primary"
+            variant="primary"
+            onClick={handleAnterior}
+          >
             Anterior
           </Button>
-          <Button className="btn btn-primary" variant="primary" onClick={handleSiguiente}>
+          <Button
+            className="btn btn-primary"
+            variant="primary"
+            onClick={handleSiguiente}
+          >
             Siguiente
           </Button>
         </div>
@@ -158,9 +201,19 @@ const ObjetivoDesarrolloSostenible = () => {
             onSubmit={(e) => {
               e.preventDefault();
               let id = document.querySelector("#idObjetivo");
-              let nombre = document.querySelector("#nombreObjetivoDesarrolloSostenible");
-              let descripcion = document.querySelector("#descripcionObjetivoDesarrolloSostenible");
+              let nombre = document.querySelector(
+                "#nombreObjetivoDesarrolloSostenible"
+              );
+              let descripcion = document.querySelector(
+                "#descripcionObjetivoDesarrolloSostenible"
+              );
               let estado = document.querySelector("#estadoObjetivo");
+              console.log(
+                id.value,
+                nombre.value,
+                descripcion.value,
+                estado.value
+              );
               fetch("http://127.0.0.1:3900/api/desarrolloSostenible/agregar", {
                 method: "POST",
                 headers: {
@@ -174,8 +227,6 @@ const ObjetivoDesarrolloSostenible = () => {
                 .then((res) => {
                   console.log(res);
                   setIncersionObjetivo(true);
-                  listar();
-                  maxId();
                 });
             }}
           >
@@ -184,13 +235,24 @@ const ObjetivoDesarrolloSostenible = () => {
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="idObjetivo" disabled value={maxIdObjetivo + 1} />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idObjetivo"
+                  disabled
+                  value={maxIdObjetivo + 1}
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="nombreObjetivoDesarrolloSostenible" aria-describedby="emailHelp" />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreObjetivoDesarrolloSostenible"
+                  aria-describedby="emailHelp"
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputPassword1" className="form-label">
@@ -208,7 +270,11 @@ const ObjetivoDesarrolloSostenible = () => {
                 <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select className="form-select" aria-label="Default select example" id="estadoObjetivo">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoObjetivo"
+                >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>
                 </select>
@@ -233,8 +299,12 @@ const ObjetivoDesarrolloSostenible = () => {
             onSubmit={(e) => {
               e.preventDefault();
               let id = document.querySelector("#idObjetivo");
-              let nombre = document.querySelector("#nombreObjetivoDesarrolloSostenible");
-              let descripcion = document.querySelector("#descripcionObjetivoDesarrolloSostenible");
+              let nombre = document.querySelector(
+                "#nombreObjetivoDesarrolloSostenible"
+              );
+              let descripcion = document.querySelector(
+                "#descripcionObjetivoDesarrolloSostenible"
+              );
               let estado = document.querySelector("#estadoObjetivo");
               fetch("http://127.0.0.1:3900/api/desarrolloSostenible/agregar", {
                 method: "POST",
@@ -259,13 +329,24 @@ const ObjetivoDesarrolloSostenible = () => {
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="idObjetivo" disabled value={maxIdObjetivo + 1} />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idObjetivo"
+                  disabled
+                  value={maxIdObjetivo + 1}
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="nombreObjetivoDesarrolloSostenible" aria-describedby="emailHelp" />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreObjetivoDesarrolloSostenible"
+                  aria-describedby="emailHelp"
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputPassword1" className="form-label">
@@ -283,7 +364,11 @@ const ObjetivoDesarrolloSostenible = () => {
                 <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select className="form-select" aria-label="Default select example" id="estadoObjetivo">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoObjetivo"
+                >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>
                 </select>
