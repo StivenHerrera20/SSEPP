@@ -1,8 +1,14 @@
 const router = require("express").Router();
-const { metaOds } = require("../../model/Conexion");
+const { metaOds, sequelize } = require("../../model/Conexion");
+const { QueryTypes } = require("sequelize");
 router.get("/listar", async (req, res) => {
-  const meta = await metaOds.findAll();
-  res.json(meta);
+  const { page = 0, size = 5 } = req.query;
+  let options = {
+    limit: +size,
+    offset: +page * +size,
+  };
+  const { count, rows } = await metaOds.findAndCountAll(options);
+  res.json({ total: count, desarrollo: rows, fila: size, page: page });
 });
 router.post("/agregar", async (req, res) => {
   const meta = await metaOds.create(req.body);
@@ -47,5 +53,13 @@ router.get("/maximo/:campo", async (req, res) => {
         mensaje: "Hubo un problema al obtener el valor máximo.",
       });
     });
+});
+router.get("/listarEscrito", async (req, res) => {
+  console.log(req.query.Nombre);
+  const busqueda = await sequelize.query(
+    "select * from meta_ods where Nombre like '%" + req.query.Nombre + "%'",
+    { type: QueryTypes.SELECT }
+  );
+  res.json({ resultado: busqueda });
 });
 module.exports = router;

@@ -11,6 +11,10 @@ router.get("/listar", async (req, res) => {
   const { count, rows } = await desarrolloSostenible.findAndCountAll(options);
   res.json({ total: count, desarrollo: rows, fila: size, page: page });
 });
+router.get("/listarTodos", async (req, res) => {
+  const enfoqueDos = await desarrolloSostenible.findAll();
+  res.json(enfoqueDos);
+});
 router.post("/agregar", async (req, res) => {
   const desarrollo = await desarrolloSostenible.create(req.body);
   res.json({

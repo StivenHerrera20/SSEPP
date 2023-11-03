@@ -1,6 +1,16 @@
 const router = require("express").Router();
-const { EnfoqueNivelDos } = require("../../model/Conexion");
+const { EnfoqueNivelDos, sequelize } = require("../../model/Conexion");
+const { QueryTypes } = require("sequelize");
 router.get("/listar", async (req, res) => {
+  const { page = 0, size = 5 } = req.query;
+  let options = {
+    limit: +size,
+    offset: +page * +size,
+  };
+  const { count, rows } = await EnfoqueNivelDos.findAndCountAll(options);
+  res.json({ total: count, desarrollo: rows, fila: size, page: page });
+});
+router.get("/listarTodos", async (req, res) => {
   const enfoqueDos = await EnfoqueNivelDos.findAll();
   res.json(enfoqueDos);
 });
@@ -46,5 +56,15 @@ router.get("/maximo/:campo", async (req, res) => {
         mensaje: "Hubo un problema al obtener el valor máximo.",
       });
     });
+});
+router.get("/listarEscrito", async (req, res) => {
+  console.log(req.query.Nombre);
+  const busqueda = await sequelize.query(
+    "select * from enfoque_nivel_dos where Nombre like '%" +
+      req.query.Nombre +
+      "%'",
+    { type: QueryTypes.SELECT }
+  );
+  res.json({ resultado: busqueda });
 });
 module.exports = router;

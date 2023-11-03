@@ -1,8 +1,18 @@
 const router = require("express").Router();
-const { Sector } = require("../../model/Conexion");
+const { Sector, sequelize } = require("../../model/Conexion");
+const { QueryTypes } = require("sequelize");
 router.get("/listar", async (req, res) => {
-  const sector = await Sector.findAll();
-  res.json(sector);
+  const { page = 0, size = 5 } = req.query;
+  let options = {
+    limit: +size,
+    offset: +page * +size,
+  };
+  const { count, rows } = await Sector.findAndCountAll(options);
+  res.json({ total: count, desarrollo: rows, fila: size, page: page });
+});
+router.get("/listarTodos", async (req, res) => {
+  const unidad = await Sector.findAll();
+  res.json(unidad);
 });
 router.post("/agregar", async (req, res) => {
   const sector = await Sector.create(req.body);
@@ -46,5 +56,13 @@ router.get("/maximo/:campo", async (req, res) => {
         mensaje: "Hubo un problema al obtener el valor máximo.",
       });
     });
+});
+router.get("/listarEscrito", async (req, res) => {
+  console.log(req.query.Nombre);
+  const busqueda = await sequelize.query(
+    "select * from sector where Nombre like '%" + req.query.Nombre + "%'",
+    { type: QueryTypes.SELECT }
+  );
+  res.json({ resultado: busqueda });
 });
 module.exports = router;

@@ -1,8 +1,19 @@
 const router = require("express").Router();
-const { nivelDeTerritorializacion } = require("../../model/Conexion");
+const {
+  nivelDeTerritorializacion,
+  sequelize,
+} = require("../../model/Conexion");
+const { QueryTypes } = require("sequelize");
 router.get("/listar", async (req, res) => {
-  const territorializacion = await nivelDeTerritorializacion.findAll();
-  res.json(territorializacion);
+  const { page = 0, size = 5 } = req.query;
+  let options = {
+    limit: +size,
+    offset: +page * +size,
+  };
+  const { count, rows } = await nivelDeTerritorializacion.findAndCountAll(
+    options
+  );
+  res.json({ total: count, desarrollo: rows, fila: size, page: page });
 });
 router.post("/agregar", async (req, res) => {
   const territorializacion = await nivelDeTerritorializacion.create(req.body);
@@ -47,5 +58,15 @@ router.get("/maximo/:campo", async (req, res) => {
         mensaje: "Hubo un problema al obtener el valor máximo.",
       });
     });
+});
+router.get("/listarEscrito", async (req, res) => {
+  console.log(req.query.Nombre);
+  const busqueda = await sequelize.query(
+    "select * from nivel_de_territorializacion where Nombre like '%" +
+      req.query.Nombre +
+      "%'",
+    { type: QueryTypes.SELECT }
+  );
+  res.json({ resultado: busqueda });
 });
 module.exports = router;

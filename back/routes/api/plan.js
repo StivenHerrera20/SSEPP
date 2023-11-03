@@ -1,8 +1,18 @@
 const router = require("express").Router();
-const { Plan } = require("../../model/Conexion");
+const { Plan, sequelize } = require("../../model/Conexion");
+const { QueryTypes } = require("sequelize");
 router.get("/listar", async (req, res) => {
-  const plan = await Plan.findAll();
-  res.json(plan);
+  const { page = 0, size = 5 } = req.query;
+  let options = {
+    limit: +size,
+    offset: +page * +size,
+  };
+  const { count, rows } = await Plan.findAndCountAll(options);
+  res.json({ total: count, desarrollo: rows, fila: size, page: page });
+});
+router.get("/listarTodos", async (req, res) => {
+  const unidad = await Plan.findAll();
+  res.json(unidad);
 });
 router.post("/agregar", async (req, res) => {
   const plan = await Plan.create(req.body);
@@ -46,5 +56,15 @@ router.get("/maximo/:campo", async (req, res) => {
         mensaje: "Hubo un problema al obtener el valor máximo.",
       });
     });
+});
+router.get("/listarEscrito", async (req, res) => {
+  console.log(req.query.Nombre);
+  const busqueda = await sequelize.query(
+    "select * from plan_de_desarrollo where Nombre like '%" +
+      req.query.Nombre +
+      "%'",
+    { type: QueryTypes.SELECT }
+  );
+  res.json({ resultado: busqueda });
 });
 module.exports = router;
