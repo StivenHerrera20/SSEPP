@@ -20,6 +20,7 @@ import PlanDesarrollo from "./pages/Parametrizacion/PlanDesarrollo";
 import IndicadorPlanDesarrollo from "./pages/Parametrizacion/IndicadorPlanDesarrollo";
 import Parametros from "./pages/Parametrizacion/Parametros";
 import IndexPoliticaPublica from "./pages/PoliticaPublica/IndexPoliticaPublica";
+import IndexPlanAccion from "./pages/PlanDeAccion/IndexPlanAccion";
 const Router = () => {
   return (
     <>
@@ -37,6 +38,7 @@ const Router = () => {
             path="/inicio/politicasPublicas"
             element={<IndexPoliticaPublica />}
           />
+          <Route path="/inicio/plandeaccion" element={<IndexPlanAccion />} />
         </Routes>
 
         {/* Esta es la forma de prueba (Que pinte la url de cada componente) */}
