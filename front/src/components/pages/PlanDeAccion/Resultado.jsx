@@ -99,7 +99,7 @@ const Resultado = () => {
                   id="exampleFormControlTextarea1"
                   rows="2"
                   disabled
-                  placeholder={
+                  defaultValue={
                     "Aca va el nombre del objetivo especifico seleccionado"
                   }
                   style={{ resize: "none" }}
@@ -537,6 +537,17 @@ const Resultado = () => {
                                 type="text"
                                 className="form-control"
                                 placeholder="0,00"
+                              />
+                            </div>
+                            <div className="mb-3">
+                              <label htmlFor="" className="form-label">
+                                Meta total Resultado
+                              </label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="0,00"
+                                disabled
                               />
                             </div>
                           </div>
