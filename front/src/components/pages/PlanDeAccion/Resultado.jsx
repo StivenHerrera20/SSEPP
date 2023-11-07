@@ -81,17 +81,9 @@ const Resultado = () => {
         </div>
         <div className="card card-body px-0 py-0">
           <div className="tab-content  p-2" id="myTabContent">
-            <div
-              className="tab-pane fade show active"
-              id="datosGenerales"
-              role="tabpanel"
-              aria-labelledby="datosGenerales-tab"
-            >
+            <div className="tab-pane fade show active" id="datosGenerales" role="tabpanel" aria-labelledby="datosGenerales-tab">
               <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea1"
-                  className="form-label"
-                >
+                <label htmlFor="exampleFormControlTextarea1" className="form-label">
                   Objetivo Especifico
                 </label>
                 <textarea
@@ -99,25 +91,15 @@ const Resultado = () => {
                   id="exampleFormControlTextarea1"
                   rows="2"
                   disabled
-                  defaultValue={
-                    "Aca va el nombre del objetivo especifico seleccionado"
-                  }
+                  defaultValue={"Aca va el nombre del objetivo especifico seleccionado"}
                   style={{ resize: "none" }}
                 ></textarea>
               </div>
               <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea1"
-                  className="form-label"
-                >
+                <label htmlFor="exampleFormControlTextarea1" className="form-label">
                   Nombre del Resultado <b className="text-danger">*</b>
                 </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea1"
-                  rows="2"
-                  style={{ resize: "none" }}
-                ></textarea>
+                <textarea className="form-control" id="exampleFormControlTextarea1" rows="2" style={{ resize: "none" }}></textarea>
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
@@ -132,10 +114,7 @@ const Resultado = () => {
                 <label htmlFor="" className="form-label">
                   Sector Responsable <b className="text-danger">*</b>
                 </label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                >
+                <select className="form-select" aria-label="Default select example">
                   <option value="1">...</option>
                   <option value="2">...</option>
                   <option value="3">...</option>
@@ -145,10 +124,7 @@ const Resultado = () => {
                 <label htmlFor="" className="form-label">
                   Entidad Responsable <b className="text-danger">*</b>
                 </label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                >
+                <select className="form-select" aria-label="Default select example">
                   <option value="1">...</option>
                   <option value="2">...</option>
                   <option value="3">...</option>
@@ -168,121 +144,52 @@ const Resultado = () => {
                       height: "150px",
                     }}
                   >
-                    <input
-                      type="text"
-                      name=""
-                      className="form-control mb-2"
-                      placeholder="Buscar..."
-                    />
+                    <input type="text" name="" className="form-control mb-2" placeholder="Buscar..." />
                     <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
+                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                      <label className="form-check-label" htmlFor="flexCheckDefault">
                         1
                       </label>
                     </div>
                     <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
+                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                      <label className="form-check-label" htmlFor="flexCheckDefault">
                         2
                       </label>
                     </div>
                     <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
+                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                      <label className="form-check-label" htmlFor="flexCheckDefault">
                         3
                       </label>
                     </div>
                     <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
+                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                      <label className="form-check-label" htmlFor="flexCheckDefault">
                         4
                       </label>
                     </div>
                     <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
+                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                      <label className="form-check-label" htmlFor="flexCheckDefault">
                         5
                       </label>
                     </div>
                     <div className="form-check ">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
+                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                      <label className="form-check-label" htmlFor="flexCheckDefault">
                         6
                       </label>
                     </div>
                     <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
+                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                      <label className="form-check-label" htmlFor="flexCheckDefault">
                         7
                       </label>
                     </div>
                     <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
+                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                      <label className="form-check-label" htmlFor="flexCheckDefault">
                         8
                       </label>
                     </div>
@@ -290,48 +197,24 @@ const Resultado = () => {
                 </div>
               </div>
             </div>
-            <div
-              className="tab-pane fade"
-              id="indicador"
-              role="tabpanel"
-              aria-labelledby="indicador-tab"
-            >
+            <div className="tab-pane fade" id="indicador" role="tabpanel" aria-labelledby="indicador-tab">
               <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea1"
-                  className="form-label"
-                >
+                <label htmlFor="exampleFormControlTextarea1" className="form-label">
                   Nombre del Indicador <b className="text-danger">*</b>
                 </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea1"
-                  rows="2"
-                  style={{ resize: "none" }}
-                ></textarea>
+                <textarea className="form-control" id="exampleFormControlTextarea1" rows="2" style={{ resize: "none" }}></textarea>
               </div>
               <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea1"
-                  className="form-label"
-                >
+                <label htmlFor="exampleFormControlTextarea1" className="form-label">
                   Formula del Indicador <b className="text-danger">*</b>
                 </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea1"
-                  rows="2"
-                  style={{ resize: "none" }}
-                ></textarea>
+                <textarea className="form-control" id="exampleFormControlTextarea1" rows="2" style={{ resize: "none" }}></textarea>
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
                   Tipo de Anulación <b className="text-danger">*</b>
                 </label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                >
+                <select className="form-select" aria-label="Default select example">
                   <option value="1">...</option>
                   <option value="2">...</option>
                   <option value="3">...</option>
@@ -342,10 +225,7 @@ const Resultado = () => {
                   <label htmlFor="" className="form-label">
                     Aplica Indicador PDD? <b className="text-danger">*</b>
                   </label>
-                  <select
-                    className="form-select w-50"
-                    aria-label="Default select example"
-                  >
+                  <select className="form-select w-50" aria-label="Default select example">
                     <option
                       value="1"
                       onClick={() => {
@@ -368,11 +248,7 @@ const Resultado = () => {
                   <label htmlFor="" className="form-label">
                     Plan de Desarrollo
                   </label>
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    disabled={enable}
-                  >
+                  <select className="form-select" aria-label="Default select example" disabled={enable}>
                     <option value="1">...</option>
                     <option value="2">...</option>
                     <option value="3">...</option>
@@ -382,11 +258,7 @@ const Resultado = () => {
                   <label htmlFor="" className="form-label">
                     Indicador PDD
                   </label>
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    disabled={enable}
-                  >
+                  <select className="form-select" aria-label="Default select example" disabled={enable}>
                     <option value="1">...</option>
                     <option value="2">...</option>
                     <option value="3">...</option>
@@ -411,12 +283,7 @@ const Resultado = () => {
               <div className="row mb-3 d-flex align-items-center m-auto">
                 <div className="col-4">
                   <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id=""
-                    />
+                    <input className="form-check-input" type="checkbox" value="" id="" />
                     <label className="form-check-label" htmlFor="">
                       No disponible
                     </label>
@@ -444,12 +311,7 @@ const Resultado = () => {
                 </div>
               </div>
             </div>
-            <div
-              className="tab-pane fade"
-              id="meta"
-              role="tabpanel"
-              aria-labelledby="meta-tab"
-            >
+            <div className="tab-pane fade" id="meta" role="tabpanel" aria-labelledby="meta-tab">
               <div className="row mt-3 mb-3">
                 <div className="col-9 w-100">
                   <div style={{ height: "950px" }}>
@@ -472,39 +334,26 @@ const Resultado = () => {
                   <h5>Meta Total del resultado</h5>
                   <div className="row">
                     <div className="col">
-                      <button
-                        type="button"
-                        className="btn btn-primary bi bi-pencil"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalId"
-                      ></button>
+                      <button type="button" className="btn btn-primary bi bi-pencil" data-bs-toggle="modal" data-bs-target="#modalId"></button>
                     </div>
 
                     <div
                       className="modal fade"
                       id="modalId"
-                      tabindex="-1"
+                      tabIndex="-1"
                       data-bs-backdrop="static"
                       data-bs-keyboard="false"
                       role="dialog"
                       aria-labelledby="modalTitleId"
                       aria-hidden="true"
                     >
-                      <div
-                        className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
-                        role="document"
-                      >
+                      <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
                         <div className="modal-content">
                           <div className="modal-header">
                             <h5 className="modal-title" id="modalTitleId">
                               Registrar Metas
                             </h5>
-                            <button
-                              type="button"
-                              className="btn-close"
-                              data-bs-dismiss="modal"
-                              aria-label="Close"
-                            ></button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
                           <div className="modal-body">
                             <div className="mb-3">Tipo anualización: ...</div>
@@ -513,50 +362,29 @@ const Resultado = () => {
                               <label htmlFor="" className="form-label">
                                 2020
                               </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
+                              <input type="text" className="form-control" placeholder="0,00" />
                             </div>
                             <div className="mb-3">
                               <label htmlFor="" className="form-label">
                                 2021
                               </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
+                              <input type="text" className="form-control" placeholder="0,00" />
                             </div>
                             <div className="mb-3">
                               <label htmlFor="" className="form-label">
                                 2022
                               </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
+                              <input type="text" className="form-control" placeholder="0,00" />
                             </div>
                             <div className="mb-3">
                               <label htmlFor="" className="form-label">
                                 Meta total Resultado
                               </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                                disabled
-                              />
+                              <input type="text" className="form-control" placeholder="0,00" disabled />
                             </div>
                           </div>
                           <div className="modal-footer">
-                            <button
-                              type="button"
-                              className="btn btn-secondary"
-                              data-bs-dismiss="modal"
-                            >
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                               Cancelar
                             </button>
                             <button type="button" className="btn btn-primary">
@@ -566,12 +394,6 @@ const Resultado = () => {
                         </div>
                       </div>
                     </div>
-
-                    <script>
-                      const myModal = new
-                      bootstrap.Modal(document.getElementById('modalId'),
-                      options)
-                    </script>
                   </div>
                 </div>
               </div>
