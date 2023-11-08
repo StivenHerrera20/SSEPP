@@ -17,6 +17,7 @@ const planRouter = require("./api/plan");
 const rangoSemaforoRouter = require("./api/rangoSemaforo");
 const sectorRouter = require("./api/sector");
 const unidadDeMedidaRouter = require("./api/unidadDeMedida");
+const politicaPublicaRouter = require("./api/politicasPublicas");
 router.use("/documentosAsociados", apiDocumentosAsociadosRouter);
 router.use("/documentosDeAdopcion", apiDocumentosDeAdopcionRouter);
 router.use("/enfoqueNivelCuatro", enfoqueNivelCuatroRouter);
@@ -34,5 +35,6 @@ router.use("/plan", planRouter);
 router.use("/rangoSemaforo", rangoSemaforoRouter);
 router.use("/sector", sectorRouter);
 router.use("/unidadDeMedida", unidadDeMedidaRouter);
+router.use("/politicasPublicas", politicaPublicaRouter);
 
 module.exports = router;

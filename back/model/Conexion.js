@@ -18,6 +18,7 @@ const planModel = require("./Plan");
 const rangoSemaforoModel = require("./rangoSemaforo");
 const sectorModel = require("./Sector");
 const unidadDeMedidaModel = require("./unidadDeMedida");
+const politicasPublicasModel = require("./PoliticasPublicas");
 
 // metodo para conectarnos a la bd, usando async -- await funciones asincronicas
 const sequelize = new Sequelize("politicas_publicas", "root", "", {
@@ -41,6 +42,7 @@ const rangoSemaforo = rangoSemaforoModel(sequelize, Sequelize);
 const Sector = sectorModel(sequelize, Sequelize);
 const unidadDeMedida = unidadDeMedidaModel(sequelize, Sequelize);
 const nivelDeTerritorializacion = nivelDeTerritorializacionModel(sequelize, Sequelize);
+const politicasPublicas = politicasPublicasModel(sequelize, Sequelize);
 sequelize.sync({ force: false }).then(() => {
   console.log("Melo hasta aqui");
 });
@@ -64,4 +66,5 @@ module.exports = {
   rangoSemaforo,
   Sector,
   unidadDeMedida,
+  politicasPublicas,
 };
