@@ -50,7 +50,12 @@ const IndexBateriaDeIndicadores = () => {
                   );
                 } else {
                   if (controlBI == 1) {
-                    return <CrearFichaTecnica></CrearFichaTecnica>;
+                    return (
+                      <CrearFichaTecnica
+                        controlBI={controlBI}
+                        setControlBI={setControlBI}
+                      ></CrearFichaTecnica>
+                    );
                   }
                 }
               })()}
