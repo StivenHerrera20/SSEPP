@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Chrono } from "react-chrono";
-import { Chart as ChartJS, LinearScale, CategoryScale, Tooltip, Legend, BarElement } from "chart.js";
+import {
+  Chart as ChartJS,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+  BarElement,
+} from "chart.js";
 ChartJS.register(LinearScale, CategoryScale, Tooltip, Legend, BarElement);
 import { Bar } from "react-chartjs-2";
 
@@ -39,7 +46,7 @@ const Producto = () => {
     labels: ["2020", "2021", "2022"],
     datasets: [
       {
-        label: "ds",
+        label: "Estimado",
         data: [4, 3, 7],
         responsive: true,
         backgroundColor: "aqua",
@@ -47,7 +54,7 @@ const Producto = () => {
         borderWidth: 1,
       },
       {
-        label: "ds",
+        label: "Disponible",
         data: [4, 3, 7],
         backgroundColor: "green",
         borderColor: "black",
@@ -132,9 +139,17 @@ const Producto = () => {
         </div>
         <div className="card card-body px-0 py-0">
           <div className="tab-content  p-2" id="myTabContent">
-            <div className="tab-pane fade show active" id="datosGenerales" role="tabpanel" aria-labelledby="datosGenerales-tab">
+            <div
+              className="tab-pane fade show active"
+              id="datosGenerales"
+              role="tabpanel"
+              aria-labelledby="datosGenerales-tab"
+            >
               <div className="mb-3">
-                <label htmlFor="exampleFormControlTextarea1" className="form-label">
+                <label
+                  htmlFor="exampleFormControlTextarea1"
+                  className="form-label"
+                >
                   Objetivo Especifico
                 </label>
                 <textarea
@@ -142,12 +157,17 @@ const Producto = () => {
                   id="exampleFormControlTextarea1"
                   rows="2"
                   disabled
-                  defaultValue={"Aca va el nombre del objetivo especifico seleccionado"}
+                  defaultValue={
+                    "Aca va el nombre del objetivo especifico seleccionado"
+                  }
                   style={{ resize: "none" }}
                 ></textarea>
               </div>
               <div className="mb-3">
-                <label htmlFor="exampleFormControlTextarea2" className="form-label">
+                <label
+                  htmlFor="exampleFormControlTextarea2"
+                  className="form-label"
+                >
                   Nombre del Resultado
                 </label>
                 <textarea
@@ -160,7 +180,10 @@ const Producto = () => {
                 ></textarea>
               </div>
               <div className="mb-3">
-                <label htmlFor="exampleFormControlTextarea3" className="form-label">
+                <label
+                  htmlFor="exampleFormControlTextarea3"
+                  className="form-label"
+                >
                   Nombre del Producto <b className="text-danger">*</b>
                 </label>
                 <textarea
@@ -184,7 +207,10 @@ const Producto = () => {
                 <label htmlFor="" className="form-label">
                   Sector Responsable <b className="text-danger">*</b>
                 </label>
-                <select className="form-select" aria-label="Default select example">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                >
                   <option value="1">...</option>
                   <option value="2">...</option>
                   <option value="3">...</option>
@@ -194,7 +220,10 @@ const Producto = () => {
                 <label htmlFor="" className="form-label">
                   Entidad Responsable <b className="text-danger">*</b>
                 </label>
-                <select className="form-select" aria-label="Default select example">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                >
                   <option value="1">...</option>
                   <option value="2">...</option>
                   <option value="3">...</option>
@@ -214,52 +243,121 @@ const Producto = () => {
                       height: "150px",
                     }}
                   >
-                    <input type="text" name="" className="form-control mb-2" placeholder="Buscar..." />
+                    <input
+                      type="text"
+                      name=""
+                      className="form-control mb-2"
+                      placeholder="Buscar..."
+                    />
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         1
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         2
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         3
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         4
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         5
                       </label>
                     </div>
                     <div className="form-check ">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         6
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         7
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         8
                       </label>
                     </div>
@@ -268,7 +366,8 @@ const Producto = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputPassword1" className="form-label ">
-                  Objetivos de Desarrollo Sostenible <b className="text-danger">*</b>
+                  Objetivos de Desarrollo Sostenible{" "}
+                  <b className="text-danger">*</b>
                 </label>
                 <div className="card w-75 px-0 bg-primary">
                   <div
@@ -280,52 +379,121 @@ const Producto = () => {
                       height: "150px",
                     }}
                   >
-                    <input type="text" name="" className="form-control mb-2" placeholder="Buscar..." />
+                    <input
+                      type="text"
+                      name=""
+                      className="form-control mb-2"
+                      placeholder="Buscar..."
+                    />
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         1
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         2
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         3
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         4
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         5
                       </label>
                     </div>
                     <div className="form-check ">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         6
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         7
                       </label>
                     </div>
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         8
                       </label>
                     </div>
@@ -333,24 +501,48 @@ const Producto = () => {
                 </div>
               </div>
             </div>
-            <div className="tab-pane fade" id="indicador" role="tabpanel" aria-labelledby="indicador-tab">
+            <div
+              className="tab-pane fade"
+              id="indicador"
+              role="tabpanel"
+              aria-labelledby="indicador-tab"
+            >
               <div className="mb-3">
-                <label htmlFor="exampleFormControlTextarea4" className="form-label">
+                <label
+                  htmlFor="exampleFormControlTextarea4"
+                  className="form-label"
+                >
                   Nombre del Indicador <b className="text-danger">*</b>
                 </label>
-                <textarea className="form-control" id="exampleFormControlTextarea4" rows="2" style={{ resize: "none" }}></textarea>
+                <textarea
+                  className="form-control"
+                  id="exampleFormControlTextarea4"
+                  rows="2"
+                  style={{ resize: "none" }}
+                ></textarea>
               </div>
               <div className="mb-3">
-                <label htmlFor="exampleFormControlTextarea5" className="form-label">
+                <label
+                  htmlFor="exampleFormControlTextarea5"
+                  className="form-label"
+                >
                   Formula del Indicador <b className="text-danger">*</b>
                 </label>
-                <textarea className="form-control" id="exampleFormControlTextarea5" rows="2" style={{ resize: "none" }}></textarea>
+                <textarea
+                  className="form-control"
+                  id="exampleFormControlTextarea5"
+                  rows="2"
+                  style={{ resize: "none" }}
+                ></textarea>
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
                   Tipo de Anulación <b className="text-danger">*</b>
                 </label>
-                <select className="form-select" aria-label="Default select example">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                >
                   <option value="1">...</option>
                   <option value="2">...</option>
                   <option value="3">...</option>
@@ -361,7 +553,10 @@ const Producto = () => {
                   <label htmlFor="" className="form-label">
                     Aplica Indicador PDD? <b className="text-danger">*</b>
                   </label>
-                  <select className="form-select w-50" aria-label="Default select example">
+                  <select
+                    className="form-select w-50"
+                    aria-label="Default select example"
+                  >
                     <option
                       value="1"
                       onClick={() => {
@@ -384,7 +579,11 @@ const Producto = () => {
                   <label htmlFor="" className="form-label">
                     Plan de Desarrollo
                   </label>
-                  <select className="form-select" aria-label="Default select example" disabled={enable}>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    disabled={enable}
+                  >
                     <option value="1">...</option>
                     <option value="2">...</option>
                     <option value="3">...</option>
@@ -394,7 +593,11 @@ const Producto = () => {
                   <label htmlFor="" className="form-label">
                     Indicador PDD
                   </label>
-                  <select className="form-select" aria-label="Default select example" disabled={enable}>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    disabled={enable}
+                  >
                     <option value="1">...</option>
                     <option value="2">...</option>
                     <option value="3">...</option>
@@ -447,7 +650,12 @@ const Producto = () => {
                 </div>
               </div>
             </div>
-            <div className="tab-pane fade" id="meta" role="tabpanel" aria-labelledby="meta-tab">
+            <div
+              className="tab-pane fade"
+              id="meta"
+              role="tabpanel"
+              aria-labelledby="meta-tab"
+            >
               <div className="row mt-3 mb-3">
                 <div className="col-9 w-100">
                   <div style={{ height: "950px" }}>
@@ -470,7 +678,12 @@ const Producto = () => {
                   <h5>Meta Total del Producto</h5>
                   <div className="row">
                     <div className="col">
-                      <button type="button" className="btn btn-primary bi bi-pencil" data-bs-toggle="modal" data-bs-target="#metaProducto"></button>
+                      <button
+                        type="button"
+                        className="btn btn-primary bi bi-pencil"
+                        data-bs-toggle="modal"
+                        data-bs-target="#metaProducto"
+                      ></button>
                     </div>
 
                     <div
@@ -483,13 +696,21 @@ const Producto = () => {
                       aria-labelledby="modalTitleId"
                       aria-hidden="true"
                     >
-                      <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+                      <div
+                        className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+                        role="document"
+                      >
                         <div className="modal-content">
                           <div className="modal-header">
                             <h5 className="modal-title" id="modalTitleId">
                               Registrar Metas
                             </h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button
+                              type="button"
+                              className="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close"
+                            ></button>
                           </div>
                           <div className="modal-body">
                             <div className="mb-3">Tipo anualización: ...</div>
@@ -498,29 +719,50 @@ const Producto = () => {
                               <label htmlFor="" className="form-label">
                                 2020
                               </label>
-                              <input type="text" className="form-control" placeholder="0,00" />
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="0,00"
+                              />
                             </div>
                             <div className="mb-3">
                               <label htmlFor="" className="form-label">
                                 2021
                               </label>
-                              <input type="text" className="form-control" placeholder="0,00" />
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="0,00"
+                              />
                             </div>
                             <div className="mb-3">
                               <label htmlFor="" className="form-label">
                                 2022
                               </label>
-                              <input type="text" className="form-control" placeholder="0,00" />
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="0,00"
+                              />
                             </div>
                             <div className="mb-3">
                               <label htmlFor="" className="form-label">
                                 Meta total Producto
                               </label>
-                              <input type="text" className="form-control" placeholder="0,00" disabled />
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="0,00"
+                                disabled
+                              />
                             </div>
                           </div>
                           <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              data-bs-dismiss="modal"
+                            >
                               Cancelar
                             </button>
                             <button type="button" className="btn btn-primary">
@@ -534,12 +776,24 @@ const Producto = () => {
                 </div>
               </div>
             </div>
-            <div className="tab-pane fade show active" id="costos" role="tabpanel" aria-labelledby="costos-tab">
+            <div
+              className="tab-pane fade show active"
+              id="costos"
+              role="tabpanel"
+              aria-labelledby="costos-tab"
+            >
               <h1>0,00</h1>
-              <h5>Costo Total Estimado del Producto, Valores en Millones de Pesos</h5>
+              <h5>
+                Costo Total Estimado del Producto, Valores en Millones de Pesos
+              </h5>
               <div className="row">
                 <div className="col">
-                  <button type="button" className="btn btn-primary bi bi-pencil" data-bs-toggle="modal" data-bs-target="#costosProducto"></button>
+                  <button
+                    type="button"
+                    className="btn btn-primary bi bi-pencil"
+                    data-bs-toggle="modal"
+                    data-bs-target="#costosProducto"
+                  ></button>
                 </div>
                 {/* Inicio Modal de los costos */}
                 <div
@@ -552,44 +806,146 @@ const Producto = () => {
                   aria-labelledby="modalTitleId"
                   aria-hidden="true"
                 >
-                  <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+                  <div
+                    className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl"
+                    role="document"
+                  >
                     <div className="modal-content">
                       <div className="modal-header">
                         <h5 className="modal-title" id="modalTitleId">
-                          Registrar Metas
+                          Registrar Costos de Producto
                         </h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
                       </div>
                       <div className="modal-body">
-                        <div className="mb-3">Tipo anualización: ...</div>
-                        <div className="mb-3">Linea Base: ...</div>
-                        <div className="mb-3">
-                          <label htmlFor="" className="form-label">
-                            2020
-                          </label>
-                          <input type="text" className="form-control" placeholder="0,00" />
+                        <div className="row mb-3">
+                          <b>Valores en Millones de Pesos</b>
                         </div>
-                        <div className="mb-3">
-                          <label htmlFor="" className="form-label">
-                            2021
-                          </label>
-                          <input type="text" className="form-control" placeholder="0,00" />
+                        <div className="row mb-3 ">
+                          <div className="col-6">
+                            <div className="row">
+                              <div className="col d-flex justify-content-center ">
+                                <h5>Costo total estimado</h5>
+                              </div>
+                            </div>
+                            <div className="row">
+                              <div className="col-8 d-flex justify-content-center ms-3">
+                                <span className="">0,00</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-6 ">
+                            {" "}
+                            <h5>Recurso total disponible</h5>
+                            <span className="text-center">0,00</span>
+                          </div>
                         </div>
-                        <div className="mb-3">
-                          <label htmlFor="" className="form-label">
-                            2022
-                          </label>
-                          <input type="text" className="form-control" placeholder="0,00" />
+                        <hr className="bg-black mx-0 my-0" />
+                        <div className="row mb-3 mt-3">
+                          {/*Aca va un ciclo que coloque la cantidad de inputs necesarios segun las fechas*/}
+                          <div className="col-1">
+                            <h5>Año</h5>
+                            <b>
+                              <h3>2020</h3>
+                            </b>
+                          </div>
+                          <div className="col-2">
+                            <label
+                              for="exampleInputPassword1"
+                              className="form-label"
+                            >
+                              Costo Estimado
+                            </label>
+                            <div className="input-group mb-3">
+                              <span className="input-group-text">$</span>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="0,00"
+                              />
+                            </div>
+                          </div>
+                          <div className="col-2">
+                            <label
+                              for="exampleInputPassword1"
+                              className="form-label"
+                            >
+                              Recurso Disponible
+                            </label>
+                            <div className="input-group mb-3">
+                              <span className="input-group-text">$</span>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="0,00"
+                              />
+                            </div>
+                          </div>
+                          <div className="col-3">
+                            <label
+                              for="exampleInputPassword1"
+                              className="form-label"
+                            >
+                              Fuentes Disponibles
+                            </label>
+                            <div
+                              className="card card-body"
+                              style={{
+                                height: "90px",
+                                scrollbarWidth: "none",
+                                overflow: "auto",
+                                overflowX: "hidden",
+                              }}
+                            >
+                              <button className="btn my-0 py-0 text-dark">
+                                dasdasdas
+                              </button>
+                              <button className="btn my-0 pd-0 text-dark">
+                                dasdasdas
+                              </button>
+                              <button className="btn my-0 pd-0 text-dark">
+                                dasdasdas
+                              </button>
+                              <button className="btn my-0 pd-0 text-dark">
+                                dasdasdas
+                              </button>
+                              <button className="btn my-0 pd-0 text-dark">
+                                dasdasdas
+                              </button>
+                            </div>
+                          </div>
+                          <div className="col-3">
+                            <label
+                              for="exampleInputPassword1"
+                              className="form-label"
+                            >
+                              Fuentes Disponibles
+                            </label>
+                            <div
+                              className="card card-body"
+                              style={{
+                                height: "90px",
+                                scrollbarWidth: "none",
+                                overflow: "auto",
+                                overflowX: "hidden",
+                              }}
+                            ></div>
+                          </div>
                         </div>
-                        <div className="mb-3">
-                          <label htmlFor="" className="form-label">
-                            Meta total Producto
-                          </label>
-                          <input type="text" className="form-control" placeholder="0,00" disabled />
-                        </div>
+                        {/* Incluir este hr dentro del ciclo */}
+                        <hr className="bg-black mx-0 my-0" />
                       </div>
                       <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
                           Cancelar
                         </button>
                         <button type="button" className="btn btn-primary">
@@ -602,9 +958,7 @@ const Producto = () => {
                 {/* Fin Modal de los costos */}
 
                 {/*Inicio grafica*/}
-                <canvas id="1">
-                  <Bar data={data} options={config} />
-                </canvas>
+                <Bar data={data} options={config} />
                 {/*Fin grafica*/}
               </div>
             </div>
