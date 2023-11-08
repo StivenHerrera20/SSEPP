@@ -122,7 +122,25 @@ const Index = () => {
                     </h3>
                   </div>
                 </a>
-
+                <a
+                  href="/inicio/bateriadeindicadores"
+                  className="col-xl-4 col-md-6 mb-4 optionsCard"
+                  style={{ textDecoration: "none" }}
+                >
+                  <div className="card border-left-dark shadow h-100 py-2">
+                    <div className="card-body">
+                      <div className="row no-gutters align-items-center">
+                        <div className="col-auto text-center m-auto">
+                          {/* <!-- <i className="fas fa-chart-area fa-5x text-gray-300"></i> --> */}
+                          <img src={indicadores} alt="" />
+                        </div>
+                      </div>
+                    </div>
+                    <h3 className="text-center text-secondary">
+                      Bateria de indicadores
+                    </h3>
+                  </div>
+                </a>
                 <a
                   className="col-xl-4 col-md-6 mb-4 optionsCard"
                   style={{ textDecoration: "none" }}
@@ -138,25 +156,6 @@ const Index = () => {
                     </div>
                     <h3 className="text-center text-secondary">
                       Registro de seguimiento
-                    </h3>
-                  </div>
-                </a>
-
-                <a
-                  className="col-xl-4 col-md-6 mb-4 optionsCard"
-                  style={{ textDecoration: "none" }}
-                >
-                  <div className="card border-left-dark shadow h-100 py-2">
-                    <div className="card-body">
-                      <div className="row no-gutters align-items-center">
-                        <div className="col-auto text-center m-auto">
-                          {/* <!-- <i className="fas fa-chart-area fa-5x text-gray-300"></i> --> */}
-                          <img src={indicadores} alt="" />
-                        </div>
-                      </div>
-                    </div>
-                    <h3 className="text-center text-secondary">
-                      Bateria de indicadores
                     </h3>
                   </div>
                 </a>
