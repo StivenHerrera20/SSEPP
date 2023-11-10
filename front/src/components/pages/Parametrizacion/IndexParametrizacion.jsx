@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
+import { Outlet, NavLink, redirect } from "react-router-dom";
 import Sector from "./Sector";
 import Entidad from "./Entidad";
 import DocumentosAdopcion from "./DocumentosAdopcion";
@@ -26,7 +26,7 @@ const IndexParametrizacion = () => {
     <>
       <div id="wrapper">
         <nav
-          class="navbar-nav bg-primary sidebar sidebar-dark"
+          className="navbar-nav bg-primary sidebar sidebar-dark"
           /* style={{ height: window.innerHeight - 200 }} */
           id="accordionSidebar"
         >
@@ -47,241 +47,281 @@ const IndexParametrizacion = () => {
               overflowX: "hidden",
             }}
           >
-            <li className="nav-item">
-              <a
-                className="nav-link"
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 1 ? setControl(0) : setControl(1);
-                }}
-              >
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(1);
+              }}
+            >
+              <NavLink to="sector" className="nav-link" aria-current="page">
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Sector</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 2 ? setControl(0) : setControl(2);
-                }}
-              >
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(2);
+              }}
+            >
+              <NavLink to="entidad" className="nav-link" aria-current="page">
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Entidad</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(3);
+              }}
+            >
+              <NavLink
+                to="documentosDeAdopcion"
                 className="nav-link"
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 3 ? setControl(0) : setControl(3);
-                }}
+                aria-current="page"
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Documentos de adopción</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 4 ? setControl(0) : setControl(4);
-                }}
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(4);
+              }}
+            >
+              <NavLink
+                to="unidadesDeMedida"
+                className="nav-link"
+                aria-current="page"
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Unidades de Medida</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 5 ? setControl(0) : setControl(5);
-                }}
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(5);
+              }}
+            >
+              <NavLink
+                to="rangoSemaforo"
+                className="nav-link"
+                aria-current="page"
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Rango Semáforo</span>
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
               <button
-                class="nav-link"
+                className="nav-link"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapseExample"
                 aria-expanded="false"
                 aria-controls="collapseExample"
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 6 || control == 7 || control == 8 || control == 9
-                    ? setControl(0)
-                    : null;
-                }}
               >
                 <span>Enfoque</span>
               </button>
               <div
-                class="collapse w-100 my-0 mx-0 text-center"
+                className="collapse w-100 my-0 mx-0 text-center"
                 id="collapseExample"
               >
-                <a
-                  className="nav-link w-100"
-                  href=""
+                <li
+                  className="nav-item"
                   onClick={(e) => {
                     e.preventDefault();
-                    control == 6 ? setControl(0) : setControl(6);
+                    setControl(6);
                   }}
                 >
-                  <i className="bi bi-dash "></i>
-                  <span className="text-center">Nivel 1</span>
-                </a>
-                <a
-                  className="nav-link w-100"
-                  href=""
+                  <NavLink
+                    to="enfoqueNivelUno"
+                    className="nav-link w-100"
+                    aria-current="page"
+                  >
+                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Nivel 1</span>
+                  </NavLink>
+                </li>
+                <li
+                  className="nav-item"
                   onClick={(e) => {
                     e.preventDefault();
-                    control == 7 ? setControl(0) : setControl(7);
+                    setControl(7);
                   }}
                 >
-                  <i className="bi bi-dash "></i>
-                  <span className="text-center">Nivel 2</span>
-                </a>
-                <a
-                  className="nav-link w-100"
-                  href=""
+                  <NavLink
+                    to="enfoqueNivelDos"
+                    className="nav-link w-100"
+                    aria-current="page"
+                  >
+                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Nivel 2</span>
+                  </NavLink>
+                </li>
+
+                <li
+                  className="nav-item"
                   onClick={(e) => {
                     e.preventDefault();
-                    control == 8 ? setControl(0) : setControl(8);
+                    setControl(8);
                   }}
                 >
-                  <i className="bi bi-dash "></i>
-                  <span className="text-center">Nivel 3</span>
-                </a>
-                <a
-                  className="nav-link w-100"
-                  href=""
+                  <NavLink
+                    to="enfoqueNivelTres"
+                    className="nav-link w-100"
+                    aria-current="page"
+                  >
+                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Nivel 3</span>
+                  </NavLink>
+                </li>
+
+                <li
+                  className="nav-item"
                   onClick={(e) => {
                     e.preventDefault();
-                    control == 9 ? setControl(0) : setControl(9);
+                    setControl(9);
                   }}
                 >
-                  <i className="bi bi-dash "></i>
-                  <span className="text-center">Nivel 4</span>
-                </a>
+                  {" "}
+                  <NavLink
+                    to="enfoqueNivelCuatro"
+                    className="nav-link w-100"
+                    aria-current="page"
+                  >
+                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Nivel 4</span>
+                  </NavLink>
+                </li>
               </div>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 10 ? setControl(0) : setControl(10);
-                }}
-              >
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(10);
+              }}
+            >
+              <NavLink to="metaODS" className="nav-link" aria-current="page">
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Meta ODS</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 11 ? setControl(0) : setControl(11);
-                }}
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(11);
+              }}
+            >
+              <NavLink
+                to="documentosAsociados"
+                className="nav-link"
+                aria-current="page"
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Documentos asociados</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 12 ? setControl(0) : setControl(12);
-                }}
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(12);
+              }}
+            >
+              <NavLink
+                to="fuentesDeFinanciacion"
+                className="nav-link"
+                aria-current="page"
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Fuentes de Financiación</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 13 ? setControl(0) : setControl(13);
-                }}
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(13);
+              }}
+            >
+              <NavLink
+                to="desarrolloSostenible"
+                className="nav-link"
+                aria-current="page"
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Objetivo de Desarrollo Sostenible</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 14 ? setControl(0) : setControl(14);
-                }}
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(14);
+              }}
+            >
+              <NavLink
+                to="nivelTerritorializacion"
+                className="nav-link"
+                aria-current="page"
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Nivel de Territorialización</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 15 ? setControl(0) : setControl(15);
-                }}
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(15);
+              }}
+            >
+              <NavLink
+                to="planDesarrollo"
+                className="nav-link"
+                aria-current="page"
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Plan de Desarrollo</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 16 ? setControl(0) : setControl(16);
-                }}
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(16);
+              }}
+            >
+              <NavLink
+                to="indicadorPlanDesarrollo"
+                className="nav-link"
+                aria-current="page"
               >
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Indicador Plan de Desarrollo</span>
-              </a>
+              </NavLink>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link "
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  control == 17 ? setControl(0) : setControl(17);
-                }}
-              >
+            <li
+              className="nav-item"
+              onClick={(e) => {
+                e.preventDefault();
+                setControl(17);
+              }}
+            >
+              <NavLink to="parametros" className="nav-link" aria-current="page">
                 <i className="fas fa-fw fa-tachometer-alt"></i>
-                <span>Paramaetros</span>
-              </a>
+                <span>Parametros</span>
+              </NavLink>
             </li>
           </div>
         </nav>
@@ -297,7 +337,7 @@ const IndexParametrizacion = () => {
                   Inicio
                 </a>{" "}
                 <a
-                  href=""
+                  href="/inicio/parametrizacion"
                   className="text-secondary mx-0 px-1"
                   style={{ textDecoration: "none" }}
                 >
@@ -429,7 +469,7 @@ const IndexParametrizacion = () => {
               {
                 //Control de seleccion
               }
-              {(() => {
+              {/* {(() => {
                 //Desicion para controlar el contenido del div de interacciones
                 if (control == 0) {
                   return <h1>Seleccione una opcion</h1>;
@@ -516,7 +556,8 @@ const IndexParametrizacion = () => {
                     }
                   }
                 }
-              })()}
+              })()} */}
+              <Outlet />
             </div>
           </div>
           <footer className="sticky-footer bg-white">

@@ -4,14 +4,17 @@ const DocumentosAdopcion = () => {
   const [show, setShow] = useState(false);
   const [maxIdDocumentoDeAdopcion, setmaxIDDocumentoDeAdopcion] = useState([]);
   const [documentoDeAdopcion, setDocumentoDeAdopcion] = useState([]);
-  const [insercionDocumentoDeAdopcion, setIncersionDocumentoDeAdopcion] = useState(false);
+  const [insercionDocumentoDeAdopcion, setIncersionDocumentoDeAdopcion] =
+    useState(false);
   const [pagina, setPagina] = useState(0);
   const [fila, setFila] = useState(5);
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
   useEffect(() => {
-    fetch(`http://127.0.0.1:3900/api/documentosDeAdopcion/listar?page=${pagina}&size=${fila}`)
+    fetch(
+      `http://127.0.0.1:3900/api/documentosDeAdopcion/listar?page=${pagina}&size=${fila}`
+    )
       .then((response) => {
         return response.json();
       })
@@ -33,7 +36,12 @@ const DocumentosAdopcion = () => {
     let nRegistros = totalRegistros;
     let nRegistrosPP = selectedValue;
     setTotalPaginas(Math.ceil(nRegistros / nRegistrosPP));
-    fetch("http://127.0.0.1:3900/api/documentosDeAdopcion/listar?page=" + pagina + "&size=" + selectedValue)
+    fetch(
+      "http://127.0.0.1:3900/api/documentosDeAdopcion/listar?page=" +
+        pagina +
+        "&size=" +
+        selectedValue
+    )
       .then((response) => {
         return response.json();
       })
@@ -47,7 +55,9 @@ const DocumentosAdopcion = () => {
     setBusqueda(searchText); // Actualiza el estado inmediatamente
     if (searchText.length != 0) {
       // Realiza la búsqueda solo si el texto no está vacío
-      fetch(`http://127.0.0.1:3900/api/documentosDeAdopcion/listarEscrito?Nombre=${searchText}`)
+      fetch(
+        `http://127.0.0.1:3900/api/documentosDeAdopcion/listarEscrito?Nombre=${searchText}`
+      )
         .then((response) => {
           return response.json();
         })
@@ -57,7 +67,9 @@ const DocumentosAdopcion = () => {
         });
     } else {
       // Si el texto está vacío, vuelve a cargar los datos originales
-      fetch(`http://127.0.0.1:3900/api/documentosDeAdopcion/listar?page=${pagina}&size=${fila}`)
+      fetch(
+        `http://127.0.0.1:3900/api/documentosDeAdopcion/listar?page=${pagina}&size=${fila}`
+      )
         .then((response) => {
           return response.json();
         })
@@ -87,9 +99,18 @@ const DocumentosAdopcion = () => {
     <>
       <div className="card shadow mb-4">
         <div className="card-header py-3 d-flex">
-          <Button className="btn btn-primary fa fa-plus" variant="primary" onClick={handleShow}></Button>
+          <Button
+            className="btn btn-primary fa fa-plus"
+            variant="primary"
+            onClick={handleShow}
+          ></Button>
           <div>
-            <select name="" id="numeroFilas" className="form-select ms-3" onChange={selectPagina}>
+            <select
+              name=""
+              id="numeroFilas"
+              className="form-select ms-3"
+              onChange={selectPagina}
+            >
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -104,14 +125,28 @@ const DocumentosAdopcion = () => {
               <option value="10">10</option>
             </select>
           </div>
-          <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">Documentos de adopción</h2>
+          <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">
+            Documentos de adopción
+          </h2>
           <div>
-            <input type="text" name="" className="form-control" placeholder="Buscar..." id="txtTabla" onChange={handleSearch} />
+            <input
+              type="text"
+              name=""
+              className="form-control"
+              placeholder="Buscar..."
+              id="txtTabla"
+              onChange={handleSearch}
+            />
           </div>
         </div>
         <div className="card-body">
           <div className="table-responsive">
-            <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
+            <table
+              className="table table-bordered"
+              id="dataTable"
+              width="100%"
+              cellSpacing="0"
+            >
               <thead>
                 <tr>
                   <th>#</th>
@@ -132,7 +167,10 @@ const DocumentosAdopcion = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil " onClick={handleShowEdit}></button>
+                        <button
+                          className="btn btn-success fa fa-pencil "
+                          onClick={handleShowEdit}
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -140,12 +178,22 @@ const DocumentosAdopcion = () => {
               </tbody>
             </table>
           </div>
-          <Button className="btn btn-primary" variant="primary" onClick={handleAnterior}>
-            Anterior
-          </Button>
-          <Button className="btn btn-primary" variant="primary" onClick={handleSiguiente}>
-            Siguiente
-          </Button>
+          <div className="d-flex justify-content-center">
+            <Button
+              className="btn btn-primary m-2"
+              variant="primary"
+              onClick={handleAnterior}
+            >
+              Anterior
+            </Button>
+            <Button
+              className="btn btn-primary m-2"
+              variant="primary"
+              onClick={handleSiguiente}
+            >
+              Siguiente
+            </Button>
+          </div>
         </div>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header className="bg-light" closeButton>
@@ -157,8 +205,12 @@ const DocumentosAdopcion = () => {
               e.preventDefault();
               let id = document.querySelector("#idDocumentoDeAdopcion");
               let nombre = document.querySelector("#nombreDocumentosAdopcion");
-              let estado = document.querySelector("#estadoDocumentosDeAdopcion");
-              let descripcion = document.querySelector("#descripcionDocumentosAdopcion");
+              let estado = document.querySelector(
+                "#estadoDocumentosDeAdopcion"
+              );
+              let descripcion = document.querySelector(
+                "#descripcionDocumentosAdopcion"
+              );
               fetch("http://127.0.0.1:3900/api/documentosDeAdopcion/agregar", {
                 method: "POST",
                 headers: {
@@ -189,25 +241,46 @@ const DocumentosAdopcion = () => {
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="idDocumentoDeAdopcion" disabled value={maxIdDocumentoDeAdopcion + 1} />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idDocumentoDeAdopcion"
+                  disabled
+                  value={maxIdDocumentoDeAdopcion + 1}
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="nombreDocumentosAdopcion" aria-describedby="emailHelp" />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreDocumentosAdopcion"
+                  aria-describedby="emailHelp"
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputPassword1" className="form-label">
                   Descripción
                 </label>
-                <textarea className="form-control" name="" id="descripcionDocumentosAdopcion" rows="5" style={{ resize: "none" }}></textarea>
+                <textarea
+                  className="form-control"
+                  name=""
+                  id="descripcionDocumentosAdopcion"
+                  rows="5"
+                  style={{ resize: "none" }}
+                ></textarea>
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select className="form-select" aria-label="Default select example" id="estadoDocumentosDeAdopcion">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoDocumentosDeAdopcion"
+                >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>
                 </select>
@@ -233,8 +306,12 @@ const DocumentosAdopcion = () => {
               e.preventDefault();
               let id = document.querySelector("#idDocumentoDeAdopcion");
               let nombre = document.querySelector("#nombreDocumentosAdopcion");
-              let estado = document.querySelector("#estadoDocumentosDeAdopcion");
-              let descripcion = document.querySelector("#descripcionDocumentosAdopcion");
+              let estado = document.querySelector(
+                "#estadoDocumentosDeAdopcion"
+              );
+              let descripcion = document.querySelector(
+                "#descripcionDocumentosAdopcion"
+              );
               fetch("http://127.0.0.1:3900/api/documentosDeAdopcion/agregar", {
                 method: "POST",
                 headers: {
@@ -258,25 +335,46 @@ const DocumentosAdopcion = () => {
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="idDocumentoDeAdopcion" disabled value={maxIdDocumentoDeAdopcion + 1} />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idDocumentoDeAdopcion"
+                  disabled
+                  value={maxIdDocumentoDeAdopcion + 1}
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="nombreDocumentosAdopcion" aria-describedby="emailHelp" />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreDocumentosAdopcion"
+                  aria-describedby="emailHelp"
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputPassword1" className="form-label">
                   Descripción
                 </label>
-                <textarea className="form-control" name="" id="descripcionDocumentosAdopcion" rows="5" style={{ resize: "none" }}></textarea>
+                <textarea
+                  className="form-control"
+                  name=""
+                  id="descripcionDocumentosAdopcion"
+                  rows="5"
+                  style={{ resize: "none" }}
+                ></textarea>
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select className="form-select" aria-label="Default select example" id="estadoDocumentosDeAdopcion">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoDocumentosDeAdopcion"
+                >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>
                 </select>

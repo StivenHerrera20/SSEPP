@@ -22,6 +22,11 @@ import Parametros from "./pages/Parametrizacion/Parametros";
 import IndexPoliticaPublica from "./pages/PoliticaPublica/IndexPoliticaPublica";
 import IndexPlanAccion from "./pages/PlanDeAccion/IndexPlanAccion";
 import IndexBateriaDeIndicadores from "./pages/BateriaDeIndicadores/IndexBateriaDeIndicadores";
+import Enfoque from "./pages/Parametrizacion/Enfoque";
+import EnfoqueDos from "./pages/Parametrizacion/EnfoqueDos";
+import EnfoqueTres from "./pages/Parametrizacion/EnfoqueTres";
+import EnfoqueCuatro from "./pages/Parametrizacion/EnfoqueCuatro";
+
 const Router = () => {
   return (
     <>
@@ -32,16 +37,67 @@ const Router = () => {
           <Route index element={<Login />} />
           <Route path="/inicio" element={<Index />} />
           <Route
-            path="/inicio/parametrizacion"
+            path="/inicio/parametrizacion/"
             element={<IndexParametrizacion />}
-          />
+          >
+            <Route path="sector" element={<Sector></Sector>} />
+            <Route path="Entidad" element={<Entidad></Entidad>} />
+            <Route
+              path="documentosDeAdopcion"
+              element={<DocumentosAdopcion></DocumentosAdopcion>}
+            />
+            <Route
+              path="unidadesDeMedida"
+              element={<UnidadesMedida></UnidadesMedida>}
+            />
+            <Route path="enfoqueNivelUno" element={<Enfoque></Enfoque>} />
+            <Route path="enfoqueNivelDos" element={<EnfoqueDos></EnfoqueDos>} />
+            <Route
+              path="enfoqueNivelTres"
+              element={<EnfoqueTres></EnfoqueTres>}
+            />
+            <Route
+              path="enfoqueNivelCuatro"
+              element={<EnfoqueCuatro></EnfoqueCuatro>}
+            />
+            <Route
+              path="rangoSemaforo"
+              element={<RangoSemaforo></RangoSemaforo>}
+            />
+            <Route path="metaODS" element={<MetaODS></MetaODS>} />
+            <Route
+              path="documentosAsociados"
+              element={<DocumentosAsociados></DocumentosAsociados>}
+            />
+            <Route
+              path="fuentesDeFinanciacion"
+              element={<FuentesFinanciacion></FuentesFinanciacion>}
+            />
+            <Route
+              path="desarrolloSostenible"
+              element={
+                <ObjetivoDesarrolloSostenible></ObjetivoDesarrolloSostenible>
+              }
+            />
+            <Route
+              path="nivelTerritorializacion"
+              element={<NivelTerritorializacion></NivelTerritorializacion>}
+            />
+            <Route
+              path="planDesarrollo"
+              element={<PlanDesarrollo></PlanDesarrollo>}
+            />
+            <Route
+              path="indicadorPlanDesarrollo"
+              element={<IndicadorPlanDesarrollo></IndicadorPlanDesarrollo>}
+            />
+            <Route path="parametros" element={<Parametros></Parametros>} />
+          </Route>
+
+          <Route path="politicasPublicas" element={<IndexPoliticaPublica />} />
+          <Route path="plandeaccion" element={<IndexPlanAccion />} />
           <Route
-            path="/inicio/politicasPublicas"
-            element={<IndexPoliticaPublica />}
-          />
-          <Route path="/inicio/plandeaccion" element={<IndexPlanAccion />} />
-          <Route
-            path="/inicio/bateriadeindicadores"
+            path="bateriadeindicadores"
             element={<IndexBateriaDeIndicadores />}
           />
         </Routes>

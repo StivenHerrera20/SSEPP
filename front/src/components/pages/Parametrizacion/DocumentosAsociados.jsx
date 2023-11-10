@@ -11,7 +11,9 @@ const DocumentosAsociados = () => {
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
   useEffect(() => {
-    fetch(`http://127.0.0.1:3900/api/documentosAsociados/listar?page=${pagina}&size=${fila}`)
+    fetch(
+      `http://127.0.0.1:3900/api/documentosAsociados/listar?page=${pagina}&size=${fila}`
+    )
       .then((response) => {
         return response.json();
       })
@@ -33,7 +35,12 @@ const DocumentosAsociados = () => {
     let nRegistros = totalRegistros;
     let nRegistrosPP = selectedValue;
     setTotalPaginas(Math.ceil(nRegistros / nRegistrosPP));
-    fetch("http://127.0.0.1:3900/api/documentosAsociados/listar?page=" + pagina + "&size=" + selectedValue)
+    fetch(
+      "http://127.0.0.1:3900/api/documentosAsociados/listar?page=" +
+        pagina +
+        "&size=" +
+        selectedValue
+    )
       .then((response) => {
         return response.json();
       })
@@ -47,7 +54,9 @@ const DocumentosAsociados = () => {
     setBusqueda(searchText); // Actualiza el estado inmediatamente
     if (searchText.length != 0) {
       // Realiza la búsqueda solo si el texto no está vacío
-      fetch(`http://127.0.0.1:3900/api/documentosAsociados/listarEscrito?Nombre=${searchText}`)
+      fetch(
+        `http://127.0.0.1:3900/api/documentosAsociados/listarEscrito?Nombre=${searchText}`
+      )
         .then((response) => {
           return response.json();
         })
@@ -57,7 +66,9 @@ const DocumentosAsociados = () => {
         });
     } else {
       // Si el texto está vacío, vuelve a cargar los datos originales
-      fetch(`http://127.0.0.1:3900/api/documentosAsociados/listar?page=0&size=5`)
+      fetch(
+        `http://127.0.0.1:3900/api/documentosAsociados/listar?page=0&size=5`
+      )
         .then((response) => {
           return response.json();
         })
@@ -87,9 +98,18 @@ const DocumentosAsociados = () => {
     <>
       <div className="card shadow mb-4">
         <div className="card-header py-3 d-flex">
-          <Button className="btn btn-primary fa fa-plus" variant="primary" onClick={handleShow}></Button>
+          <Button
+            className="btn btn-primary fa fa-plus"
+            variant="primary"
+            onClick={handleShow}
+          ></Button>
           <div>
-            <select name="" id="numeroFilas" className="form-select ms-3" onChange={selectPagina}>
+            <select
+              name=""
+              id="numeroFilas"
+              className="form-select ms-3"
+              onChange={selectPagina}
+            >
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -104,14 +124,28 @@ const DocumentosAsociados = () => {
               <option value="10">10</option>
             </select>
           </div>
-          <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">Documentos Asociados</h2>
+          <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">
+            Documentos Asociados
+          </h2>
           <div>
-            <input type="text" name="" className="form-control" placeholder="Buscar..." id="txtTabla" onChange={handleSearch} />
+            <input
+              type="text"
+              name=""
+              className="form-control"
+              placeholder="Buscar..."
+              id="txtTabla"
+              onChange={handleSearch}
+            />
           </div>
         </div>
         <div className="card-body">
           <div className="table-responsive">
-            <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
+            <table
+              className="table table-bordered"
+              id="dataTable"
+              width="100%"
+              cellSpacing="0"
+            >
               <thead>
                 <tr>
                   <th>#</th>
@@ -132,7 +166,11 @@ const DocumentosAsociados = () => {
                       <td>{res.Estado}</td>
                       <td className="text-center">
                         {" "}
-                        <Button className="btn btn-success fa fa-pencil " variant="success" onClick={handleShowEdit}></Button>
+                        <Button
+                          className="btn btn-success fa fa-pencil "
+                          variant="success"
+                          onClick={handleShowEdit}
+                        ></Button>
                       </td>
                     </tr>
                   );
@@ -140,12 +178,22 @@ const DocumentosAsociados = () => {
               </tbody>
             </table>
           </div>
-          <Button className="btn btn-primary" variant="primary" onClick={handleAnterior}>
-            Anterior
-          </Button>
-          <Button className="btn btn-primary" variant="primary" onClick={handleSiguiente}>
-            Siguiente
-          </Button>
+          <div className="d-flex justify-content-center">
+            <Button
+              className="btn btn-primary m-2"
+              variant="primary"
+              onClick={handleAnterior}
+            >
+              Anterior
+            </Button>
+            <Button
+              className="btn btn-primary m-2"
+              variant="primary"
+              onClick={handleSiguiente}
+            >
+              Siguiente
+            </Button>
+          </div>
         </div>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header className="bg-light" closeButton>
@@ -158,7 +206,9 @@ const DocumentosAsociados = () => {
               let id = document.querySelector("#idDocumentosAsociados");
               let nombre = document.querySelector("#nombreDocumentosAsociados");
               let estado = document.querySelector("#estadoDocumentosAsociados");
-              let descripcion = document.querySelector("#descripcionDocumentosAsociados");
+              let descripcion = document.querySelector(
+                "#descripcionDocumentosAsociados"
+              );
               fetch("http://127.0.0.1:3900/api/documentosAsociados/agregar", {
                 method: "POST",
                 headers: {
@@ -170,7 +220,15 @@ const DocumentosAsociados = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setDocumentos([...documentos, { id: id.value, Nombre: nombre.value, Descripcion: descripcion.value, Estado: estado.value }]);
+                  setDocumentos([
+                    ...documentos,
+                    {
+                      id: id.value,
+                      Nombre: nombre.value,
+                      Descripcion: descripcion.value,
+                      Estado: estado.value,
+                    },
+                  ]);
                   setIncersion(true);
                   if (insercion == true) {
                     alert("Agregado correctamente");
@@ -185,25 +243,46 @@ const DocumentosAsociados = () => {
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="idDocumentosAsociados" disabled value={maxId + 1} />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idDocumentosAsociados"
+                  disabled
+                  value={maxId + 1}
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="nombreDocumentosAsociados" aria-describedby="emailHelp" />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreDocumentosAsociados"
+                  aria-describedby="emailHelp"
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputPassword1" className="form-label">
                   Descripción
                 </label>
-                <textarea className="form-control" name="" id="descripcionDocumentosAsociados" rows="5" style={{ resize: "none" }}></textarea>
+                <textarea
+                  className="form-control"
+                  name=""
+                  id="descripcionDocumentosAsociados"
+                  rows="5"
+                  style={{ resize: "none" }}
+                ></textarea>
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select className="form-select" aria-label="Default select example" id="estadoDocumentosAsociados">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoDocumentosAsociados"
+                >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>
                 </select>
@@ -231,25 +310,45 @@ const DocumentosAsociados = () => {
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="idDocumentosAsociadosEdit" disabled />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="idDocumentosAsociadosEdit"
+                  disabled
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   Nombre <b className="text-danger">*</b>
                 </label>
-                <input type="text" className="form-control" id="nombreDocumentosAsociadosEdit" aria-describedby="emailHelp" />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nombreDocumentosAsociadosEdit"
+                  aria-describedby="emailHelp"
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputPassword1" className="form-label">
                   Descripción
                 </label>
-                <textarea className="form-control" name="" id="descripcionDocumentosAsociadosEdit" rows="5" style={{ resize: "none" }}></textarea>
+                <textarea
+                  className="form-control"
+                  name=""
+                  id="descripcionDocumentosAsociadosEdit"
+                  rows="5"
+                  style={{ resize: "none" }}
+                ></textarea>
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
                   Estado
                 </label>
-                <select className="form-select" aria-label="Default select example" id="estadoDocumentosAsociadosEdit">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="estadoDocumentosAsociadosEdit"
+                >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>
                 </select>
