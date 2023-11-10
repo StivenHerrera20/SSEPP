@@ -27,6 +27,8 @@ import EnfoqueDos from "./pages/Parametrizacion/EnfoqueDos";
 import EnfoqueTres from "./pages/Parametrizacion/EnfoqueTres";
 import EnfoqueCuatro from "./pages/Parametrizacion/EnfoqueCuatro";
 
+import IndexRegistroSeguimiento from "./pages/RegistroDeSeguimiento/IndexRegistroSeguimiento";
+import TablaRegistroSeguimiento from "./pages/RegistroDeSeguimiento/TablaRegistroSeguimiento";
 const Router = () => {
   return (
     <>
@@ -40,7 +42,9 @@ const Router = () => {
             path="/inicio/parametrizacion/"
             element={<IndexParametrizacion />}
           >
+            <Route index element={<Sector></Sector>} />
             <Route path="sector" element={<Sector></Sector>} />
+
             <Route path="Entidad" element={<Entidad></Entidad>} />
             <Route
               path="documentosDeAdopcion"
@@ -94,12 +98,24 @@ const Router = () => {
             <Route path="parametros" element={<Parametros></Parametros>} />
           </Route>
 
-          <Route path="politicasPublicas" element={<IndexPoliticaPublica />} />
-          <Route path="plandeaccion" element={<IndexPlanAccion />} />
           <Route
-            path="bateriadeindicadores"
+            path="/inicio/politicasPublicas"
+            element={<IndexPoliticaPublica />}
+          />
+
+          <Route path="/inicio/plandeaccion" element={<IndexPlanAccion />} />
+
+          <Route
+            path="/inicio/bateriadeindicadores"
             element={<IndexBateriaDeIndicadores />}
           />
+
+          <Route
+            path="/inicio/registrodeseguimiento"
+            element={<IndexRegistroSeguimiento />}
+          >
+            <Route index element={<TablaRegistroSeguimiento />} />
+          </Route>
         </Routes>
 
         {/* Esta es la forma de prueba (Que pinte la url de cada componente) */}

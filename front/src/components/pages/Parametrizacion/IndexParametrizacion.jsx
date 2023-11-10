@@ -19,7 +19,7 @@ import EnfoqueTres from "./EnfoqueTres";
 import EnfoqueCuatro from "./EnfoqueCuatro";
 
 const IndexParametrizacion = () => {
-  const [control, setControl] = useState(0);
+  const [control, setControl] = useState(1);
 
   useEffect(() => {}, []);
   return (
