@@ -29,6 +29,7 @@ import EnfoqueCuatro from "./pages/Parametrizacion/EnfoqueCuatro";
 
 import IndexRegistroSeguimiento from "./pages/RegistroDeSeguimiento/IndexRegistroSeguimiento";
 import TablaRegistroSeguimiento from "./pages/RegistroDeSeguimiento/TablaRegistroSeguimiento";
+import CargueAvance from "./pages/RegistroDeSeguimiento/CargueAvance";
 const Router = () => {
   return (
     <>
@@ -115,6 +116,7 @@ const Router = () => {
             element={<IndexRegistroSeguimiento />}
           >
             <Route index element={<TablaRegistroSeguimiento />} />
+            <Route path="cargueavance" element={<CargueAvance />} />
           </Route>
         </Routes>
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 
 const TablaRegistroSeguimiento = () => {
   return (
@@ -33,7 +34,11 @@ const TablaRegistroSeguimiento = () => {
                   <td>Secretaria Distrital de la Mujer</td>
                   <td className="text-center">
                     {" "}
-                    <button className="btn btn-success fa fa-pencil "></button>
+                    <NavLink
+                      to="cargueavance"
+                      className="btn btn-success fa fa-pencil"
+                      aria-current="page"
+                    ></NavLink>
                   </td>
                 </tr>
               </tbody>
