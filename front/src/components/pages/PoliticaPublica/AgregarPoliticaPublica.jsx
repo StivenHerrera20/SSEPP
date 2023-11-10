@@ -6,6 +6,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
   const [publicar, setPublicar] = useState(0);
 
   const [show, setShow] = useState(false);
+  const [insercion, setIncersion] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -24,8 +25,25 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
   const [showCinco, setShowCinco] = useState(false);
   const handleCloseCinco = () => setShowCinco(false);
   const handleShowCinco = () => setShowCinco(true);
-
-  useEffect(() => {}, []);
+  const [sector, setSectores] = useState([]);
+  const [entidad, setEntidades] = useState([]);
+  const [idPolitica, setmaxIdPolitica] = useState([]);
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/sector/listarTodos")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setSectores(doc);
+      });
+    fetch(`http://127.0.0.1:3900/api/entidad/listarTodos`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setEntidades(doc);
+      });
+  }, []);
   return (
     <>
       <div className="card shadow mb-4">
@@ -71,6 +89,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                 role="tab"
                 aria-controls="documentosAdopcion"
                 aria-selected="false"
+                disabled
               >
                 Documentos de Adopción
               </button>
@@ -85,6 +104,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                 role="tab"
                 aria-controls="objetivos"
                 aria-selected="false"
+                disabled
               >
                 Objetivos
               </button>
@@ -99,6 +119,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                 role="tab"
                 aria-controls="documentosAsociados"
                 aria-selected="false"
+                disabled
               >
                 Documentos Asociados
               </button>
@@ -113,6 +134,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                 role="tab"
                 aria-controls="publicacion"
                 aria-selected="false"
+                disabled
               >
                 Publicación
               </button>
@@ -126,247 +148,320 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
               aria-labelledby="datosGenerales-tab"
             >
               <div className="container-fluid">
-                <div className="row mb-3">
-                  <div className="col">
-                    <label for="exampleInputPassword1" className="form-label">
-                      Nombre de la politica <b className="text-danger">*</b>
-                    </label>
-                    <textarea
-                      className="form-control"
-                      name=""
-                      id="nomPolitica"
-                      rows="2"
-                      style={{ resize: "none" }}
-                    ></textarea>
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col-4">
-                    <label for="exampleInputPassword1" className="form-label">
-                      Nemotécnico - Documento CONPES D.C.N{" "}
-                      <b className="text-danger">*</b>
-                    </label>
-                    <div className="col d-flex">
-                      <input type="text" className="form-control w-25 me-3" />
-                      <input
-                        type="number"
-                        className="form-control w-25 "
-                        placeholder="Años"
-                      />
-                    </div>
-                  </div>
-                  <div className="col-5">
-                    <label
-                      for="exampleInputPassword1"
-                      className="form-label ms-4"
-                    >
-                      Vigencia de la politica
-                    </label>
-                    <div className="col d-flex">
+                <form
+                  action=""
+                  method="post"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    let nombre = document.querySelector("#nomPolitica");
+                    let nemotecnico = document.querySelector("#nemotecnico");
+                    let years = document.querySelector("#years");
+                    let fechaInicio = document.querySelector("#fechaInicio");
+                    let fechaFin = document.querySelector("#fechaFin");
+                    let sectorLider = document.querySelector("#sectorLiderPP");
+                    let costo = document.querySelector("#costoPP");
+                    let imagen = document.querySelector("#imagen");
+                    let fechaAprobacion =
+                      document.querySelector("#fechaAprobacion");
+                    let entidadLider =
+                      document.querySelector("#entidadLiderPP");
+                    if (
+                      nombre.value.length > 0 &&
+                      nemotecnico.value.length > 0 &&
+                      years.value.length > 0 &&
+                      fechaInicio.value.length > 0 &&
+                      fechaFin.value.length > 0 &&
+                      sectorLider.value.length > 0 &&
+                      costo.value.length > 0 &&
+                      fechaAprobacion.value.length &&
+                      entidadLider.length > 0
+                    ) {
+                      const formData = new FormData();
+                      formData.append("nombre", nombre.value);
+                      formData.append("nemotecnico", nemotecnico.value);
+                      formData.append("years", years.value);
+                      formData.append("fecha_inicio", fechaInicio.value);
+                      formData.append("fecha_fin", fechaFin.value);
+                      formData.append("sector_lider", sectorLider.value);
+                      formData.append("entidad_lider", entidadLider.value);
+                      formData.append("costo", costo.value);
+                      formData.append(
+                        "fecha_aprobacion",
+                        fechaAprobacion.value
+                      );
+                      formData.append("imagen", imagen.files[0]); // Aquí se adjunta el archivo de imagen
+
+                      formData.append("estado", "por aprobar");
+                      fetch(
+                        "http://127.0.0.1:3900/api/politicasPublicas/agregar",
+                        {
+                          method: "POST",
+                          body: formData,
+                        }
+                      )
+                        .then((response) => {
+                          return response.json();
+                        })
+                        .then((res) => {
+                          console.log(res);
+                          setIncersion(true);
+                          const checkboxes = document.querySelectorAll(
+                            'input[type="checkbox"]:checked'
+                          );
+                          let idPolitica = res.doc[0].max;
+                          for (let i = 0; i < checkboxes.length; i++) {
+                            // Envía los valores seleccionados al servidor, por ejemplo, como un JSON en el cuerpo de la solicitud
+                            fetch(
+                              "http://127.0.0.1:3900/api/politicaHasSectores/agregar",
+                              {
+                                method: "POST",
+                                body: `sector=${checkboxes[i].value}&id_politica=${idPolitica}`,
+                                headers: {
+                                  "Content-Type":
+                                    "application/x-www-form-urlencoded",
+                                },
+                              }
+                            )
+                              .then((response) => response.json())
+                              .then((data) => {
+                                // Maneja la respuesta del servidor
+                              })
+                              .catch((error) => {
+                                // Maneja errores
+                              });
+                          }
+                          let documentosAdopcion = document.querySelector(
+                            "#documentosAdopcion-tab"
+                          );
+                          documentosAdopcion.removeAttribute("disabled");
+                          let datosGenerales = document.querySelector(
+                            "#datosGenerales-tab"
+                          );
+                          datosGenerales.setAttribute("disabled", true);
+                        });
+                    } else {
+                      alert("revisar los datos");
+                    }
+                  }}
+                >
+                  <div className="row mb-3">
+                    <div className="col">
                       <label
-                        for="exampleInputPassword1"
-                        className="form-label w-25 text-center"
+                        htmlFor="exampleInputPassword1"
+                        className="form-label"
                       >
-                        Inicio <b className="text-danger">*</b>
+                        Nombre de la politica <b className="text-danger">*</b>
                       </label>
-                      <input type="date" className="form-control w-50 " />
-                      <label
-                        for="exampleInputPassword1"
-                        className="form-label w-25 text-center"
-                      >
-                        Fin <b className="text-danger">*</b>
-                      </label>
-                      <input type="date" className="form-control w-50" />
-                    </div>
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col">
-                    <label for="exampleInputPassword1" className="form-label">
-                      Sector lider <b className="text-danger">*</b>
-                    </label>
-                    <select name="" id="" className="form-select"></select>
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col">
-                    <label for="exampleInputPassword1" className="form-label">
-                      Entidad lider <b className="text-danger">*</b>
-                    </label>
-                    <select name="" id="" className="form-select"></select>
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col-4">
-                    <label for="exampleInputPassword1" className="form-label">
-                      Costo total de la politica{" "}
-                      <b className="text-danger">*</b>
-                    </label>
-                    <div className="input-group mb-3">
-                      <span className="input-group-text">$</span>
-                      <input
-                        type="text"
+                      <textarea
                         className="form-control"
-                        aria-label="Amount (to the nearest dollar)"
+                        name=""
+                        id="nomPolitica"
+                        rows="2"
+                        style={{ resize: "none" }}
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className="row mb-3">
+                    <div className="col-4">
+                      <label
+                        htmlFor="exampleInputPassword1"
+                        className="form-label"
+                      >
+                        Nemotécnico - Documento CONPES D.C.N{" "}
+                        <b className="text-danger">*</b>
+                      </label>
+                      <div className="col d-flex">
+                        <input
+                          type="text"
+                          className="form-control w-25 me-3"
+                          id="nemotecnico"
+                        />
+                        <input
+                          type="number"
+                          className="form-control w-25 "
+                          placeholder="Años"
+                          id="years"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-5">
+                      <label
+                        htmlFor="exampleInputPassword1"
+                        className="form-label ms-4"
+                      >
+                        Vigencia de la politica
+                      </label>
+                      <div className="col d-flex">
+                        <label
+                          htmlFor="exampleInputPassword1"
+                          className="form-label w-25 text-center"
+                        >
+                          Inicio <b className="text-danger">*</b>
+                        </label>
+                        <input
+                          type="date"
+                          className="form-control w-50 "
+                          id="fechaInicio"
+                        />
+                        <label
+                          htmlFor="exampleInputPassword1"
+                          className="form-label w-25 text-center"
+                        >
+                          Fin <b className="text-danger">*</b>
+                        </label>
+                        <input
+                          type="date"
+                          className="form-control w-50"
+                          id="fechaFin"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row mb-3">
+                    <div className="col">
+                      <label
+                        htmlFor="exampleInputPassword1"
+                        className="form-label"
+                      >
+                        Sector lider <b className="text-danger">*</b>
+                      </label>
+                      <select
+                        name=""
+                        id="sectorLiderPP"
+                        className="form-select"
+                      >
+                        {sector.map((element) => (
+                          <option
+                            key={element.id}
+                            value={element.Nombre}
+                            id="sectorLider"
+                          >
+                            {element.Nombre}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="row mb-3">
+                    <div className="col">
+                      <label
+                        htmlFor="exampleInputPassword1"
+                        className="form-label"
+                      >
+                        Entidad lider <b className="text-danger">*</b>
+                      </label>
+                      <select
+                        name=""
+                        id="entidadLiderPP"
+                        className="form-select"
+                      >
+                        {entidad.map((element) => (
+                          <option
+                            key={element.id}
+                            value={element.Nombre}
+                            id="sectorEntidad"
+                          >
+                            {element.Nombre}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="row mb-3">
+                    <div className="col-4">
+                      <label
+                        htmlFor="exampleInputPassword1"
+                        className="form-label"
+                      >
+                        Costo total de la politica{" "}
+                        <b className="text-danger">*</b>
+                      </label>
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">$</span>
+                        <input
+                          type="text"
+                          className="form-control"
+                          aria-label="Amount (to the nearest dollar)"
+                          id="costoPP"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-5 ms-4">
+                      <label
+                        htmlFor="exampleInputPassword1"
+                        className="form-label "
+                      >
+                        Fecha aprobación <b className="text-danger">*</b>
+                      </label>
+                      <input
+                        type="date"
+                        className="form-control w-50"
+                        id="fechaAprobacion"
                       />
                     </div>
                   </div>
-                  <div className="col-5 ms-4">
-                    <label for="exampleInputPassword1" className="form-label ">
-                      Fecha aprobación <b className="text-danger">*</b>
-                    </label>
-                    <input type="date" className="form-control w-50" />
+                  <div className="row mb-3">
+                    <div className="col">
+                      <label
+                        htmlFor="exampleInputPassword1"
+                        className="form-label "
+                      >
+                        Imagen
+                      </label>
+                      <input
+                        type="file"
+                        name="imagen"
+                        id="imagen"
+                        className="form-control w-50"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col">
-                    <label for="exampleInputPassword1" className="form-label ">
-                      Imagen
-                    </label>
-                    <input
-                      type="file"
-                      name=""
-                      id=""
-                      className="form-control w-50"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <label for="exampleInputPassword1" className="form-label ">
-                    Sectores corresponsables
-                  </label>
-                  <div className="card w-50 px-0 bg-primary">
-                    <div
-                      className="card m-2 p-3 "
-                      style={{
-                        scrollbarWidth: "none",
-                        overflow: "auto",
-                        overflowX: "hidden",
-                        height: "150px",
-                      }}
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label "
                     >
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          for="flexCheckDefault"
-                        >
-                          Sector Gobierno
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          for="flexCheckDefault"
-                        >
-                          Sector Gestión Pública
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          for="flexCheckDefault"
-                        >
-                          Sector Educación
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          for="flexCheckDefault"
-                        >
-                          Sector Ambiente
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          for="flexCheckDefault"
-                        >
-                          Sector Cultura Recreación y Deporte
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          for="flexCheckDefault"
-                        >
-                          Sector Desarrollo Económico, Industris y Turismo
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          for="flexCheckDefault"
-                        >
-                          Sector Hacienda
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          for="flexCheckDefault"
-                        >
-                          Sector
-                        </label>
+                      Sectores corresponsables
+                    </label>
+                    <div className="card w-50 px-0 bg-primary">
+                      <div
+                        className="card m-2 p-3 "
+                        style={{
+                          scrollbarWidth: "none",
+                          overflow: "auto",
+                          overflowX: "hidden",
+                          height: "150px",
+                        }}
+                      >
+                        {sector.map((sector) => (
+                          <div className="form-check" key={sector.id}>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              value={sector.Nombre}
+                              id={`checkbox-${sector.id}`}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor={`checkbox-${sector.id}`}
+                            >
+                              {sector.Nombre}
+                            </label>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
-                </div>
-                <hr className="sidebar-divider my-0 " />
-                <div className="row mb-3">
-                  <div className="col d-flex justify-content-end">
-                    <button className="btn btn-primary m-2">Guardar</button>
-                    <button className="btn btn-secondary m-2">Cancelar</button>
+                  <hr className="sidebar-divider my-0 " />
+                  <div className="row mb-3">
+                    <div className="col d-flex justify-content-end">
+                      <button className="btn btn-primary m-2">Guardar</button>
+                      <button className="btn btn-secondary m-2">
+                        Cancelar
+                      </button>
+                    </div>
                   </div>
-                </div>
+                </form>
               </div>
             </div>
             <div
@@ -435,7 +530,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                   <form>
                     <Modal.Body>
                       <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">
+                        <label htmlFor="exampleInputEmail1" class="form-label">
                           Tipo de documento <b className="text-danger">*</b>
                         </label>
                         <select name="" id="" className="form-select">
@@ -443,7 +538,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         </select>
                       </div>
                       <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">
+                        <label htmlFor="exampleInputEmail1" class="form-label">
                           Número <b className="text-danger">*</b>
                         </label>
                         <input
@@ -454,7 +549,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         />
                       </div>
                       <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">
+                        <label htmlFor="exampleInputEmail1" class="form-label">
                           Año <b className="text-danger">*</b>
                         </label>
                         <input
@@ -466,7 +561,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       </div>
                       <div className="mb-3">
                         <label
-                          for="exampleInputPassword1"
+                          htmlFor="exampleInputPassword1"
                           className="form-label"
                         >
                           Nombre del documento <b className="text-danger">*</b>
@@ -481,7 +576,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       </div>
                       <div className="mb-3">
                         <label
-                          for="exampleInputPassword1"
+                          htmlFor="exampleInputPassword1"
                           className="form-label "
                         >
                           Documento <b className="text-danger">*</b>
@@ -556,7 +651,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                     <Modal.Body>
                       <div className="mb-3">
                         <label
-                          for="exampleInputPassword1"
+                          htmlFor="exampleInputPassword1"
                           className="form-label"
                         >
                           Descripción Objetivo <b className="text-danger">*</b>
@@ -657,7 +752,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                     <Modal.Body>
                       <div className="mb-3">
                         <label
-                          for="exampleInputPassword1"
+                          htmlFor="exampleInputPassword1"
                           className="form-label"
                         >
                           Descripción Objetivo <b className="text-danger">*</b>
@@ -749,7 +844,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                   <form>
                     <Modal.Body>
                       <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">
+                        <label htmlFor="exampleInputEmail1" class="form-label">
                           Tipo de documento <b className="text-danger">*</b>
                         </label>
                         <select name="" id="" className="form-select">
@@ -758,7 +853,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       </div>
                       <div className="mb-3">
                         <label
-                          for="exampleInputPassword1"
+                          htmlFor="exampleInputPassword1"
                           className="form-label"
                         >
                           Nombre del documento
@@ -773,7 +868,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       </div>
                       <div className="mb-3">
                         <label
-                          for="exampleInputPassword1"
+                          htmlFor="exampleInputPassword1"
                           className="form-label "
                         >
                           Documento
@@ -898,7 +993,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                     <Modal.Body>
                       <div className="mb-3">
                         <label
-                          for="exampleInputPassword1"
+                          htmlFor="exampleInputPassword1"
                           className="form-label"
                         >
                           Justificación <b className="text-danger">*</b>
@@ -913,7 +1008,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       </div>
                       <div className="mb-3">
                         <label
-                          for="exampleInputPassword1"
+                          htmlFor="exampleInputPassword1"
                           className="form-label "
                         >
                           Entrada en vigencia en versiones de la política{" "}

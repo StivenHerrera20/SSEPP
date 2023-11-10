@@ -10,7 +10,9 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
   useEffect(() => {
-    fetch(`http://127.0.0.1:3900/api/politicasPublicas/listar?page=${pagina}&size=${fila}`)
+    fetch(
+      `http://127.0.0.1:3900/api/politicasPublicas/listar?page=${pagina}&size=${fila}`
+    )
       .then((response) => {
         return response.json();
       })
@@ -25,7 +27,12 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
     let nRegistros = totalRegistros;
     let nRegistrosPP = selectedValue;
     setTotalPaginas(Math.ceil(nRegistros / nRegistrosPP));
-    fetch("http://127.0.0.1:3900/api/politicasPublicas/listar?page=" + pagina + "&size=" + selectedValue)
+    fetch(
+      "http://127.0.0.1:3900/api/politicasPublicas/listar?page=" +
+        pagina +
+        "&size=" +
+        selectedValue
+    )
       .then((response) => {
         return response.json();
       })
@@ -39,7 +46,9 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
     setBusqueda(searchText); // Actualiza el estado inmediatamente
     if (searchText.length != 0) {
       // Realiza la búsqueda solo si el texto no está vacío
-      fetch(`http://127.0.0.1:3900/api/politicasPublicas/listarEscrito?Nombre=${searchText}`)
+      fetch(
+        `http://127.0.0.1:3900/api/politicasPublicas/listarEscrito?Nombre=${searchText}`
+      )
         .then((response) => {
           return response.json();
         })
@@ -48,7 +57,9 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
         });
     } else {
       // Si el texto está vacío, vuelve a cargar los datos originales
-      fetch(`http://127.0.0.1:3900/api/politicasPublicas/listar?page=${pagina}&size=${fila}`)
+      fetch(
+        `http://127.0.0.1:3900/api/politicasPublicas/listar?page=${pagina}&size=${fila}`
+      )
         .then((response) => {
           return response.json();
         })
@@ -80,7 +91,12 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
             }}
           ></button>
           <div>
-            <select name="" id="numeroFilas" className="form-select ms-3" onChange={selectPagina}>
+            <select
+              name=""
+              id="numeroFilas"
+              className="form-select ms-3"
+              onChange={selectPagina}
+            >
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -100,12 +116,24 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
             Politicas Públicas
           </h2>
           <div>
-            <input type="text" name="" className="form-control" placeholder="Buscar..." id="txtTabla" onChange={handleSearch} />
+            <input
+              type="text"
+              name=""
+              className="form-control"
+              placeholder="Buscar..."
+              id="txtTabla"
+              onChange={handleSearch}
+            />
           </div>
         </div>
         <div className="card-body">
           <div className="table-responsive">
-            <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
+            <table
+              className="table table-bordered"
+              id="dataTable"
+              width="100%"
+              cellSpacing="0"
+            >
               <thead>
                 <tr>
                   <th>#</th>
@@ -125,7 +153,7 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
                     <tr key={res.id}>
                       <td>{res.id}</td>
                       <td>
-                        <img className="img-fluid" src={"http://" + res.imagen} />
+                        <img className="img-fluid" src={res.imagen} />
                       </td>
                       <td>{res.nemotecnico}</td>
                       <td>{res.nombre}</td>
@@ -142,10 +170,18 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
               </tbody>
             </table>
           </div>
-          <Button className="btn btn-primary" variant="primary" onClick={handleAnterior}>
+          <Button
+            className="btn btn-primary"
+            variant="primary"
+            onClick={handleAnterior}
+          >
             Anterior
           </Button>
-          <Button className="btn btn-primary" variant="primary" onClick={handleSiguiente}>
+          <Button
+            className="btn btn-primary"
+            variant="primary"
+            onClick={handleSiguiente}
+          >
             Siguiente
           </Button>
         </div>

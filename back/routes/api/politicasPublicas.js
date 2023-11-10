@@ -13,14 +13,27 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // Tamaño máximo: 50 MB
+  },
+});
 
 router.post("/agregar", upload.single("imagen"), async (req, res) => {
   try {
     const originalname = req.file.filename;
-    const imagePath = `127.0.0.1:3900/images/${originalname}`;
-    const plan = await politicasPublicas.create({ ...req.body, imagen: imagePath });
+    const imagePath = `http://127.0.0.1:3900/images/${originalname}`;
+    const plan = await politicasPublicas.create({
+      ...req.body,
+      imagen: imagePath,
+    });
+    const busqueda = await sequelize.query(
+      "select max(id) as max from politica_publica",
+      { type: QueryTypes.SELECT }
+    );
     res.json({
+      doc: busqueda,
       status: "OK",
       mensaje: "Agregado Correctamente",
     });
@@ -40,9 +53,33 @@ router.get("/listar", async (req, res) => {
 });
 router.get("/listarEscrito", async (req, res) => {
   console.log(req.query.Nombre);
-  const busqueda = await sequelize.query("select * from politica_publica where nombre like '%" + req.query.Nombre + "%'", {
-    type: QueryTypes.SELECT,
-  });
+  const busqueda = await sequelize.query(
+    "select * from politica_publica where nombre like '%" +
+      req.query.Nombre +
+      "%'",
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
   res.json({ resultado: busqueda });
+});
+router.get("/maximo/:campo", async (req, res) => {
+  const campo = req.params.campo;
+
+  politicasPublicas
+    .max(campo)
+    .then((maxValue) => {
+      res.json({
+        status: "OK",
+        maximo: maxValue,
+      });
+    })
+    .catch((err) => {
+      console.error("Error al obtener el valor máximo:", err);
+      res.status(500).json({
+        status: "Error",
+        mensaje: "Hubo un problema al obtener el valor máximo.",
+      });
+    });
 });
 module.exports = router;

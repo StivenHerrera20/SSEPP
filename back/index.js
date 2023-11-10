@@ -11,7 +11,8 @@ app.use("/images", express.static("uploads"));
 //convertir body de las peticiones a json
 app.use(express.json());
 //recibir body de los formularios
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use("/api", apiRouter);
 app.listen(3900, () => {
   console.log("App ejecutandose");

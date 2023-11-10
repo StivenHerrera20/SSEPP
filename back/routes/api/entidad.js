@@ -10,6 +10,10 @@ router.get("/listar", async (req, res) => {
   const { count, rows } = await Entidad.findAndCountAll(options);
   res.json({ total: count, desarrollo: rows, fila: size, page: page });
 });
+router.get("/listarTodos", async (req, res) => {
+  const unidad = await Entidad.findAll();
+  res.json(unidad);
+});
 router.post("/agregar", async (req, res) => {
   const entidad = await Entidad.create(req.body);
   res.json({
