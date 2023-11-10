@@ -6,6 +6,8 @@ require("./model/Conexion");
 
 //setting cors :: middleware para evitar error de rutas cruzadas
 app.use(cors());
+app.use(express.static("uploads"));
+app.use("/images", express.static("uploads"));
 //convertir body de las peticiones a json
 app.use(express.json());
 //recibir body de los formularios
