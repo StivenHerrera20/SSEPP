@@ -145,361 +145,375 @@ const Producto = () => {
               role="tabpanel"
               aria-labelledby="datosGenerales-tab"
             >
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea1"
-                  className="form-label"
-                >
-                  Objetivo Especifico
-                </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea1"
-                  rows="2"
-                  disabled
-                  defaultValue={
-                    "Aca va el nombre del objetivo especifico seleccionado"
-                  }
-                  style={{ resize: "none" }}
-                ></textarea>
-              </div>
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea2"
-                  className="form-label"
-                >
-                  Nombre del Resultado
-                </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea2"
-                  rows="2"
-                  style={{ resize: "none" }}
-                  defaultValue={"Aca va el nombre del resultado"}
-                  disabled
-                ></textarea>
-              </div>
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea3"
-                  className="form-label"
-                >
-                  Nombre del Producto <b className="text-danger">*</b>
-                </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea3"
-                  rows="2"
-                  style={{ resize: "none" }}
-                  defaultValue={"Acá va el nombre del Producto"}
-                ></textarea>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="" className="form-label">
-                  Importancia relativa <b className="text-danger">*</b>
-                </label>
-                <div className="input-group">
-                  <input type="text" className="form-control" />
-                  <span className="input-group-text">%</span>
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="" className="form-label">
-                  Sector Responsable <b className="text-danger">*</b>
-                </label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                >
-                  <option value="1">...</option>
-                  <option value="2">...</option>
-                  <option value="3">...</option>
-                </select>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="" className="form-label">
-                  Entidad Responsable <b className="text-danger">*</b>
-                </label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                >
-                  <option value="1">...</option>
-                  <option value="2">...</option>
-                  <option value="3">...</option>
-                </select>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="exampleInputPassword1" className="form-label ">
-                  Enfoques <b className="text-danger">*</b>
-                </label>
-                <div className="card w-75 px-0 bg-primary">
-                  <div
-                    className="card m-2 p-3 "
-                    style={{
-                      scrollbarWidth: "none",
-                      overflow: "auto",
-                      overflowX: "hidden",
-                      height: "150px",
-                    }}
+              <form action="">
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlTextarea1"
+                    className="form-label"
                   >
-                    <input
-                      type="text"
-                      name=""
-                      className="form-control mb-2"
-                      placeholder="Buscar..."
-                    />
-                    <div className="form-check">
+                    Objetivo Especifico
+                  </label>
+                  <textarea
+                    className="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="2"
+                    disabled
+                    defaultValue={
+                      "Aca va el nombre del objetivo especifico seleccionado"
+                    }
+                    style={{ resize: "none" }}
+                  ></textarea>
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlTextarea2"
+                    className="form-label"
+                  >
+                    Nombre del Resultado
+                  </label>
+                  <textarea
+                    className="form-control"
+                    id="exampleFormControlTextarea2"
+                    rows="2"
+                    style={{ resize: "none" }}
+                    defaultValue={"Aca va el nombre del resultado"}
+                    disabled
+                  ></textarea>
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlTextarea3"
+                    className="form-label"
+                  >
+                    Nombre del Producto <b className="text-danger">*</b>
+                  </label>
+                  <textarea
+                    className="form-control"
+                    id="exampleFormControlTextarea3"
+                    rows="2"
+                    style={{ resize: "none" }}
+                    defaultValue={"Acá va el nombre del Producto"}
+                  ></textarea>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="" className="form-label">
+                    Importancia relativa <b className="text-danger">*</b>
+                  </label>
+                  <div className="input-group">
+                    <input type="text" className="form-control" />
+                    <span className="input-group-text">%</span>
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="" className="form-label">
+                    Sector Responsable <b className="text-danger">*</b>
+                  </label>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option value="1">...</option>
+                    <option value="2">...</option>
+                    <option value="3">...</option>
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="" className="form-label">
+                    Entidad Responsable <b className="text-danger">*</b>
+                  </label>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option value="1">...</option>
+                    <option value="2">...</option>
+                    <option value="3">...</option>
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleInputPassword1"
+                    className="form-label "
+                  >
+                    Enfoques <b className="text-danger">*</b>
+                  </label>
+                  <div className="card w-75 px-0 bg-primary">
+                    <div
+                      className="card m-2 p-3 "
+                      style={{
+                        scrollbarWidth: "none",
+                        overflow: "auto",
+                        overflowX: "hidden",
+                        height: "150px",
+                      }}
+                    >
                       <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
+                        type="text"
+                        name=""
+                        className="form-control mb-2"
+                        placeholder="Buscar..."
                       />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        1
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        2
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        3
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        4
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        5
-                      </label>
-                    </div>
-                    <div className="form-check ">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        6
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        7
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        8
-                      </label>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          1
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          2
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          3
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          4
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          5
+                        </label>
+                      </div>
+                      <div className="form-check ">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          6
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          7
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          8
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="exampleInputPassword1" className="form-label ">
-                  Objetivos de Desarrollo Sostenible{" "}
-                  <b className="text-danger">*</b>
-                </label>
-                <div className="card w-75 px-0 bg-primary">
-                  <div
-                    className="card m-2 p-3 "
-                    style={{
-                      scrollbarWidth: "none",
-                      overflow: "auto",
-                      overflowX: "hidden",
-                      height: "150px",
-                    }}
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleInputPassword1"
+                    className="form-label "
                   >
-                    <input
-                      type="text"
-                      name=""
-                      className="form-control mb-2"
-                      placeholder="Buscar..."
-                    />
-                    <div className="form-check">
+                    Objetivos de Desarrollo Sostenible{" "}
+                    <b className="text-danger">*</b>
+                  </label>
+                  <div className="card w-75 px-0 bg-primary">
+                    <div
+                      className="card m-2 p-3 "
+                      style={{
+                        scrollbarWidth: "none",
+                        overflow: "auto",
+                        overflowX: "hidden",
+                        height: "150px",
+                      }}
+                    >
                       <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
+                        type="text"
+                        name=""
+                        className="form-control mb-2"
+                        placeholder="Buscar..."
                       />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        1
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        2
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        3
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        4
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        5
-                      </label>
-                    </div>
-                    <div className="form-check ">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        6
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        7
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexCheckDefault"
-                      >
-                        8
-                      </label>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          1
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          2
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          3
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          4
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          5
+                        </label>
+                      </div>
+                      <div className="form-check ">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          6
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          7
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                        >
+                          8
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+                <div className="row mb-3">
+                  <div className="col d-flex justify-content-end">
+                    <button className="btn btn-primary m-2">Guardar</button>
+                    <button className="btn btn-secondary m-2">Cancelar</button>
+                  </div>
+                </div>
+              </form>
             </div>
             <div
               className="tab-pane fade"
@@ -507,148 +521,160 @@ const Producto = () => {
               role="tabpanel"
               aria-labelledby="indicador-tab"
             >
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea4"
-                  className="form-label"
-                >
-                  Nombre del Indicador <b className="text-danger">*</b>
-                </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea4"
-                  rows="2"
-                  style={{ resize: "none" }}
-                ></textarea>
-              </div>
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea5"
-                  className="form-label"
-                >
-                  Formula del Indicador <b className="text-danger">*</b>
-                </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea5"
-                  rows="2"
-                  style={{ resize: "none" }}
-                ></textarea>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="" className="form-label">
-                  Tipo de Anulación <b className="text-danger">*</b>
-                </label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                >
-                  <option value="1">...</option>
-                  <option value="2">...</option>
-                  <option value="3">...</option>
-                </select>
-              </div>
-              <div className="row mb-3">
-                <div className="col-4">
-                  <label htmlFor="" className="form-label">
-                    Aplica Indicador PDD? <b className="text-danger">*</b>
-                  </label>
-                  <select
-                    className="form-select w-50"
-                    aria-label="Default select example"
+              <form action="">
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlTextarea4"
+                    className="form-label"
                   >
-                    <option
-                      value="1"
-                      onClick={() => {
-                        setEnable("false");
-                      }}
-                    >
-                      Si
-                    </option>
-                    <option
-                      value="2"
-                      onClick={() => {
-                        setEnable("true");
-                      }}
-                    >
-                      No
-                    </option>
-                  </select>
+                    Nombre del Indicador <b className="text-danger">*</b>
+                  </label>
+                  <textarea
+                    className="form-control"
+                    id="exampleFormControlTextarea4"
+                    rows="2"
+                    style={{ resize: "none" }}
+                  ></textarea>
                 </div>
-                <div className="col-3">
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlTextarea5"
+                    className="form-label"
+                  >
+                    Formula del Indicador <b className="text-danger">*</b>
+                  </label>
+                  <textarea
+                    className="form-control"
+                    id="exampleFormControlTextarea5"
+                    rows="2"
+                    style={{ resize: "none" }}
+                  ></textarea>
+                </div>
+                <div className="mb-3">
                   <label htmlFor="" className="form-label">
-                    Plan de Desarrollo
+                    Tipo de Anulación <b className="text-danger">*</b>
                   </label>
                   <select
                     className="form-select"
                     aria-label="Default select example"
-                    disabled={enable}
                   >
                     <option value="1">...</option>
                     <option value="2">...</option>
                     <option value="3">...</option>
                   </select>
                 </div>
-                <div className="col-5">
-                  <label htmlFor="" className="form-label">
-                    Indicador PDD
-                  </label>
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    disabled={enable}
-                  >
-                    <option value="1">...</option>
-                    <option value="2">...</option>
-                    <option value="3">...</option>
-                  </select>
-                </div>
-              </div>
-              <h6 className="mb-3 ">Tiempo de ejecución</h6>
-              <div className="row mb-3">
-                <div className="col-6">
-                  <label htmlFor="" className="form-label">
-                    Inicio <b className="text-danger">*</b>
-                  </label>
-                  <input type="date" className="form-control" />
-                </div>
-                <div className="col-6">
-                  <label htmlFor="" className="form-label">
-                    Fin <b className="text-danger">*</b>
-                  </label>
-                  <input type="date" className="form-control" />
-                </div>
-              </div>
-              <div className="row mb-3 d-flex align-items-center m-auto">
-                <div className="col-4">
-                  <div className="form-check">
-                    <input className="form-check-input" type="checkbox" id="" />
-                    <label className="form-check-label" htmlFor="">
-                      No disponible
+                <div className="row mb-3">
+                  <div className="col-4">
+                    <label htmlFor="" className="form-label">
+                      Aplica Indicador PDD? <b className="text-danger">*</b>
                     </label>
+                    <select
+                      className="form-select w-50"
+                      aria-label="Default select example"
+                    >
+                      <option
+                        value="1"
+                        onClick={() => {
+                          setEnable("false");
+                        }}
+                      >
+                        Si
+                      </option>
+                      <option
+                        value="2"
+                        onClick={() => {
+                          setEnable("true");
+                        }}
+                      >
+                        No
+                      </option>
+                    </select>
+                  </div>
+                  <div className="col-3">
+                    <label htmlFor="" className="form-label">
+                      Plan de Desarrollo
+                    </label>
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      disabled={enable}
+                    >
+                      <option value="1">...</option>
+                      <option value="2">...</option>
+                      <option value="3">...</option>
+                    </select>
+                  </div>
+                  <div className="col-5">
+                    <label htmlFor="" className="form-label">
+                      Indicador PDD
+                    </label>
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      disabled={enable}
+                    >
+                      <option value="1">...</option>
+                      <option value="2">...</option>
+                      <option value="3">...</option>
+                    </select>
                   </div>
                 </div>
-                <div className="col-3">
-                  <label htmlFor="" className="form-label">
-                    Valor
-                  </label>
-                  <input type="text" className="form-control" />
+                <h6 className="mb-3 ">Tiempo de ejecución</h6>
+                <div className="row mb-3">
+                  <div className="col-6">
+                    <label htmlFor="" className="form-label">
+                      Inicio <b className="text-danger">*</b>
+                    </label>
+                    <input type="date" className="form-control" />
+                  </div>
+                  <div className="col-6">
+                    <label htmlFor="" className="form-label">
+                      Fin <b className="text-danger">*</b>
+                    </label>
+                    <input type="date" className="form-control" />
+                  </div>
                 </div>
-                <div className="col-5">
-                  <label htmlFor="" className="form-label">
-                    Fecha de la linea base
-                  </label>
-                  <input type="date" className="form-control" />
+                <div className="row mb-3 d-flex align-items-center m-auto">
+                  <div className="col-4">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id=""
+                      />
+                      <label className="form-check-label" htmlFor="">
+                        No disponible
+                      </label>
+                    </div>
+                  </div>
+                  <div className="col-3">
+                    <label htmlFor="" className="form-label">
+                      Valor
+                    </label>
+                    <input type="text" className="form-control" />
+                  </div>
+                  <div className="col-5">
+                    <label htmlFor="" className="form-label">
+                      Fecha de la linea base
+                    </label>
+                    <input type="date" className="form-control" />
+                  </div>
                 </div>
-              </div>
-              <div className="row mb-3">
-                <div className="col">
-                  <label htmlFor="" className="form-label">
-                    Fuente de la linea base
-                  </label>
-                  <input type="text" className="form-control w-75" />
+                <div className="row mb-3">
+                  <div className="col">
+                    <label htmlFor="" className="form-label">
+                      Fuente de la linea base
+                    </label>
+                    <input type="text" className="form-control w-75" />
+                  </div>
                 </div>
-              </div>
+                <div className="row mb-3">
+                  <div className="col d-flex justify-content-end">
+                    <button className="btn btn-primary m-2">Guardar</button>
+                    <button className="btn btn-secondary m-2">Cancelar</button>
+                  </div>
+                </div>
+              </form>
             </div>
             <div
               className="tab-pane fade"
@@ -777,7 +803,7 @@ const Producto = () => {
               </div>
             </div>
             <div
-              className="tab-pane fade show active"
+              className="tab-pane fade"
               id="costos"
               role="tabpanel"
               aria-labelledby="costos-tab"
@@ -794,6 +820,13 @@ const Producto = () => {
                     data-bs-toggle="modal"
                     data-bs-target="#costosProducto"
                   ></button>
+                </div>
+                <div className="row">
+                  <div className="col">
+                    {/*Inicio grafica*/}
+                    <Bar data={data} options={config} />
+                    {/*Fin grafica*/}
+                  </div>
                 </div>
                 {/* Inicio Modal de los costos */}
                 <div
@@ -956,10 +989,6 @@ const Producto = () => {
                   </div>
                 </div>
                 {/* Fin Modal de los costos */}
-
-                {/*Inicio grafica*/}
-                <Bar data={data} options={config} />
-                {/*Fin grafica*/}
               </div>
             </div>
           </div>

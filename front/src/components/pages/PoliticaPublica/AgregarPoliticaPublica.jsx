@@ -795,20 +795,22 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       </tbody>
                     </table>
                   </div>
-                  <Button
-                    className="btn btn-primary"
-                    variant="primary"
-                    onClick={handleAnterior}
-                  >
-                    Anterior
-                  </Button>
-                  <Button
-                    className="btn btn-primary"
-                    variant="primary"
-                    onClick={handleSiguiente}
-                  >
-                    Siguiente
-                  </Button>
+                  <div className="col d-flex justify-content-center">
+                    <Button
+                      className="btn btn-primary m-2"
+                      variant="primary"
+                      onClick={handleAnterior}
+                    >
+                      Anterior
+                    </Button>
+                    <Button
+                      className="btn btn-primary m-2"
+                      variant="primary"
+                      onClick={handleSiguiente}
+                    >
+                      Siguiente
+                    </Button>
+                  </div>
                 </div>
                 <Modal show={show} onHide={handleClose}>
                   <Modal.Header className="bg-light" closeButton>
@@ -1419,20 +1421,22 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       </tbody>
                     </table>
                   </div>
-                  <Button
-                    className="btn btn-primary"
-                    variant="primary"
-                    onClick={handleAnteriorAsociados}
-                  >
-                    Anterior
-                  </Button>
-                  <Button
-                    className="btn btn-primary"
-                    variant="primary"
-                    onClick={handleSiguienteAsociados}
-                  >
-                    Siguiente
-                  </Button>
+                  <div className="col d-flex justify-content-center">
+                    <Button
+                      className="btn btn-primary m-2"
+                      variant="primary"
+                      onClick={handleAnterior}
+                    >
+                      Anterior
+                    </Button>
+                    <Button
+                      className="btn btn-primary m-2"
+                      variant="primary"
+                      onClick={handleSiguiente}
+                    >
+                      Siguiente
+                    </Button>
+                  </div>
                 </div>
                 <Modal show={showCuatro} onHide={handleCloseCuatro}>
                   <Modal.Header className="bg-light" closeButton>
