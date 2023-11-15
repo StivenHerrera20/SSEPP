@@ -20,6 +20,10 @@ const sectorModel = require("./Sector");
 const unidadDeMedidaModel = require("./unidadDeMedida");
 const politicasPublicasModel = require("./PoliticasPublicas");
 const politicaHasSectoresModel = require("./PoliticaHasSectores");
+const documentoDeAdopcionPPModel = require("./DocumentoDeAdopcionPP");
+const PPHasObjetivoGeneralModel = require("./PoliticaHasObjetivoGeneral");
+const PPHasObjetivoEspecificoModel = require("./politicaHasObjetivoEspecifico");
+const documentosAsociadosPPModel = require("./documentosAsociadosPP");
 
 // metodo para conectarnos a la bd, usando async -- await funciones asincronicas
 const sequelize = new Sequelize("politicas_publicas", "root", "", {
@@ -42,9 +46,19 @@ const Plan = planModel(sequelize, Sequelize);
 const rangoSemaforo = rangoSemaforoModel(sequelize, Sequelize);
 const Sector = sectorModel(sequelize, Sequelize);
 const unidadDeMedida = unidadDeMedidaModel(sequelize, Sequelize);
-const nivelDeTerritorializacion = nivelDeTerritorializacionModel(sequelize, Sequelize);
+const nivelDeTerritorializacion = nivelDeTerritorializacionModel(
+  sequelize,
+  Sequelize
+);
 const politicasPublicas = politicasPublicasModel(sequelize, Sequelize);
 const politicaHasSectores = politicaHasSectoresModel(sequelize, Sequelize);
+const documentoDeAdopcionPP = documentoDeAdopcionPPModel(sequelize, Sequelize);
+const PPHasObjetivoGeneral = PPHasObjetivoGeneralModel(sequelize, Sequelize);
+const documentosAsociadosPP = documentosAsociadosPPModel(sequelize, Sequelize);
+const PPHasObjetivoEspecifico = PPHasObjetivoEspecificoModel(
+  sequelize,
+  Sequelize
+);
 sequelize.sync({ force: false }).then(() => {
   console.log("Melo hasta aqui");
 });
@@ -70,4 +84,8 @@ module.exports = {
   unidadDeMedida,
   politicasPublicas,
   politicaHasSectores,
+  documentoDeAdopcionPP,
+  PPHasObjetivoGeneral,
+  PPHasObjetivoEspecifico,
+  documentosAsociadosPP,
 };

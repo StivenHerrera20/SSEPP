@@ -28,7 +28,36 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
   const [sector, setSectores] = useState([]);
   const [entidad, setEntidades] = useState([]);
   const [idPolitica, setmaxIdPolitica] = useState([]);
+  const [objetivosEspecificos, setobjetivosEspecificos] = useState([]);
+  const [documentosDeAdopcion, setdocumentosDeAdopcion] = useState([]);
+  const [documentosAsociados, setdocumentosAsociados] = useState([]);
+  const [totalRegistros, setTotalRegistros] = useState(0);
+  const [totalPaginas, setTotalPaginas] = useState(0);
+  const [fila, setFila] = useState(5);
+  const [busqueda, setBusqueda] = useState(0);
+  const [pagina, setPagina] = useState(0);
+  const [totalRegistrosEspecificos, setTotalRegistrosEspecificos] = useState(0);
+  const [totalPaginasEspecificos, setTotalPaginasEspecificos] = useState(0);
+  const [filaEspecificos, setFilaEspecificos] = useState(5);
+  const [busquedaEspecificos, setBusquedaEspecificos] = useState(0);
+  const [paginaEspecificos, setPaginaEspecificos] = useState(0);
+  const [totalRegistrosAsociados, setTotalRegistrosAsociados] = useState(0);
+  const [totalPaginasAsociados, setTotalPaginasAsociados] = useState(0);
+  const [filaAsociados, setFilaAsociados] = useState(5);
+  const [busquedaAsociados, setBusquedaAsociados] = useState(0);
+  const [paginaAsociados, setPaginaAsociados] = useState(0);
   useEffect(() => {
+    fetch(
+      `http://127.0.0.1:3900/api/documentosAsociadosPP/listar?page=${paginaAsociados}&size=${filaAsociados}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setdocumentosAsociados(doc.desarrollo);
+        setTotalRegistrosAsociados(doc.total);
+        setTotalPaginasAsociados(Math.ceil(doc.total / filaAsociados));
+      });
     fetch("http://127.0.0.1:3900/api/sector/listarTodos")
       .then((response) => {
         return response.json();
@@ -43,7 +72,197 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
       .then((doc) => {
         setEntidades(doc);
       });
-  }, []);
+    fetch(
+      `http://127.0.0.1:3900/api/documentoDeAdopcionPP/listar?page=${pagina}&size=${fila}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setdocumentosDeAdopcion(doc.desarrollo);
+        setTotalRegistros(doc.total);
+        setTotalPaginas(Math.ceil(doc.total / fila));
+      });
+  }, [pagina, fila, paginaAsociados, filaAsociados]);
+  const selectPagina = (e) => {
+    const selectedValue = e.target.value;
+    let nRegistros = totalRegistros;
+    let nRegistrosPP = selectedValue;
+    setTotalPaginas(Math.ceil(nRegistros / nRegistrosPP));
+    fetch(
+      "http://127.0.0.1:3900/api/documentoDeAdopcionPP/listar?page=" +
+        pagina +
+        "&size=" +
+        selectedValue
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setdocumentosDeAdopcion(doc.desarrollo);
+        setFila(parseInt(selectedValue));
+      });
+  };
+  const selectPaginaAsociados = (e) => {
+    const selectedValue = e.target.value;
+    let nRegistros = totalRegistrosAsociados;
+    let nRegistrosPP = selectedValue;
+    setTotalPaginasAsociados(Math.ceil(nRegistros / nRegistrosPP));
+    fetch(
+      "http://127.0.0.1:3900/api/documentosAsociadosPP/listar?page=" +
+        paginaAsociados +
+        "&size=" +
+        selectedValue
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setdocumentosAsociados(doc.desarrollo);
+        setFilaAsociados(parseInt(selectedValue));
+      });
+  };
+  const handleSearchAsociados = (event) => {
+    const searchText = event.target.value;
+    setBusqueda(searchText); // Actualiza el estado inmediatamente
+    if (searchText.length != 0) {
+      // Realiza la búsqueda solo si el texto no está vacío
+      fetch(
+        `http://127.0.0.1:3900/api/documentosAsociadosPP/listarEscrito?Nombre=${searchText}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          setdocumentosAsociados(doc.resultado);
+        });
+    } else {
+      // Si el texto está vacío, vuelve a cargar los datos originales
+      fetch(
+        `http://127.0.0.1:3900/api/documentosAsociadosPP/listar?page=${paginaAsociados}&size=${filaAsociados}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          setdocumentosAsociados(doc.desarrollo);
+        });
+    }
+  };
+  /* const selectPaginaEspecificos = (e) => {
+    const selectedValue = e.target.value;
+    let nRegistros = totalRegistrosEspecificos;
+    let nRegistrosPP = selectedValue;
+    setTotalPaginasAsociados(Math.ceil(nRegistros / nRegistrosPP));
+    fetch(
+      "http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/listar?page=" +
+        paginaEspecificos +
+        "&size=" +
+        selectedValue
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setobjetivosEspecificos(doc.desarrollo);
+        setFilaEspecificos(parseInt(selectedValue));
+      });
+  }; */
+  const handleSearchEspecificos = (event) => {
+    const searchText = event.target.value;
+    setBusqueda(searchText); // Actualiza el estado inmediatamente
+    if (searchText.length != 0) {
+      // Realiza la búsqueda solo si el texto no está vacío
+      fetch(
+        `http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/listarEscrito?Nombre=${searchText}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          setobjetivosEspecificos(doc.resultado);
+        });
+    } else {
+      // Si el texto está vacío, vuelve a cargar los datos originales
+      fetch(
+        `http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/listar?page=${paginaEspecificos}&size=${filaEspecificos}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          setobjetivosEspecificos(doc.desarrollo);
+        });
+    }
+  };
+  const handleSearch = (event) => {
+    const searchText = event.target.value;
+    setBusqueda(searchText); // Actualiza el estado inmediatamente
+    if (searchText.length != 0) {
+      // Realiza la búsqueda solo si el texto no está vacío
+      fetch(
+        `http://127.0.0.1:3900/api/documentoDeAdopcionPP/listarEscrito?Nombre=${searchText}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          setdocumentosDeAdopcion(doc.resultado);
+        });
+    } else {
+      // Si el texto está vacío, vuelve a cargar los datos originales
+      fetch(
+        `http://127.0.0.1:3900/api/documentoDeAdopcionPP/listar?page=${pagina}&size=${fila}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          setdocumentosDeAdopcion(doc.desarrollo);
+        });
+    }
+  };
+  const handleSiguiente = () => {
+    if (pagina < totalPaginas - 1) {
+      setPagina(pagina + 1);
+    }
+  };
+
+  const handleAnterior = () => {
+    if (pagina > 0) {
+      setPagina(pagina - 1);
+    }
+  };
+  const handleSiguienteAsociados = () => {
+    if (paginaAsociados < totalPaginasAsociados - 1) {
+      setPaginaAsociados(paginaAsociados + 1);
+    }
+  };
+
+  const handleAnteriorAsociados = () => {
+    if (paginaAsociados > 0) {
+      setPaginaAsociados(paginaAsociados - 1);
+    }
+  };
+  /*  const handleSiguienteEspecificos = () => {
+    if (paginaEspecificos < totalPaginasEspecificos - 1) {
+      setPaginaEspecificos(paginaEspecificos + 1);
+    }
+  };
+
+  const handleAnteriorEspecificos = () => {
+    if (paginaEspecificos > 0) {
+      setPaginaEspecificos(paginaEspecificos - 1);
+    }
+  }; */
+  const handleDownload = (documento) => {
+    const link = document.createElement("a");
+    link.href = "http://127.0.0.1:3900/images/" + documento;
+    link.download = `NombreDeArchivo`; // Puedes establecer el nombre del archivo aquí
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
     <>
       <div className="card shadow mb-4">
@@ -89,7 +308,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                 role="tab"
                 aria-controls="documentosAdopcion"
                 aria-selected="false"
-                disabled
               >
                 Documentos de Adopción
               </button>
@@ -104,7 +322,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                 role="tab"
                 aria-controls="objetivos"
                 aria-selected="false"
-                disabled
               >
                 Objetivos
               </button>
@@ -119,7 +336,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                 role="tab"
                 aria-controls="documentosAsociados"
                 aria-selected="false"
-                disabled
               >
                 Documentos Asociados
               </button>
@@ -134,7 +350,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                 role="tab"
                 aria-controls="publicacion"
                 aria-selected="false"
-                disabled
               >
                 Publicación
               </button>
@@ -203,7 +418,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                           return response.json();
                         })
                         .then((res) => {
-                          console.log(res);
                           setIncersion(true);
                           const checkboxes = document.querySelectorAll(
                             'input[type="checkbox"]:checked'
@@ -230,14 +444,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                                 // Maneja errores
                               });
                           }
-                          let documentosAdopcion = document.querySelector(
-                            "#documentosAdopcion-tab"
-                          );
-                          documentosAdopcion.removeAttribute("disabled");
-                          let datosGenerales = document.querySelector(
-                            "#datosGenerales-tab"
-                          );
-                          datosGenerales.setAttribute("disabled", true);
                         });
                     } else {
                       alert("revisar los datos");
@@ -477,10 +683,40 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                     variant="primary"
                     onClick={handleShow}
                   ></Button>
-
+                  <div>
+                    <select
+                      name=""
+                      id="numeroFilas"
+                      className="form-select ms-3"
+                      onChange={selectPagina}
+                    >
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option defaultValue="5" value="5">
+                        5
+                      </option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select>
+                  </div>
                   <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">
                     Documento de adopción
                   </h2>
+                  <div>
+                    <input
+                      type="text"
+                      name=""
+                      className="form-control"
+                      placeholder="Buscar..."
+                      id="txtTabla"
+                      onChange={handleSearch}
+                    />
+                  </div>
                 </div>
                 <div className="card-body">
                   <div className="table-responsive">
@@ -492,6 +728,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                     >
                       <thead>
                         <tr>
+                          <th>#</th>
                           <th>Tipo Documento</th>
                           <th>Número</th>
                           <th>Año</th>
@@ -502,39 +739,155 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       </thead>
 
                       <tbody>
-                        <tr>
-                          <td>Documento CONPES D.C</td>
-                          <td>03</td>
-                          <td>2019</td>
-                          <td>
-                            Politica Pública Distrital de Servicio a la
-                            Ciudadania
-                          </td>
-                          <td className="text-center">
-                            {" "}
-                            <button className="btn btn-warning fa fa-download "></button>
-                          </td>
-                          <td className="text-center">
-                            {" "}
-                            <button className="btn btn-danger fa fa-trash "></button>
-                          </td>
-                        </tr>
+                        {documentosDeAdopcion.map((res) => {
+                          return (
+                            <tr key={res.id}>
+                              <td>{res.id}</td>
+                              <td>{res.tipo}</td>
+                              <td>{res.numero}</td>
+                              <td>{res.year}</td>
+                              <td>{res.nombre}</td>
+                              <td className="text-center">
+                                {" "}
+                                <button
+                                  className="btn btn-warning fa fa-download "
+                                  onClick={() => handleDownload(res.documento)}
+                                ></button>
+                              </td>
+                              <td className="text-center">
+                                {" "}
+                                <button
+                                  className="btn btn-danger fa fa-trash "
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    fetch(
+                                      "http://127.0.0.1:3900/api/documentoDeAdopcionPP/eliminar/" +
+                                        e.target.parentElement.parentElement
+                                          .children[0].textContent,
+                                      { method: "DELETE" }
+                                    )
+                                      .then((response) => {
+                                        return response.json();
+                                      })
+                                      .then((res) => {
+                                        fetch(
+                                          `http://127.0.0.1:3900/api/documentoDeAdopcionPP/listar?page=${pagina}&size=${fila}`
+                                        )
+                                          .then((response) => {
+                                            return response.json();
+                                          })
+                                          .then((doc) => {
+                                            setdocumentosDeAdopcion(
+                                              doc.desarrollo
+                                            );
+                                            setTotalRegistros(doc.total);
+                                            setTotalPaginas(
+                                              Math.ceil(doc.total / fila)
+                                            );
+                                          });
+                                      });
+                                  }}
+                                ></button>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
+                  <Button
+                    className="btn btn-primary"
+                    variant="primary"
+                    onClick={handleAnterior}
+                  >
+                    Anterior
+                  </Button>
+                  <Button
+                    className="btn btn-primary"
+                    variant="primary"
+                    onClick={handleSiguiente}
+                  >
+                    Siguiente
+                  </Button>
                 </div>
                 <Modal show={show} onHide={handleClose}>
                   <Modal.Header className="bg-light" closeButton>
                     <Modal.Title>Agregar Documento Adopción</Modal.Title>
                   </Modal.Header>
-                  <form>
+                  <form
+                    method="post"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      let tipoDocumento =
+                        document.querySelector("#tipoDocumento");
+                      let numero = document.querySelector("#numero");
+                      let year = document.querySelector("#year");
+                      let descripcionDocumentosAdopcion =
+                        document.querySelector(
+                          "#descripcionDocumentosAdopcion"
+                        );
+                      let documento = document.querySelector("#documento");
+                      if (
+                        tipoDocumento.value.length > 0 &&
+                        numero.value.length > 0 &&
+                        year.value.length > 0 &&
+                        descripcionDocumentosAdopcion.value.length > 0
+                      ) {
+                        const formData = new FormData();
+                        formData.append("tipo", tipoDocumento.value);
+                        formData.append("numero", numero.value);
+                        formData.append("year", year.value);
+                        formData.append(
+                          "nombre",
+                          descripcionDocumentosAdopcion.value
+                        );
+                        formData.append("documento", documento.files[0]);
+                        fetch(
+                          "http://127.0.0.1:3900/api/documentoDeAdopcionPP/agregar",
+                          {
+                            method: "POST",
+                            body: formData,
+                          }
+                        )
+                          .then((response) => {
+                            return response.json();
+                          })
+                          .then((res) => {
+                            fetch(
+                              `http://127.0.0.1:3900/api/documentoDeAdopcionPP/listar?page=${pagina}&size=${fila}`
+                            )
+                              .then((response) => {
+                                return response.json();
+                              })
+                              .then((doc) => {
+                                setdocumentosDeAdopcion(doc.desarrollo);
+                                setTotalRegistros(doc.total);
+                                setTotalPaginas(Math.ceil(doc.total / fila));
+                              });
+                            console.log(res);
+                          });
+                      } else {
+                        alert("revisar los datos");
+                      }
+                    }}
+                  >
                     <Modal.Body>
                       <div class="mb-3">
                         <label htmlFor="exampleInputEmail1" class="form-label">
                           Tipo de documento <b className="text-danger">*</b>
                         </label>
-                        <select name="" id="" className="form-select">
-                          <option value="">Documento CONPES D.C</option>
+                        <select
+                          name=""
+                          id="tipoDocumento"
+                          className="form-select"
+                        >
+                          <option value="Ley">Ley</option>
+                          <option value="Decreto">Decreto</option>
+                          <option value="Resolución">Resolución</option>
+                          <option value="Ordenanza">Ordenanza</option>
+                          <option value="Acuerdo">Acuerdo</option>
+                          <option value="Compes">Compes</option>
+                          <option value="Directiva">Directiva</option>
                         </select>
                       </div>
                       <div class="mb-3">
@@ -543,8 +896,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         </label>
                         <input
                           type="text"
-                          name=""
-                          id=""
+                          id="numero"
                           className="form-control"
                         />
                       </div>
@@ -554,8 +906,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         </label>
                         <input
                           type="number"
-                          name=""
-                          id=""
+                          id="year"
                           className="form-control"
                         />
                       </div>
@@ -583,8 +934,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         </label>
                         <input
                           type="file"
-                          name=""
-                          id=""
+                          id="documento"
                           className="form-control"
                         />
                       </div>
@@ -641,13 +991,50 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                   </h2>
                 </div>
                 <div className="card-body">
-                  Aún no se ha creado Objetivo General para esta Politica
+                  <p id="objetivo">
+                    Aún no se ha creado Objetivo General para esta Politica
+                  </p>
                 </div>
                 <Modal show={showDos} onHide={handleCloseDos}>
                   <Modal.Header className="bg-light" closeButton>
                     <Modal.Title>Objetivo General</Modal.Title>
                   </Modal.Header>
-                  <form>
+                  <form
+                    method="post"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const objetivo =
+                        document.querySelector("#objetivoGeneral");
+                      fetch(
+                        "http://127.0.0.1:3900/api/politicasPublicas/maximo/id"
+                      )
+                        .then((response) => {
+                          return response.json();
+                        })
+                        .then((res) => {
+                          let id = res.maximo;
+                          fetch(
+                            "http://127.0.0.1:3900/api/PPHasObjetivoGeneral/agregar",
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type":
+                                  "application/x-www-form-urlencoded",
+                              },
+                              body: `objetivo=${objetivo.value}&id_politica=${id}`,
+                            }
+                          )
+                            .then((response) => {
+                              return response.json();
+                            })
+                            .then((res) => {
+                              let objetivoP =
+                                document.querySelector("#objetivo");
+                              objetivoP.innerHTML = objetivo.value;
+                            });
+                        });
+                    }}
+                  >
                     <Modal.Body>
                       <div className="mb-3">
                         <label
@@ -659,7 +1046,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         <textarea
                           className="form-control"
                           name=""
-                          id="descripcionDocumentosAdopcion"
+                          id="objetivoGeneral"
                           rows="5"
                           style={{ resize: "none" }}
                         ></textarea>
@@ -669,17 +1056,14 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       <Button
                         type="submit"
                         variant="primary"
-                        onClick={handleCloseDos}
-                      >
-                        Guardar
-                      </Button>
-                      <Button
-                        variant="secondary"
                         onClick={() => {
                           setObjetivoGeneral(1);
                           handleCloseDos();
                         }}
                       >
+                        Guardar
+                      </Button>
+                      <Button variant="secondary" onClick={handleCloseDos}>
                         Cancelar
                       </Button>
                     </Modal.Footer>
@@ -704,10 +1088,40 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       }
                     }
                   })()}
-
+                  {/* <div>
+                    <select
+                      name=""
+                      id="numeroFilas"
+                      className="form-select ms-3"
+                      onChange={selectPaginaEspecificos}
+                    >
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option defaultValue="5" value="5">
+                        5
+                      </option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select>
+                  </div> */}
                   <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">
                     Objetivos Especificos
                   </h2>
+                  <div>
+                    <input
+                      type="text"
+                      name=""
+                      className="form-control"
+                      placeholder="Buscar..."
+                      id="txtTabla"
+                      onChange={handleSearchEspecificos}
+                    />
+                  </div>
                 </div>
                 <div className="card-body">
                   <div className="table-responsive">
@@ -719,6 +1133,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                     >
                       <thead>
                         <tr>
+                          <th hidden>#</th>
                           <th>Descripción del Objetivo</th>
                           <th className="text-center">Editar</th>
                           <th className="text-center">Eliminar</th>
@@ -726,29 +1141,126 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       </thead>
 
                       <tbody>
-                        <tr>
-                          <td>
-                            Aumentar los niveles de interacción entre el
-                            ciudadano y la Administración Distrital
-                          </td>
-                          <td className="text-center">
-                            {" "}
-                            <button className="btn btn-success fa fa-pencil "></button>
-                          </td>
-                          <td className="text-center">
-                            {" "}
-                            <button className="btn btn-danger fa fa-trash "></button>
-                          </td>
-                        </tr>
+                        {objetivosEspecificos.map((res) => {
+                          return (
+                            <tr key={res.id}>
+                              <td hidden>{res.id}</td>
+                              <td>{res.objetivo}</td>
+                              <td className="text-center">
+                                {" "}
+                                <button className="btn btn-success fa fa-pencil "></button>
+                              </td>
+                              <td className="text-center">
+                                {" "}
+                                <button
+                                  className="btn btn-danger fa fa-trash "
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    fetch(
+                                      "http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/eliminar/" +
+                                        e.target.parentElement.parentElement
+                                          .children[0].textContent,
+                                      { method: "DELETE" }
+                                    )
+                                      .then((response) => {
+                                        return response.json();
+                                      })
+                                      .then((res) => {
+                                        fetch(
+                                          `http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/listar?page=${paginaEspecificos}&size=${filaEspecificos}`
+                                        )
+                                          .then((response) => {
+                                            return response.json();
+                                          })
+                                          .then((doc) => {
+                                            setobjetivosEspecificos(
+                                              doc.desarrollo
+                                            );
+                                            setTotalRegistrosEspecificos(
+                                              doc.total
+                                            );
+                                            setTotalPaginasEspecificos(
+                                              Math.ceil(
+                                                doc.total / filaEspecificos
+                                              )
+                                            );
+                                          });
+                                      });
+                                  }}
+                                ></button>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
+                  {/* <Button
+                    className="btn btn-primary"
+                    variant="primary"
+                    onClick={handleAnteriorEspecificos}
+                  >
+                    Anterior
+                  </Button>
+                  <Button
+                    className="btn btn-primary"
+                    variant="primary"
+                    onClick={handleSiguienteEspecificos}
+                  >
+                    Siguiente
+                  </Button> */}
                 </div>
                 <Modal show={showTres} onHide={handleCloseTres}>
                   <Modal.Header className="bg-light" closeButton>
                     <Modal.Title>Agregar Objetivo Especifico</Modal.Title>
                   </Modal.Header>
-                  <form>
+                  <form
+                    method="post"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const objetivo = document.querySelector(
+                        "#objetivoEspecifico"
+                      );
+                      fetch(
+                        "http://127.0.0.1:3900/api/politicasPublicas/maximo/id"
+                      )
+                        .then((response) => {
+                          return response.json();
+                        })
+                        .then((res) => {
+                          let id = res.maximo;
+                          fetch(
+                            "http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/agregar",
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type":
+                                  "application/x-www-form-urlencoded",
+                              },
+                              body: `objetivo=${objetivo.value}&id_politica=${id}`,
+                            }
+                          )
+                            .then((response) => {
+                              return response.json();
+                            })
+                            .then((res) => {
+                              fetch(
+                                `http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/listar?page=${paginaEspecificos}&size=${filaEspecificos}`
+                              )
+                                .then((response) => {
+                                  return response.json();
+                                })
+                                .then((doc) => {
+                                  setobjetivosEspecificos(doc.desarrollo);
+                                  setTotalRegistrosEspecificos(doc.total);
+                                  setTotalPaginasEspecificos(
+                                    Math.ceil(doc.total / filaEspecificos)
+                                  );
+                                });
+                            });
+                        });
+                    }}
+                  >
                     <Modal.Body>
                       <div className="mb-3">
                         <label
@@ -760,7 +1272,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         <textarea
                           className="form-control"
                           name=""
-                          id="descripcionDocumentosAdopcion"
+                          id="objetivoEspecifico"
                           rows="5"
                           style={{ resize: "none" }}
                         ></textarea>
@@ -795,10 +1307,40 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                     variant="primary"
                     onClick={handleShowCuatro}
                   ></Button>
-
+                  <div>
+                    <select
+                      name=""
+                      id="numeroFilas"
+                      className="form-select ms-3"
+                      onChange={selectPaginaAsociados}
+                    >
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option defaultValue="5" value="5">
+                        5
+                      </option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select>
+                  </div>
                   <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">
                     Documentos Asociados
                   </h2>
+                  <div>
+                    <input
+                      type="text"
+                      name=""
+                      className="form-control"
+                      placeholder="Buscar..."
+                      id="txtTabla"
+                      onChange={handleSearchAsociados}
+                    />
+                  </div>
                 </div>
                 <div className="card-body">
                   <div className="table-responsive">
@@ -810,6 +1352,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                     >
                       <thead>
                         <tr>
+                          <th>#</th>
                           <th>Nombre del Documento</th>
                           <th>Tipo Documento</th>
                           <th className="text-center">Descargar</th>
@@ -818,37 +1361,159 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       </thead>
 
                       <tbody>
-                        <tr>
-                          <td>
-                            Politica Pública Distrital de Servicio a la
-                            Ciudadania
-                          </td>
-                          <td>Documento CONPES D.C</td>
-                          <td className="text-center">
-                            {" "}
-                            <button className="btn btn-warning fa fa-download "></button>
-                          </td>
-                          <td className="text-center">
-                            {" "}
-                            <button className="btn btn-danger fa fa-trash "></button>
-                          </td>
-                        </tr>
+                        {documentosAsociados.map((res) => {
+                          return (
+                            <tr key={res.id}>
+                              <td>{res.id}</td>
+                              <td>{res.nombre}</td>
+                              <td>{res.tipo_documento}</td>
+                              <td className="text-center">
+                                {" "}
+                                <button
+                                  className="btn btn-warning fa fa-download "
+                                  onClick={() => handleDownload(res.documento)}
+                                ></button>
+                              </td>
+                              <td className="text-center">
+                                {" "}
+                                <button
+                                  className="btn btn-danger fa fa-trash "
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    fetch(
+                                      "http://127.0.0.1:3900/api/documentosAsociadosPP/eliminar/" +
+                                        e.target.parentElement.parentElement
+                                          .children[0].textContent,
+                                      { method: "DELETE" }
+                                    )
+                                      .then((response) => {
+                                        return response.json();
+                                      })
+                                      .then((res) => {
+                                        fetch(
+                                          `http://127.0.0.1:3900/api/documentosAsociadosPP/listar?page=${paginaAsociados}&size=${filaAsociados}`
+                                        )
+                                          .then((response) => {
+                                            return response.json();
+                                          })
+                                          .then((doc) => {
+                                            setdocumentosAsociados(
+                                              doc.desarrollo
+                                            );
+                                            setTotalRegistrosAsociados(
+                                              doc.total
+                                            );
+                                            setTotalPaginasAsociados(
+                                              Math.ceil(
+                                                doc.total / filaAsociados
+                                              )
+                                            );
+                                          });
+                                      });
+                                  }}
+                                ></button>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
+                  <Button
+                    className="btn btn-primary"
+                    variant="primary"
+                    onClick={handleAnteriorAsociados}
+                  >
+                    Anterior
+                  </Button>
+                  <Button
+                    className="btn btn-primary"
+                    variant="primary"
+                    onClick={handleSiguienteAsociados}
+                  >
+                    Siguiente
+                  </Button>
                 </div>
                 <Modal show={showCuatro} onHide={handleCloseCuatro}>
                   <Modal.Header className="bg-light" closeButton>
                     <Modal.Title>Agregar Documento Asociados</Modal.Title>
                   </Modal.Header>
-                  <form>
+                  <form
+                    method="post"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      let tipoDocumentoAsociado = document.querySelector(
+                        "#tipoDocumentoAsociado"
+                      );
+                      let nombreDocumentoAsociado = document.querySelector(
+                        "#nombreDocumentoAsociado"
+                      );
+                      let documentoAsociado =
+                        document.querySelector("#documentoAsociado");
+                      if (
+                        tipoDocumentoAsociado.value.length > 0 &&
+                        nombreDocumentoAsociado.value.length > 0
+                      ) {
+                        const formData = new FormData();
+                        formData.append(
+                          "tipo_documento",
+                          tipoDocumentoAsociado.value
+                        );
+                        formData.append(
+                          "nombre",
+                          nombreDocumentoAsociado.value
+                        );
+                        formData.append(
+                          "documento",
+                          documentoAsociado.files[0]
+                        );
+                        fetch(
+                          "http://127.0.0.1:3900/api/documentosAsociadosPP/agregar",
+                          {
+                            method: "POST",
+                            body: formData,
+                          }
+                        )
+                          .then((response) => {
+                            return response.json();
+                          })
+                          .then((res) => {
+                            fetch(
+                              `http://127.0.0.1:3900/api/documentosAsociadosPP/listar?page=${paginaAsociados}&size=${filaAsociados}`
+                            )
+                              .then((response) => {
+                                return response.json();
+                              })
+                              .then((doc) => {
+                                setdocumentosAsociados(doc.desarrollo);
+                                setTotalRegistrosAsociados(doc.total);
+                                setTotalPaginasAsociados(
+                                  Math.ceil(doc.total / filaAsociados)
+                                );
+                              });
+                          });
+                      } else {
+                        alert("revisar los datos");
+                      }
+                    }}
+                  >
                     <Modal.Body>
                       <div class="mb-3">
                         <label htmlFor="exampleInputEmail1" class="form-label">
                           Tipo de documento <b className="text-danger">*</b>
                         </label>
-                        <select name="" id="" className="form-select">
-                          <option value="">Documento CONPES D.C</option>
+                        <select
+                          name=""
+                          id="tipoDocumentoAsociado"
+                          className="form-select"
+                        >
+                          <option value="Ley">Ley</option>
+                          <option value="Decreto">Decreto</option>
+                          <option value="Resolución">Resolución</option>
+                          <option value="Ordenanza">Ordenanza</option>
+                          <option value="Acuerdo">Acuerdo</option>
+                          <option value="Compes">Compes</option>
+                          <option value="Directiva">Directiva</option>
                         </select>
                       </div>
                       <div className="mb-3">
@@ -861,7 +1526,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         <textarea
                           className="form-control"
                           name=""
-                          id="descripcionDocumentosAdopcion"
+                          id="nombreDocumentoAsociado"
                           rows="5"
                           style={{ resize: "none" }}
                         ></textarea>
@@ -876,7 +1541,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         <input
                           type="file"
                           name=""
-                          id=""
+                          id="documentoAsociado"
                           className="form-control"
                         />
                       </div>
