@@ -1,7 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import {
+  Chart as ChartJS,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+  BarElement,
+} from "chart.js";
+ChartJS.register(LinearScale, CategoryScale, Tooltip, Legend, BarElement);
+import { Bar } from "react-chartjs-2";
 
 const CargueAvance = () => {
+  const data = {
+    labels: ["2020", "2021", "2022"],
+    datasets: [
+      {
+        label: "Meta",
+        data: [4, 3, 7],
+        responsive: true,
+        backgroundColor: "#4d72a6",
+        borderColor: "black",
+        borderWidth: 1,
+      },
+      {
+        label: "Ejecutado",
+        data: [4, 3, 7],
+        backgroundColor: "#74b458 ",
+        borderColor: "black",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const config = {
+    type: "bar",
+    data: data,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  };
+
   return (
     <>
       <div className="card shadow mb-4">
@@ -273,7 +316,89 @@ const CargueAvance = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-7"></div>
+              <div className="col-7 pt-2 ">
+                <div className="card card-header py-0 px-0  me-3">
+                  <ul className="nav nav-tabs" id="myTab" role="tablist">
+                    <li className="nav-item" role="presentation">
+                      <button
+                        className="nav-link active"
+                        id="seguimientoTecnico-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#seguimientoTecnico"
+                        type="button"
+                        role="tab"
+                        aria-controls="seguimientoTecnico"
+                        aria-selected="true"
+                      >
+                        Seguimiento Técnico
+                      </button>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                      <button
+                        className="nav-link"
+                        id="costos-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#costos"
+                        type="button"
+                        role="tab"
+                        aria-controls="costos"
+                        aria-selected="false"
+                      >
+                        Costos
+                      </button>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                      <button
+                        className="nav-link"
+                        id="avanceCualitativo-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#avanceCualitativo"
+                        type="button"
+                        role="tab"
+                        aria-controls="avanceCualitativo"
+                        aria-selected="false"
+                      >
+                        Avanve Cualitativo
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <div className="card card-body px-0 py-0 me-3">
+                  <div className="tab-content  p-2" id="myTabContent">
+                    <div
+                      className="tab-pane fade show active"
+                      id="seguimientoTecnico"
+                      role="tabpanel"
+                      aria-labelledby="seguimientoTecnico-tab"
+                    >
+                      <div className="row">
+                        <div className="col">
+                          <button className="btn btn-primary bi bi-plus"></button>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col">
+                          {/*Inicio grafica*/}
+                          <Bar data={data} options={config} />
+                          {/*Fin grafica*/}
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="tab-pane fade"
+                      id="costos"
+                      role="tabpanel"
+                      aria-labelledby="costos-tab"
+                    ></div>
+                    <div
+                      className="tab-pane fade"
+                      id="avanceCualitativo"
+                      role="tabpanel"
+                      aria-labelledby="avanceCualitativo-tab"
+                    ></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
