@@ -20,103 +20,260 @@ const CargueAvance = () => {
         </div>
         <hr className="sidebar-divider my-0 " />
         <div className="card-body">
-          <div className="row mt-2">
-            <div className="col-4">
-              <div
-                className="card card-header d-flex py-0 px-0"
-                style={{
-                  height: "3rem",
-                }}
-              >
+          <div className="card ">
+            <div className="row ">
+              <div className="col-5 ">
                 <div
-                  className="col py-0 px-0 h-100 d-flex text-center align-middle "
+                  className="container-fluid "
                   style={{
-                    height: "3rem",
+                    scrollbarWidth: "none",
+                    overflow: "auto",
+                    overflowX: "hidden",
+                    height: "30rem",
                   }}
                 >
-                  <p
-                    className="w-50 h-100 px-0 py-0"
-                    style={{
-                      backgroundColor: "#212D78",
-                    }}
-                  >
-                    <span
-                      style={{
-                        margin: "0",
-                        position: "relative",
-                        top: "25%",
-                        color: "white",
-                      }}
+                  <div className="row mb-3 mt-2">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
                     >
+                      Politica Pública
+                    </label>
+                    <textarea
+                      className="form-control"
+                      name=""
+                      id=""
+                      rows="2"
+                      style={{ resize: "none" }}
+                      disabled
+                      defaultValue={
+                        "Politica Pública de Cultura Ciudadana 2019-2038 "
+                      }
+                    ></textarea>
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Objetivo Específico
+                    </label>
+                    <textarea
+                      className="form-control"
+                      name=""
+                      id=""
+                      rows="2"
+                      style={{ resize: "none" }}
+                      disabled
+                      defaultValue={"Acción colectiva ... "}
+                    ></textarea>
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Nombre del Resultado
+                    </label>
+                    <textarea
+                      className="form-control"
+                      name=""
+                      id=""
+                      rows="2"
+                      style={{ resize: "none" }}
+                      disabled
+                      defaultValue={"..."}
+                    ></textarea>
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Nombre del Producto
+                    </label>
+                    <textarea
+                      className="form-control"
+                      name=""
+                      id=""
+                      rows="2"
+                      style={{ resize: "none" }}
+                      disabled
+                      defaultValue={"..."}
+                    ></textarea>
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Nombre del Indicador
+                    </label>
+                    <textarea
+                      className="form-control"
+                      name=""
+                      id=""
+                      rows="2"
+                      style={{ resize: "none" }}
+                      disabled
+                      defaultValue={"..."}
+                    ></textarea>
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Nombre del Funcionario
+                    </label>
+                    <textarea
+                      className="form-control"
+                      name=""
+                      id=""
+                      rows="2"
+                      style={{ resize: "none" }}
+                      disabled
+                      defaultValue={"..."}
+                    ></textarea>
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Tipo de Anualización
+                    </label>
+                    <input
+                      type="text"
+                      name=""
+                      id=""
+                      className="form-control"
+                      disabled
+                      value={"DECRECIENTE"}
+                    />
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Meta Total del Indicador
+                    </label>
+                    <input
+                      type="text"
+                      name=""
+                      id=""
+                      className="form-control"
+                      disabled
+                      value={"500"}
+                    />
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Unidad de Medida del Indicador
+                    </label>
+                    <input
+                      type="text"
+                      name=""
+                      id=""
+                      className="form-control"
+                      disabled
+                      value={"estrategia"}
+                    />
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Días de Rezago
+                    </label>
+                    <input
+                      type="text"
+                      name=""
+                      id=""
+                      className="form-control"
+                      disabled
+                      value={"0"}
+                    />
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Periodicidad de Medición
+                    </label>
+                    <input
+                      type="text"
+                      name=""
+                      id=""
+                      className="form-control"
+                      disabled
+                      value={"ANUAL"}
+                    />
+                  </div>
+                  <div className="row mb-3">
+                    <h6>Tiempo de Ejecución</h6>
+                    <div className="col-6 ps-0">
+                      <label htmlFor="" className="form-label">
+                        Inicio
+                      </label>
+                      <input type="date" className="form-control" disabled />
+                    </div>
+                    <div className="col-6 pe-0 ">
+                      <label htmlFor="" className="form-label">
+                        Fin
+                      </label>
+                      <input type="date" className="form-control" disabled />
+                    </div>
+                  </div>
+                  <div className="row mb-3">
+                    <h6>Linea Base</h6>
+                    <div className="col-6 ps-0">
                       {" "}
-                      Plan De Acción
-                    </span>
-                  </p>
-                  <p
-                    className="h-100"
-                    style={{
-                      width: "0",
-                      borderLeft: "30px solid #212D78",
-                      borderTop: "1.4rem solid transparent",
-                      borderBottom: "1.4rem solid transparent",
-                    }}
-                  ></p>
+                      <label
+                        htmlFor="exampleInputPassword1"
+                        className="form-label"
+                      >
+                        Valor
+                      </label>
+                      <input
+                        type="text"
+                        name=""
+                        id=""
+                        className="form-control"
+                        disabled
+                      />
+                    </div>
+                    <div className="col-6 pe-0 ">
+                      <label htmlFor="" className="form-label">
+                        Fecha de la Línea Base
+                      </label>
+                      <input type="date" className="form-control" disabled />
+                    </div>
+                  </div>
+                  <div className="row mb-3">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Fuente
+                    </label>
+                    <input
+                      type="text"
+                      name=""
+                      id=""
+                      className="form-control"
+                      disabled
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="card card-body">
-                <div className="card card-body py-2">Politica Pública</div>
-                <div className="card card-header">
-                  (Nombre de politica publica)
-                </div>
-              </div>
-            </div>
-            <div className="col-8">
-              {/* {(() => {
-                //Desicion para controlar el contenido del div de interacciones
-                if (controlObjetivo == 1) {
-                    return (
-                    <>
-                        {" "}
-                        <div className="card card-header d-flex py-0 px-0">
-                        <div className="row">
-                            <div className="col">
-                            <button
-                                className="btn btn-primary bi bi-plus flex-fill me-2 m-1"
-                                onClick={(e) => {
-                                e.preventDefault();
-                                setControlRP(1);
-                                }}
-                            >
-                                Resultado
-                            </button>
-                            <button
-                                className="btn btn-primary bi bi-plus flex-fill m-1"
-                                onClick={(e) => {
-                                e.preventDefault();
-                                setControlRP(2);
-                                }}
-                            >
-                                Producto
-                            </button>
-                            </div>
-                        </div>
-                        </div>{" "}
-                        <div className="row">
-                        <div className="col">
-                            {(() => {
-                            //Desicion para controlar el contenido del div de interacciones
-                            if (controlRP == 1) {
-                                return <Resultado></Resultado>;
-                            } else if (controlRP == 2) {
-                                return <Producto></Producto>;
-                            }
-                            })()}
-                        </div>
-                        </div>
-                    </>
-                    );
-                }
-                })()} */}
+              <div className="col-7"></div>
             </div>
           </div>
         </div>

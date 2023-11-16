@@ -8,7 +8,7 @@ const TablaRegistroSeguimiento = () => {
         <div className="card-header py-3 d-flex">
           <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">
             {/* <img src={megafono} alt="" style={{ height: "3rem" }} />{" "} */}
-            Registro de Seguimiento
+            Indicadores a Cargo de la Entidad
           </h2>
         </div>
         <div className="card-body">
@@ -16,22 +16,30 @@ const TablaRegistroSeguimiento = () => {
             <table className="table table-bordered" id="dataTable" width="100%">
               <thead>
                 <tr>
-                  <th>Imagen</th>
-                  <th>Nemotécnico D.C.N</th>
-                  <th>Nombre</th>
-                  <th>Sector</th>
-                  <th>Entidad </th>
-                  <th className="text-center">Editar</th>
+                  <th className="align-middle text-center">Tipo</th>
+                  <th className="align-middle text-center">
+                    Nombre del indicador
+                  </th>
+                  <th className="align-middle text-center">Politica Pública</th>
+                  <th className="align-middle text-center">
+                    Objetivo Especifico
+                  </th>
+                  <th className="align-middle text-center">¿Vigente? </th>
+                  <th>
+                    Ultimo <br /> Periodo <br /> Registrado
+                  </th>
+                  <th className="align-middle text-center">Editar</th>
                 </tr>
               </thead>
 
               <tbody>
                 <tr>
-                  <td></td>
-                  <td>101</td>
-                  <td>POLITICA AMBIENTAL - VALIDACIÓN FABRICA</td>
+                  <td>PRODUCTO</td>
+                  <td>Estrategia de respeto a las normas</td>
+                  <td>Politica Pública de cultura ciudadana 2019-2038 </td>
                   <td>Sector Administrativo Mujeres</td>
-                  <td>Secretaria Distrital de la Mujer</td>
+                  <td>Vigente</td>
+                  <td>ENE 2020</td>
                   <td className="text-center">
                     {" "}
                     <NavLink
