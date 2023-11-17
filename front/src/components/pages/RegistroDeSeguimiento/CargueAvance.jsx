@@ -1,50 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import {
-  Chart as ChartJS,
-  LinearScale,
-  CategoryScale,
-  Tooltip,
-  Legend,
-  BarElement,
-} from "chart.js";
-ChartJS.register(LinearScale, CategoryScale, Tooltip, Legend, BarElement);
-import { Bar } from "react-chartjs-2";
+import SeguimientoTecnico from "./SeguimientoTecnico";
+import TablaSeguimientoTecnico from "./TablaSeguimientoTecnico";
+import TablaCostos from "./TablaCostos";
+import Costos from "./Costos";
+import AvanceCualitativo from "./AvanceCualitativo";
 
 const CargueAvance = () => {
-  const data = {
-    labels: ["2020", "2021", "2022"],
-    datasets: [
-      {
-        label: "Meta",
-        data: [4, 3, 7],
-        responsive: true,
-        backgroundColor: "#4d72a6",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-      {
-        label: "Ejecutado",
-        data: [4, 3, 7],
-        backgroundColor: "#74b458 ",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const config = {
-    type: "bar",
-    data: data,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  };
-
+  const [controladorTabla, setControladorTabla] = useState(1);
+  useEffect(() => {}, []);
   return (
     <>
       <div className="card shadow mb-4">
@@ -76,10 +40,7 @@ const CargueAvance = () => {
                   }}
                 >
                   <div className="row mb-3 mt-2">
-                    <label
-                      htmlFor="exampleInputPassword1"
-                      className="form-label"
-                    >
+                    <label htmlFor="" className="form-label">
                       Politica Pública
                     </label>
                     <textarea
@@ -329,6 +290,9 @@ const CargueAvance = () => {
                         role="tab"
                         aria-controls="seguimientoTecnico"
                         aria-selected="true"
+                        onClick={() => {
+                          setControladorTabla(1);
+                        }}
                       >
                         Seguimiento Técnico
                       </button>
@@ -343,6 +307,9 @@ const CargueAvance = () => {
                         role="tab"
                         aria-controls="costos"
                         aria-selected="false"
+                        onClick={() => {
+                          setControladorTabla(2);
+                        }}
                       >
                         Costos
                       </button>
@@ -357,8 +324,11 @@ const CargueAvance = () => {
                         role="tab"
                         aria-controls="avanceCualitativo"
                         aria-selected="false"
+                        onClick={() => {
+                          setControladorTabla(3);
+                        }}
                       >
-                        Avanve Cualitativo
+                        Avance Cualitativo
                       </button>
                     </li>
                   </ul>
@@ -371,37 +341,49 @@ const CargueAvance = () => {
                       role="tabpanel"
                       aria-labelledby="seguimientoTecnico-tab"
                     >
-                      <div className="row">
-                        <div className="col">
-                          <button className="btn btn-primary bi bi-plus"></button>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col">
-                          {/*Inicio grafica*/}
-                          <Bar data={data} options={config} />
-                          {/*Fin grafica*/}
-                        </div>
-                      </div>
+                      <SeguimientoTecnico></SeguimientoTecnico>
                     </div>
                     <div
                       className="tab-pane fade"
                       id="costos"
                       role="tabpanel"
                       aria-labelledby="costos-tab"
-                    ></div>
+                    >
+                      <Costos></Costos>
+                    </div>
                     <div
                       className="tab-pane fade"
                       id="avanceCualitativo"
                       role="tabpanel"
                       aria-labelledby="avanceCualitativo-tab"
-                    ></div>
+                    >
+                      <AvanceCualitativo></AvanceCualitativo>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div className="card shadow">
+        {(() => {
+          if (controladorTabla === 1) {
+            return (
+              <>
+                <TablaSeguimientoTecnico></TablaSeguimientoTecnico>
+              </>
+            );
+          } else if (controladorTabla === 2) {
+            return (
+              <>
+                <TablaCostos></TablaCostos>
+              </>
+            );
+          } else if (controladorTabla === 3) {
+            return <></>;
+          }
+        })()}
       </div>
     </>
   );

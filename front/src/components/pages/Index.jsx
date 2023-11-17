@@ -142,6 +142,7 @@ const Index = () => {
                   </div>
                 </a>
                 <a
+                  href="/inicio/registrodeseguimiento"
                   className="col-xl-4 col-md-6 mb-4 optionsCard"
                   style={{ textDecoration: "none" }}
                 >

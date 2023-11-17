@@ -1,47 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  Chart as ChartJS,
-  LinearScale,
-  CategoryScale,
-  Tooltip,
-  Legend,
-  BarElement,
-} from "chart.js";
-ChartJS.register(LinearScale, CategoryScale, Tooltip, Legend, BarElement);
-import { Bar } from "react-chartjs-2";
-const SeguimientoTecnico = () => {
-  const data = {
-    labels: ["2020", "2021", "2022"],
-    datasets: [
-      {
-        label: "Meta",
-        data: [4, 3, 7],
-        responsive: true,
-        backgroundColor: "#4d72a6",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-      {
-        label: "Ejecutado",
-        data: [4, 3, 7],
-        backgroundColor: "#74b458 ",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-    ],
-  };
 
-  const config = {
-    type: "bar",
-    data: data,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  };
+const AvanceCualitativo = () => {
   return (
     <>
       <div className="row mb-3">
@@ -50,37 +9,48 @@ const SeguimientoTecnico = () => {
             type="button"
             className="btn btn-primary fa fa-plus"
             data-bs-toggle="modal"
-            data-bs-target="#agregarAvance"
+            data-bs-target="#agregarAvanceCualitativo"
           ></button>
-        </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col">
-          <h6>Avance Acumulado</h6>
-          <div
-            className="progress"
-            role="progressbar"
-            aria-label="Example with label"
-            aria-valuenow="25"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          >
-            <div className="progress-bar" style={{ width: "25%" }}>
-              25%
-            </div>
-          </div>
         </div>
       </div>
       <div className="row">
         <div className="col">
-          {/*Inicio grafica*/}
-          <Bar data={data} options={config} />
-          {/*Fin grafica*/}
+          <div className="table-responsive">
+            <table className="table table-bordered" id="dataTable" width="100%">
+              <thead>
+                <tr>
+                  <th className="align-middle text-center">Fecha</th>
+                  <th className="align-middle text-center">Mes</th>
+                  <th className="align-middle text-center">Año</th>
+                  <th className="align-middle text-center">
+                    Análisis Cualitativo General
+                  </th>
+                  <th className="align-middle text-center">
+                    Análisis Cualitativo Enfoques
+                  </th>
+                  <th className="align-middle text-center">Editar</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>27/05/2020</td>
+                  <td>ENERO</td>
+                  <td>2020</td>
+                  <td>...</td>
+                  <td>...</td>
+                  <td className="text-center">
+                    <button className="btn btn-success fa fa-pencil"></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div
         className="modal fade"
-        id="agregarAvance"
+        id="agregarAvanceCualitativo"
         tabIndex="-1"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -95,7 +65,7 @@ const SeguimientoTecnico = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="modalTitleId">
-                Agregar Avance
+                Agregar Avance Cualitativo
               </h5>
               <button
                 type="button"
@@ -106,7 +76,7 @@ const SeguimientoTecnico = () => {
             </div>
             <div className="modal-body">
               <div className="row mb-3">
-                <div className="col-3">
+                <div className="col-5">
                   <label for="exampleInputPassword1" className="form-label">
                     Mes del Periodo
                   </label>
@@ -125,40 +95,27 @@ const SeguimientoTecnico = () => {
                     <option value="diciembre">DICIEMBRE</option>
                   </select>
                 </div>
-                <div className="col-3">
+                <div className="col-5">
                   <label for="exampleInputPassword1" className="form-label">
                     Año del Periodo
                   </label>
                   <select name="" id="" className="form-select">
-                    <option value="enero">...</option>
+                    <option value="">...</option>
                   </select>
                 </div>
-                <div className="col-3">
-                  <label for="exampleInputPassword1" className="form-label">
-                    Avance del Periodo
-                  </label>
-                  <input type="text" className="form-control" />
-                </div>
-                <div className="col-3 d-flex align-items-end">
-                  <button type="button" className="btn btn-primary w-100">
-                    Validar Avance
-                  </button>
-                </div>
               </div>
-              <div className="row mb-3">
-                <div className="col-6">
-                  {" "}
+              <div className="row">
+                <div className="col">
                   <label for="exampleInputPassword1" className="form-label">
-                    Porcentaje de Avance Año
+                    Análisis Cualitativo General
                   </label>
-                  <input type="text" className="form-control" disabled />
-                </div>
-                <div className="col-6">
-                  {" "}
-                  <label for="exampleInputPassword1" className="form-label">
-                    Porcentaje de Avance Acumulado
-                  </label>
-                  <input type="text" className="form-control" disabled />
+                  <textarea
+                    name=""
+                    id=""
+                    rows="3"
+                    style={{ resize: "none" }}
+                    className="form-control"
+                  ></textarea>
                 </div>
               </div>
               <div className="row">
@@ -169,10 +126,24 @@ const SeguimientoTecnico = () => {
                   <textarea
                     name=""
                     id=""
-                    rows="5"
+                    rows="3"
                     style={{ resize: "none" }}
                     className="form-control"
                     disabled
+                  ></textarea>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <label for="exampleInputPassword1" className="form-label">
+                    Análisis Cualitativo de Enfoques
+                  </label>
+                  <textarea
+                    name=""
+                    id=""
+                    rows="3"
+                    style={{ resize: "none" }}
+                    className="form-control"
                   ></textarea>
                 </div>
               </div>
@@ -196,4 +167,4 @@ const SeguimientoTecnico = () => {
   );
 };
 
-export default SeguimientoTecnico;
+export default AvanceCualitativo;

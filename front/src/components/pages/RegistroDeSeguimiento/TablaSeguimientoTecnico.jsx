@@ -1,86 +1,58 @@
 import React, { useState, useEffect } from "react";
-import {
-  Chart as ChartJS,
-  LinearScale,
-  CategoryScale,
-  Tooltip,
-  Legend,
-  BarElement,
-} from "chart.js";
-ChartJS.register(LinearScale, CategoryScale, Tooltip, Legend, BarElement);
-import { Bar } from "react-chartjs-2";
-const SeguimientoTecnico = () => {
-  const data = {
-    labels: ["2020", "2021", "2022"],
-    datasets: [
-      {
-        label: "Meta",
-        data: [4, 3, 7],
-        responsive: true,
-        backgroundColor: "#4d72a6",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-      {
-        label: "Ejecutado",
-        data: [4, 3, 7],
-        backgroundColor: "#74b458 ",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-    ],
-  };
 
-  const config = {
-    type: "bar",
-    data: data,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  };
+const TablaSeguimientoTecnico = () => {
   return (
     <>
-      <div className="row mb-3">
-        <div className="col">
-          <button
-            type="button"
-            className="btn btn-primary fa fa-plus"
-            data-bs-toggle="modal"
-            data-bs-target="#agregarAvance"
-          ></button>
-        </div>
+      <div className="card-body ">
+        <h5 className="m-0 font-weight-bold ">Avances del Indicador</h5>
       </div>
-      <div className="row mb-3">
-        <div className="col">
-          <h6>Avance Acumulado</h6>
-          <div
-            className="progress"
-            role="progressbar"
-            aria-label="Example with label"
-            aria-valuenow="25"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          >
-            <div className="progress-bar" style={{ width: "25%" }}>
-              25%
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col">
-          {/*Inicio grafica*/}
-          <Bar data={data} options={config} />
-          {/*Fin grafica*/}
+      <hr className="sidebar-divider my-0 " />
+      <div className="card-body">
+        <div className="table-responsive">
+          <table className="table table-bordered" id="dataTable" width="100%">
+            <thead>
+              <tr>
+                <th className="align-middle text-center">Fecha</th>
+                <th className="align-middle text-center">Periodo Reportado</th>
+                <th className="align-middle text-center">Avance del Periodo</th>
+                <th className="align-middle text-center">
+                  Porcentaje de <br /> Avance{" "}
+                </th>
+                <th className="align-middle text-center">
+                  Porcentaje de <br /> Avance Acumulado
+                </th>
+                <th className="align-middle text-center"> Estado </th>
+                <th className="align-middle text-center">Editar</th>
+                <th className="align-middle text-center">Ver Avance</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>2020-05-27</td>
+                <td>DICIEMBRE 2019</td>
+                <td>180</td>
+                <td>56,96%</td>
+                <td>8,23%</td>
+                <td>Pendiente de aprobación</td>
+                <td className="text-center">
+                  <button className="btn btn-success fa fa-pencil"></button>
+                </td>
+                <td className="text-center">
+                  <button
+                    className="btn btn-success fa fa-search"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editarAvance"
+                  ></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div
         className="modal fade"
-        id="agregarAvance"
+        id="editarAvance"
         tabIndex="-1"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -110,7 +82,7 @@ const SeguimientoTecnico = () => {
                   <label for="exampleInputPassword1" className="form-label">
                     Mes del Periodo
                   </label>
-                  <select name="" id="" className="form-select">
+                  <select name="" id="" className="form-select" disabled>
                     <option value="enero">ENERO</option>
                     <option value="febrero">FEBRERO</option>
                     <option value="marzo">MARZO</option>
@@ -129,7 +101,7 @@ const SeguimientoTecnico = () => {
                   <label for="exampleInputPassword1" className="form-label">
                     Año del Periodo
                   </label>
-                  <select name="" id="" className="form-select">
+                  <select name="" id="" className="form-select" disabled>
                     <option value="enero">...</option>
                   </select>
                 </div>
@@ -137,7 +109,7 @@ const SeguimientoTecnico = () => {
                   <label for="exampleInputPassword1" className="form-label">
                     Avance del Periodo
                   </label>
-                  <input type="text" className="form-control" />
+                  <input type="text" className="form-control" disabled />
                 </div>
                 <div className="col-3 d-flex align-items-end">
                   <button type="button" className="btn btn-primary w-100">
@@ -161,10 +133,35 @@ const SeguimientoTecnico = () => {
                   <input type="text" className="form-control" disabled />
                 </div>
               </div>
-              <div className="row">
+              <div className="row mb-3">
                 <div className="col">
                   <label for="exampleInputPassword1" className="form-label">
                     Enfoques
+                  </label>
+                  <textarea
+                    name=""
+                    id=""
+                    rows="5"
+                    style={{ resize: "none" }}
+                    className="form-control"
+                    disabled
+                  ></textarea>
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className="col">
+                  <label for="exampleInputPassword1" className="form-label">
+                    Estado
+                  </label>
+                  <select name="" id="" className="form-select">
+                    <option value="">...</option>
+                  </select>
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className="col">
+                  <label for="exampleInputPassword1" className="form-label">
+                    Justificación
                   </label>
                   <textarea
                     name=""
@@ -196,4 +193,4 @@ const SeguimientoTecnico = () => {
   );
 };
 
-export default SeguimientoTecnico;
+export default TablaSeguimientoTecnico;
