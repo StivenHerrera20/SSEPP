@@ -5,6 +5,22 @@ import Producto from "./Producto";
 const ProcesoCreacionPlanAccion = () => {
   const [controlObjetivo, setControlObjetivo] = useState(0);
   const [controlRP, setControlRP] = useState(0);
+  const [idPolitica, setIdPolitica] = useState([]);
+  const [objEsp, setObjEsp] = useState([]);
+  const [idObjEsp, setIdObjEsp] = useState([]);
+  useEffect(() => {
+    let nombre = localStorage.getItem("nombre");
+    fetch(
+      `http://127.0.0.1:3900/api/politicasPublicas/traerId?nombre=${nombre}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setIdPolitica(doc.resultado[0].id);
+      });
+    localStorage.setItem("idObjetivo", idObjEsp);
+  }, [idObjEsp]);
   return (
     <>
       <div className="card shadow mb-4">
@@ -71,7 +87,7 @@ const ProcesoCreacionPlanAccion = () => {
               <div className="card card-body">
                 <div className="card card-body py-2">Politica Pública</div>
                 <div className="card card-header">
-                  (Nombre de politica publica)
+                  {localStorage.getItem("nombre")}
                 </div>
               </div>
               <div className="card card-body">
@@ -82,33 +98,65 @@ const ProcesoCreacionPlanAccion = () => {
                   data-bs-target="#collapseExample"
                   aria-expanded="false"
                   aria-controls="collapseExample"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    fetch(
+                      `http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/listarTodos/${idPolitica}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setObjEsp(doc);
+                      });
+                  }}
                 >
                   Objetivo Especifico #
                 </button>
                 <div className="collapse" id="collapseExample">
                   <div className="card card-header">
-                    <div className="row justify-content-between">
-                      <div className="col-2 h-100 text-center">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="flexRadioDefault"
-                          id="flexRadioDefault1"
-                          onChange={(e) => {
-                            e.preventDefault();
-                            setControlObjetivo(1);
-                          }}
-                        />
+                    {objEsp.map((element) => (
+                      <div
+                        className="row justify-content-between"
+                        key={element.id}
+                      >
+                        <div
+                          className="col-2 h-100 text-center"
+                          key={element.id}
+                        >
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="flexRadioDefault"
+                            id={`obj${element.id}`}
+                            key={`${element.id}`}
+                            onChange={(e) => {
+                              e.preventDefault();
+                              setControlObjetivo(1);
+                              setIdObjEsp(element.id);
+                              localStorage.setItem(
+                                "objetivo",
+                                element.objetivo
+                              );
+                              localStorage.setItem(
+                                "importancia",
+                                element.importancia_relativa
+                              );
+                            }}
+                          />
+                        </div>
+                        <div className="col-8 border-left border-right h-100">
+                          {" "}
+                          {element.objetivo}{" "}
+                        </div>
+                        <div className="col-2 h-100">
+                          {" "}
+                          <p className="text-secondary text-center">
+                            {element.importancia_relativa}
+                          </p>{" "}
+                        </div>
                       </div>
-                      <div className="col-8 border-left border-right h-100">
-                        {" "}
-                        (Nombre del objetivo){" "}
-                      </div>
-                      <div className="col-2 h-100">
-                        {" "}
-                        <p className="text-secondary text-center">0%</p>{" "}
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>

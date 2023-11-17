@@ -2,7 +2,59 @@ import React, { useState, useEffect } from "react";
 import { Chrono } from "react-chrono";
 const Resultado = () => {
   const [enable, setEnable] = useState("");
-  useEffect(() => {}, []);
+  const [sector, setSectores] = useState([]);
+  const [entidad, setEntidades] = useState([]);
+  const [enfoque, setEnfoque] = useState([]);
+  const [busqueda, setBusqueda] = useState(0);
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/sector/listarTodos")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setSectores(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/entidad/listarTodos")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setEntidades(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/enfoqueNivelUno/listarTodos")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setEnfoque(doc);
+      });
+  }, []);
+
+  const handleSearch = (event) => {
+    const searchText = event.target.value;
+    setBusqueda(searchText); // Actualiza el estado inmediatamente
+    if (searchText.length != 0) {
+      // Realiza la búsqueda solo si el texto no está vacío
+      fetch(
+        `http://127.0.0.1:3900/api/enfoqueNivelUno/listarEscrito?Nombre=${searchText}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          setEnfoque(doc.resultado);
+        });
+    } else {
+      // Si el texto está vacío, vuelve a cargar los datos originales
+      fetch(`http://127.0.0.1:3900/api/enfoqueNivelUno/listarTodos`)
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          setEnfoque(doc);
+        });
+    }
+  };
 
   const items = [
     {
@@ -87,7 +139,69 @@ const Resultado = () => {
               role="tabpanel"
               aria-labelledby="datosGenerales-tab"
             >
-              <form action="">
+              <form
+                method="post"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  let nombre = document.querySelector("#nombreResultado");
+                  let sector = document.querySelector("#sectorResponsable");
+                  let entidad = document.querySelector("#entidadResponsable");
+                  let id = localStorage.getItem("idObjetivo");
+                  let importancia = document.querySelector(
+                    "#importanciaRelativa"
+                  );
+                  if (
+                    nombre.value.length > 0 &&
+                    sector.value.length > 0 &&
+                    entidad.value.length > 0 &&
+                    id.length > 0 &&
+                    importancia.value.length > 0
+                  ) {
+                    fetch(
+                      "http://127.0.0.1:3900/api/resultadoDatosGenerales/agregar",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: `nombre_resultado=${nombre.value}&importancia_relativa=${importancia.value}&sector_responsable=${sector.value}&entidad_responsable=${entidad.value}&id_objetivo=${id}`,
+                      }
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((res) => {
+                        const checkboxes = document.querySelectorAll(
+                          'input[type="checkbox"]:checked'
+                        );
+                        let idResultado = res.doc[0].max;
+                        for (let i = 0; i < checkboxes.length; i++) {
+                          // Envía los valores seleccionados al servidor, por ejemplo, como un JSON en el cuerpo de la solicitud
+                          fetch(
+                            "http://127.0.0.1:3900/api/resultadoDatosGeneralesHasEnfoques/agregar",
+                            {
+                              method: "POST",
+                              body: `enfoque=${checkboxes[i].value}&id_resultado_datos_generales=${idResultado}`,
+                              headers: {
+                                "Content-Type":
+                                  "application/x-www-form-urlencoded",
+                              },
+                            }
+                          )
+                            .then((response) => response.json())
+                            .then((data) => {
+                              // Maneja la respuesta del servidor
+                            })
+                            .catch((error) => {
+                              // Maneja errores
+                            });
+                        }
+                      });
+                  } else {
+                    alert("Revisar los datos");
+                  }
+                }}
+              >
                 <div className="mb-3">
                   <label
                     htmlFor="exampleFormControlTextarea1"
@@ -100,9 +214,7 @@ const Resultado = () => {
                     id="exampleFormControlTextarea1"
                     rows="2"
                     disabled
-                    defaultValue={
-                      "Aca va el nombre del objetivo especifico seleccionado"
-                    }
+                    defaultValue={localStorage.getItem("objetivo")}
                     style={{ resize: "none" }}
                   ></textarea>
                 </div>
@@ -115,7 +227,7 @@ const Resultado = () => {
                   </label>
                   <textarea
                     className="form-control"
-                    id="exampleFormControlTextarea1"
+                    id="nombreResultado"
                     rows="2"
                     style={{ resize: "none" }}
                   ></textarea>
@@ -125,7 +237,13 @@ const Resultado = () => {
                     Importancia relativa
                   </label>
                   <div className="input-group">
-                    <input type="text" className="form-control" disabled />
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="importanciaRelativa"
+                      defaultValue={localStorage.getItem("importancia")}
+                      disabled
+                    />
                     <span className="input-group-text">%</span>
                   </div>
                 </div>
@@ -136,10 +254,17 @@ const Resultado = () => {
                   <select
                     className="form-select"
                     aria-label="Default select example"
+                    id="sectorResponsable"
                   >
-                    <option value="1">...</option>
-                    <option value="2">...</option>
-                    <option value="3">...</option>
+                    {sector.map((element) => (
+                      <option
+                        key={element.id}
+                        value={element.Nombre}
+                        id="sector"
+                      >
+                        {element.Nombre}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="mb-3">
@@ -149,10 +274,17 @@ const Resultado = () => {
                   <select
                     className="form-select"
                     aria-label="Default select example"
+                    id="entidadResponsable"
                   >
-                    <option value="1">...</option>
-                    <option value="2">...</option>
-                    <option value="3">...</option>
+                    {entidad.map((element) => (
+                      <option
+                        key={element.id}
+                        value={element.Nombre}
+                        id="Entidad"
+                      >
+                        {element.Nombre}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="mb-3">
@@ -177,118 +309,26 @@ const Resultado = () => {
                         name=""
                         className="form-control mb-2"
                         placeholder="Buscar..."
+                        id="txtTabla"
+                        onChange={handleSearch}
                       />
                       <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="flexCheckDefault"
-                        >
-                          1
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="flexCheckDefault"
-                        >
-                          2
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="flexCheckDefault"
-                        >
-                          3
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="flexCheckDefault"
-                        >
-                          4
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="flexCheckDefault"
-                        >
-                          5
-                        </label>
-                      </div>
-                      <div className="form-check ">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="flexCheckDefault"
-                        >
-                          6
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="flexCheckDefault"
-                        >
-                          7
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="flexCheckDefault"
-                        >
-                          8
-                        </label>
+                        {enfoque.map((element) => (
+                          <div className="form-check" key={element.id}>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              value={element.Nombre}
+                              id={`checkbox-${element.id}`}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor={`checkbox-${element.id}`}
+                            >
+                              {element.Nombre}
+                            </label>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
