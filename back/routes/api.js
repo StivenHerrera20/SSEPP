@@ -25,6 +25,7 @@ const PPHasObjetivoEspecificoRouter = require("./api/politicaHasObjetivoEspecifi
 const documentosAsociadosPPRouter = require("./api/documentosAsociadosPP");
 const resultadoDatosGeneralesRouter = require("./api/resultadoDatosGenerales");
 const resultadoDatosGeneralesHasEnfoquesRouter = require("./api/resultadoDatosGeneralesHasEnfoques");
+const resultadoIndicadorRouter = require("./api/resultadoIndicador");
 router.use("/documentosAsociados", apiDocumentosAsociadosRouter);
 router.use("/documentosDeAdopcion", apiDocumentosDeAdopcionRouter);
 router.use("/enfoqueNivelCuatro", enfoqueNivelCuatroRouter);
@@ -49,6 +50,7 @@ router.use("/PPHasObjetivoGeneral", PPHasObjetivoGeneralRouter);
 router.use("/PPHasObjetivoEspecifico", PPHasObjetivoEspecificoRouter);
 router.use("/documentosAsociadosPP", documentosAsociadosPPRouter);
 router.use("/resultadoDatosGenerales", resultadoDatosGeneralesRouter);
+router.use("/resultadoIndicador", resultadoIndicadorRouter);
 router.use(
   "/resultadoDatosGeneralesHasEnfoques",
   resultadoDatosGeneralesHasEnfoquesRouter

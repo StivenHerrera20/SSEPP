@@ -6,6 +6,8 @@ const Resultado = () => {
   const [entidad, setEntidades] = useState([]);
   const [enfoque, setEnfoque] = useState([]);
   const [busqueda, setBusqueda] = useState(0);
+  const [Plan, setPlan] = useState([]);
+  const [Indicador, setIndicador] = useState([]);
   useEffect(() => {
     fetch("http://127.0.0.1:3900/api/sector/listarTodos")
       .then((response) => {
@@ -21,7 +23,21 @@ const Resultado = () => {
       .then((doc) => {
         setEntidades(doc);
       });
-    fetch("http://127.0.0.1:3900/api/enfoqueNivelUno/listarTodos")
+    fetch("http://127.0.0.1:3900/api/plan/listarTodos")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setPlan(doc);
+      });
+    fetch("http://127.0.0.1:3900/api/planDeDesarrollo/listarTodos")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setIndicador(doc);
+      });
+    fetch(`http://127.0.0.1:3900/api/enfoqueNivelUno/listarTodos`)
       .then((response) => {
         return response.json();
       })
@@ -175,6 +191,23 @@ const Resultado = () => {
                           'input[type="checkbox"]:checked'
                         );
                         let idResultado = res.doc[0].max;
+                        //TODO::
+                        /* fetch(
+                          "http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/editar/" +
+                            idResultado,
+                          {
+                            method: "UPDATE",
+                            headers: {
+                              "Content-Type":
+                                "application/x-www-form-urlencoded",
+                            },
+                            body: `importancia_relativa=${importancia.value}`,
+                          }
+                        )
+                          .then((res) => {
+                            return response.json();
+                          })
+                          .then((res) => {}); */
                         for (let i = 0; i < checkboxes.length; i++) {
                           // Envía los valores seleccionados al servidor, por ejemplo, como un JSON en el cuerpo de la solicitud
                           fetch(
@@ -347,7 +380,77 @@ const Resultado = () => {
               role="tabpanel"
               aria-labelledby="indicador-tab"
             >
-              <form action="">
+              <form
+                method="post"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  let nombreIndicador =
+                    document.querySelector("#nombreIndicador");
+                  let formulaIndicador =
+                    document.querySelector("#formulaIndicador");
+                  let tipoAnulacion = document.querySelector("#tipoAnulacion");
+                  let aplicaIndicador =
+                    document.querySelector("#aplicaIndicador");
+                  let pdd = document.querySelector("#pdd");
+                  let indicadorPdd = document.querySelector("#indicadorPdd");
+                  let fechaInicio = document.querySelector("#fechaInicio");
+                  let fechaFin = document.querySelector("#fechaFin");
+                  let disponible = document.querySelector("#disponible");
+                  let fechaBase = document.querySelector("#fechaBase");
+                  let fuenteIndicador =
+                    document.querySelector("#fuenteIndicador");
+                  let estaDisponible = disponible.checked;
+                  let valorIndicador =
+                    document.querySelector("#valorIndicador");
+                  if (!estaDisponible) {
+                    if (aplicaIndicador.value == "Si") {
+                      if (
+                        nombreIndicador.value.length > 0 &&
+                        formulaIndicador.value.length > 0 &&
+                        tipoAnulacion.value.length > 0 &&
+                        aplicaIndicador.length > 0 &&
+                        pdd.value.length > 0 &&
+                        indicadorPdd.value.length > 0 &&
+                        fechaInicio.value.length > 0 &&
+                        fechaFin.value.length > 0 &&
+                        valorIndicador.value.length > 0 &&
+                        fechaBase.value.length > 0 &&
+                        fuenteIndicador.value.length > 0
+                      ) {
+                        fetch(
+                          "http://127.0.0.1:3900/api/resultadoIndicador/agregar",
+                          {
+                            method: "POST",
+                            headers: {
+                              "Content-Type":
+                                "application/x-www-form-urlencoded",
+                            },
+                            body: `nombre=${nombreIndicador.value}&formula=${
+                              formulaIndicador.value
+                            }&tipo_anulacion=${tipoAnulacion.value}&aplica=${
+                              aplicaIndicador.value
+                            }&plan_de_desarrollo=${pdd.value}&indicador_pdd=${
+                              indicadorPdd.value
+                            }&inicio=${fechaInicio.value}&fin=${
+                              fechaFin.value
+                            }&disponible=Si&valor=${
+                              valorIndicador.value
+                            }&fecha_base=${fechaBase.value}&fuente=${
+                              fuenteIndicador.value
+                            }&id_objetivo=${localStorage.getItem(
+                              "idObjetivo"
+                            )}`,
+                          }
+                        )
+                          .then((response) => {
+                            return response.json();
+                          })
+                          .then((res) => {});
+                      }
+                    }
+                  }
+                }}
+              >
                 <div className="mb-3">
                   <label
                     htmlFor="exampleFormControlTextarea1"
@@ -357,7 +460,7 @@ const Resultado = () => {
                   </label>
                   <textarea
                     className="form-control"
-                    id="exampleFormControlTextarea1"
+                    id="nombreIndicador"
                     rows="2"
                     style={{ resize: "none" }}
                   ></textarea>
@@ -371,7 +474,7 @@ const Resultado = () => {
                   </label>
                   <textarea
                     className="form-control"
-                    id="exampleFormControlTextarea1"
+                    id="formulaIndicador"
                     rows="2"
                     style={{ resize: "none" }}
                   ></textarea>
@@ -383,10 +486,10 @@ const Resultado = () => {
                   <select
                     className="form-select"
                     aria-label="Default select example"
+                    id="tipoAnulacion"
                   >
-                    <option value="1">...</option>
-                    <option value="2">...</option>
-                    <option value="3">...</option>
+                    <option value="aa">aa</option>
+                    <option value="bb">bb</option>
                   </select>
                 </div>
                 <div className="row mb-3">
@@ -397,17 +500,18 @@ const Resultado = () => {
                     <select
                       className="form-select w-50"
                       aria-label="Default select example"
+                      id="aplicaIndicador"
                     >
                       <option
-                        value="1"
-                        onClick={() => {
+                        value="Si"
+                        /* onClick={() => {
                           setEnable("false");
-                        }}
+                        }} */
                       >
                         Si
                       </option>
                       <option
-                        value="2"
+                        value="No"
                         onClick={() => {
                           setEnable("true");
                         }}
@@ -424,10 +528,13 @@ const Resultado = () => {
                       className="form-select"
                       aria-label="Default select example"
                       disabled={enable}
+                      id="pdd"
                     >
-                      <option value="1">...</option>
-                      <option value="2">...</option>
-                      <option value="3">...</option>
+                      {Plan.map((element) => (
+                        <option key={element.id} value={element.Nombre}>
+                          {element.Nombre}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="col-5">
@@ -438,10 +545,13 @@ const Resultado = () => {
                       className="form-select"
                       aria-label="Default select example"
                       disabled={enable}
+                      id="indicadorPdd"
                     >
-                      <option value="1">...</option>
-                      <option value="2">...</option>
-                      <option value="3">...</option>
+                      {Indicador.map((element) => (
+                        <option key={element.id} value={element.Nombre}>
+                          {element.Nombre}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -451,13 +561,17 @@ const Resultado = () => {
                     <label htmlFor="" className="form-label">
                       Inicio <b className="text-danger">*</b>
                     </label>
-                    <input type="date" className="form-control" />
+                    <input
+                      type="date"
+                      className="form-control"
+                      id="fechaInicio"
+                    />
                   </div>
                   <div className="col-6">
                     <label htmlFor="" className="form-label">
                       Fin <b className="text-danger">*</b>
                     </label>
-                    <input type="date" className="form-control" />
+                    <input type="date" className="form-control" id="fechaFin" />
                   </div>
                 </div>
                 <div className="row mb-3 d-flex align-items-center m-auto">
@@ -467,7 +581,7 @@ const Resultado = () => {
                         className="form-check-input"
                         type="checkbox"
                         value=""
-                        id=""
+                        id="disponible"
                       />
                       <label className="form-check-label" htmlFor="">
                         No disponible
@@ -478,13 +592,21 @@ const Resultado = () => {
                     <label htmlFor="" className="form-label">
                       Valor
                     </label>
-                    <input type="text" className="form-control" />
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="valorIndicador"
+                    />
                   </div>
                   <div className="col-5">
                     <label htmlFor="" className="form-label">
                       Fecha de la linea base
                     </label>
-                    <input type="date" className="form-control" />
+                    <input
+                      type="date"
+                      className="form-control"
+                      id="fechaBase"
+                    />
                   </div>
                 </div>
                 <div className="row mb-3">
@@ -492,7 +614,11 @@ const Resultado = () => {
                     <label htmlFor="" className="form-label">
                       Fuente de la linea base
                     </label>
-                    <input type="text" className="form-control w-75" />
+                    <input
+                      type="text"
+                      className="form-control w-75"
+                      id="fuenteIndicador"
+                    />
                   </div>
                 </div>
                 <div className="row mb-3">
