@@ -5,7 +5,7 @@ const Resultado = () => {
   const [sector, setSectores] = useState([]);
   const [entidad, setEntidades] = useState([]);
   const [enfoque, setEnfoque] = useState([]);
-  const [busqueda, setBusqueda] = useState(0);
+  const [busqueda, setBusqueda] = useState("");
   const [Plan, setPlan] = useState([]);
   const [Indicador, setIndicador] = useState([]);
   useEffect(() => {
@@ -187,6 +187,7 @@ const Resultado = () => {
                         return response.json();
                       })
                       .then((res) => {
+                        localStorage.setItem("nombreResultado", nombre.value);
                         const checkboxes = document.querySelectorAll(
                           'input[type="checkbox"]:checked'
                         );
@@ -447,6 +448,132 @@ const Resultado = () => {
                           })
                           .then((res) => {});
                       }
+                    } else {
+                      if (
+                        nombreIndicador.value.length > 0 &&
+                        formulaIndicador.value.length > 0 &&
+                        tipoAnulacion.value.length > 0 &&
+                        aplicaIndicador.length > 0 &&
+                        fechaInicio.value.length > 0 &&
+                        fechaFin.value.length > 0 &&
+                        valorIndicador.value.length > 0 &&
+                        fechaBase.value.length > 0 &&
+                        fuenteIndicador.value.length > 0
+                      ) {
+                        fetch(
+                          "http://127.0.0.1:3900/api/resultadoIndicador/agregar",
+                          {
+                            method: "POST",
+                            headers: {
+                              "Content-Type":
+                                "application/x-www-form-urlencoded",
+                            },
+                            body: `nombre=${nombreIndicador.value}&formula=${
+                              formulaIndicador.value
+                            }&tipo_anulacion=${tipoAnulacion.value}&aplica=${
+                              aplicaIndicador.value
+                            }&plan_de_desarrollo=N/A&indicador_pdd=N/A&inicio=${
+                              fechaInicio.value
+                            }&fin=${fechaFin.value}&disponible=Si&valor=${
+                              valorIndicador.value
+                            }&fecha_base=${fechaBase.value}&fuente=${
+                              fuenteIndicador.value
+                            }&id_objetivo=${localStorage.getItem(
+                              "idObjetivo"
+                            )}`,
+                          }
+                        )
+                          .then((response) => {
+                            return response.json();
+                          })
+                          .then((res) => {});
+                      }
+                    }
+                  } else {
+                    if (aplicaIndicador.value == "Si") {
+                      if (
+                        nombreIndicador.value.length > 0 &&
+                        formulaIndicador.value.length > 0 &&
+                        tipoAnulacion.value.length > 0 &&
+                        aplicaIndicador.length > 0 &&
+                        pdd.value.length > 0 &&
+                        indicadorPdd.value.length > 0 &&
+                        fechaInicio.value.length > 0 &&
+                        fechaFin.value.length > 0 &&
+                        valorIndicador.value.length > 0 &&
+                        fechaBase.value.length > 0 &&
+                        fuenteIndicador.value.length > 0
+                      ) {
+                        fetch(
+                          "http://127.0.0.1:3900/api/resultadoIndicador/agregar",
+                          {
+                            method: "POST",
+                            headers: {
+                              "Content-Type":
+                                "application/x-www-form-urlencoded",
+                            },
+                            body: `nombre=${nombreIndicador.value}&formula=${
+                              formulaIndicador.value
+                            }&tipo_anulacion=${tipoAnulacion.value}&aplica=${
+                              aplicaIndicador.value
+                            }&plan_de_desarrollo=${pdd.value}&indicador_pdd=${
+                              indicadorPdd.value
+                            }&inicio=${fechaInicio.value}&fin=${
+                              fechaFin.value
+                            }&disponible=No&valor=${
+                              valorIndicador.value
+                            }&fecha_base=${fechaBase.value}&fuente=${
+                              fuenteIndicador.value
+                            }&id_objetivo=${localStorage.getItem(
+                              "idObjetivo"
+                            )}`,
+                          }
+                        )
+                          .then((response) => {
+                            return response.json();
+                          })
+                          .then((res) => {});
+                      }
+                    } else {
+                      if (
+                        nombreIndicador.value.length > 0 &&
+                        formulaIndicador.value.length > 0 &&
+                        tipoAnulacion.value.length > 0 &&
+                        aplicaIndicador.length > 0 &&
+                        fechaInicio.value.length > 0 &&
+                        fechaFin.value.length > 0 &&
+                        valorIndicador.value.length > 0 &&
+                        fechaBase.value.length > 0 &&
+                        fuenteIndicador.value.length > 0
+                      ) {
+                        fetch(
+                          "http://127.0.0.1:3900/api/resultadoIndicador/agregar",
+                          {
+                            method: "POST",
+                            headers: {
+                              "Content-Type":
+                                "application/x-www-form-urlencoded",
+                            },
+                            body: `nombre=${nombreIndicador.value}&formula=${
+                              formulaIndicador.value
+                            }&tipo_anulacion=${tipoAnulacion.value}&aplica=${
+                              aplicaIndicador.value
+                            }&plan_de_desarrollo=N/A&indicador_pdd=N/A&inicio=${
+                              fechaInicio.value
+                            }&fin=${fechaFin.value}&disponible=No&valor=${
+                              valorIndicador.value
+                            }&fecha_base=${fechaBase.value}&fuente=${
+                              fuenteIndicador.value
+                            }&id_objetivo=${localStorage.getItem(
+                              "idObjetivo"
+                            )}`,
+                          }
+                        )
+                          .then((response) => {
+                            return response.json();
+                          })
+                          .then((res) => {});
+                      }
                     }
                   }
                 }}
@@ -481,7 +608,7 @@ const Resultado = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="" className="form-label">
-                    Tipo de Anulación <b className="text-danger">*</b>
+                    Tipo de Anualización <b className="text-danger">*</b>
                   </label>
                   <select
                     className="form-select"
