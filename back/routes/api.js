@@ -23,6 +23,12 @@ const documentoDeAdopcionPPRouter = require("./api/documentoDeAdopcionPP");
 const PPHasObjetivoGeneralRouter = require("./api/politicaHasObjetivoGeneral");
 const PPHasObjetivoEspecificoRouter = require("./api/politicaHasObjetivoEspecifico");
 const documentosAsociadosPPRouter = require("./api/documentosAsociadosPP");
+const resultadoDatosGeneralesRouter = require("./api/resultadoDatosGenerales");
+const resultadoDatosGeneralesHasEnfoquesRouter = require("./api/resultadoDatosGeneralesHasEnfoques");
+const resultadoIndicadorRouter = require("./api/resultadoIndicador");
+const productoDatosGeneralesRouter = require("./api/productoDatosGenerales");
+const productoDatosGeneralesHasEnfoquesRouter = require("./api/productosDatosGeneralesHasenfoques");
+const productoDatosGeneralesHasObjetivosRouter = require("./api/productoDatosGeneralesHasObjetivos");
 router.use("/documentosAsociados", apiDocumentosAsociadosRouter);
 router.use("/documentosDeAdopcion", apiDocumentosDeAdopcionRouter);
 router.use("/enfoqueNivelCuatro", enfoqueNivelCuatroRouter);
@@ -46,5 +52,20 @@ router.use("/documentoDeAdopcionPP", documentoDeAdopcionPPRouter);
 router.use("/PPHasObjetivoGeneral", PPHasObjetivoGeneralRouter);
 router.use("/PPHasObjetivoEspecifico", PPHasObjetivoEspecificoRouter);
 router.use("/documentosAsociadosPP", documentosAsociadosPPRouter);
+router.use("/resultadoDatosGenerales", resultadoDatosGeneralesRouter);
+router.use("/resultadoIndicador", resultadoIndicadorRouter);
+router.use("/productoDatosGenerales", productoDatosGeneralesRouter);
+router.use(
+  "/productoDatosGeneralesHasObjetivos",
+  productoDatosGeneralesHasObjetivosRouter
+);
+router.use(
+  "/productoDatosGeneralesHasEnfoques",
+  productoDatosGeneralesHasEnfoquesRouter
+);
+router.use(
+  "/resultadoDatosGeneralesHasEnfoques",
+  resultadoDatosGeneralesHasEnfoquesRouter
+);
 
 module.exports = router;

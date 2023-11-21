@@ -77,6 +77,7 @@ const TablaPlanAccion = ({ controlPD, setControlPD }) => {
       setPagina(pagina - 1);
     }
   };
+  localStorage.clear();
   return (
     <>
       <div className="card shadow mb-4">
@@ -154,6 +155,10 @@ const TablaPlanAccion = ({ controlPD, setControlPD }) => {
                           className="btn btn-success fa fa-pencil "
                           onClick={(e) => {
                             e.preventDefault();
+                            let nombre =
+                              e.target.parentElement.parentElement.children[3]
+                                .textContent;
+                            localStorage.setItem("nombre", nombre);
                             setControlPD(1);
                           }}
                         ></button>

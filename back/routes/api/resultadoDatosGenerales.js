@@ -1,15 +1,20 @@
 const router = require("express").Router();
-const { PPHasObjetivoEspecifico, sequelize } = require("../../model/Conexion");
+const { resultadoDatosGenerales, sequelize } = require("../../model/Conexion");
 const { QueryTypes } = require("sequelize");
 router.post("/agregar", async (req, res) => {
-  const sector = await PPHasObjetivoEspecifico.create(req.body);
+  const sector = await resultadoDatosGenerales.create(req.body);
+  const busqueda = await sequelize.query(
+    "select max(id) as max from objetivo_especifico_has_resultado_datos_generales",
+    { type: QueryTypes.SELECT }
+  );
   res.json({
+    doc: busqueda,
     status: "OK",
     mensaje: "Agregado Correctamente",
   });
 });
 router.put("/editar/:id", async (req, res) => {
-  await PPHasObjetivoEspecifico.update(req.body, {
+  await resultadoDatosGenerales.update(req.body, {
     where: { id: req.params.id },
   });
   res.json({
@@ -30,7 +35,7 @@ router.get("/listar", async (req, res) => {
     offset: +page * +size,
     where: { id_politica: busqueda[0].max },
   };
-  const { count, rows } = await PPHasObjetivoEspecifico.findAndCountAll(
+  const { count, rows } = await resultadoDatosGenerales.findAndCountAll(
     options
   );
   res.json({ total: count, desarrollo: rows, fila: size, page: page });
@@ -55,7 +60,7 @@ router.get("/listarEscrito", async (req, res) => {
   res.json({ resultado: busqueda });
 });
 router.delete("/eliminar/:id", async (req, res) => {
-  await PPHasObjetivoEspecifico.destroy({
+  await resultadoDatosGenerales.destroy({
     where: { id: req.params.id },
   });
   res.json({
@@ -64,7 +69,7 @@ router.delete("/eliminar/:id", async (req, res) => {
   });
 });
 router.get("/listarTodos/:id", async (req, res) => {
-  const unidad = await PPHasObjetivoEspecifico.findAll({
+  const unidad = await resultadoDatosGenerales.findAll({
     where: { id_politica: req.params.id },
   });
   res.json(unidad);

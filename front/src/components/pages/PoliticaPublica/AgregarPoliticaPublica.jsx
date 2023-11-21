@@ -1425,14 +1425,14 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                     <Button
                       className="btn btn-primary m-2"
                       variant="primary"
-                      onClick={handleAnterior}
+                      onClick={handleAnteriorAsociados}
                     >
                       Anterior
                     </Button>
                     <Button
                       className="btn btn-primary m-2"
                       variant="primary"
-                      onClick={handleSiguiente}
+                      onClick={handleSiguienteAsociados}
                     >
                       Siguiente
                     </Button>

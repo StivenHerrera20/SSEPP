@@ -82,4 +82,15 @@ router.get("/maximo/:campo", async (req, res) => {
       });
     });
 });
+router.get("/traerId", async (req, res) => {
+  const busqueda = await sequelize.query(
+    "select id from politica_publica where nombre like '%" +
+      req.query.nombre +
+      "%'",
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  res.json({ resultado: busqueda });
+});
 module.exports = router;
