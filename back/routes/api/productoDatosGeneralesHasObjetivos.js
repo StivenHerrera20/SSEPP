@@ -1,9 +1,5 @@
 const router = require("express").Router();
-const {
-  productoDatosGeneralesHasObjetivos,
-  sequelize,
-} = require("../../model/Conexion");
-const { QueryTypes } = require("sequelize");
+const { productoDatosGeneralesHasObjetivos } = require("../../model/Conexion");
 router.post("/agregar", async (req, res) => {
   const sector = await productoDatosGeneralesHasObjetivos.create(req.body);
   res.json({

@@ -29,6 +29,8 @@ const resultadoIndicadorRouter = require("./api/resultadoIndicador");
 const productoDatosGeneralesRouter = require("./api/productoDatosGenerales");
 const productoDatosGeneralesHasEnfoquesRouter = require("./api/productosDatosGeneralesHasenfoques");
 const productoDatosGeneralesHasObjetivosRouter = require("./api/productoDatosGeneralesHasObjetivos");
+const productoIndicadorRouter = require("./api/productoIndicador");
+const resultadoHasMetaRouter = require("./api/resultadoHasMeta");
 router.use("/documentosAsociados", apiDocumentosAsociadosRouter);
 router.use("/documentosDeAdopcion", apiDocumentosDeAdopcionRouter);
 router.use("/enfoqueNivelCuatro", enfoqueNivelCuatroRouter);
@@ -55,6 +57,8 @@ router.use("/documentosAsociadosPP", documentosAsociadosPPRouter);
 router.use("/resultadoDatosGenerales", resultadoDatosGeneralesRouter);
 router.use("/resultadoIndicador", resultadoIndicadorRouter);
 router.use("/productoDatosGenerales", productoDatosGeneralesRouter);
+router.use("/productoIndicador", productoIndicadorRouter);
+router.use("/resultadoHasMeta", resultadoHasMetaRouter);
 router.use(
   "/productoDatosGeneralesHasObjetivos",
   productoDatosGeneralesHasObjetivosRouter
