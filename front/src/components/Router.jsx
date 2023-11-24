@@ -3,8 +3,8 @@ import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Index from "./pages/Index";
 import "../assets/css/sb-admin-2.css";
-import Navbar from "./pages/Parametrizacion/Navbar";
-import OpcionesNavegacion from "./pages/Parametrizacion/OpcionesNavegacion";
+
+/* Parametrización */
 import Sector from "./pages/Parametrizacion/Sector";
 import IndexParametrizacion from "./pages/Parametrizacion/IndexParametrizacion";
 import Entidad from "./pages/Parametrizacion/Entidad";
@@ -19,17 +19,35 @@ import NivelTerritorializacion from "./pages/Parametrizacion/NivelTerritorializa
 import PlanDesarrollo from "./pages/Parametrizacion/PlanDesarrollo";
 import IndicadorPlanDesarrollo from "./pages/Parametrizacion/IndicadorPlanDesarrollo";
 import Parametros from "./pages/Parametrizacion/Parametros";
-import IndexPoliticaPublica from "./pages/PoliticaPublica/IndexPoliticaPublica";
-import IndexPlanAccion from "./pages/PlanDeAccion/IndexPlanAccion";
-import IndexBateriaDeIndicadores from "./pages/BateriaDeIndicadores/IndexBateriaDeIndicadores";
 import Enfoque from "./pages/Parametrizacion/Enfoque";
 import EnfoqueDos from "./pages/Parametrizacion/EnfoqueDos";
 import EnfoqueTres from "./pages/Parametrizacion/EnfoqueTres";
 import EnfoqueCuatro from "./pages/Parametrizacion/EnfoqueCuatro";
 
+/* Politica Publica */
+import IndexPoliticaPublica from "./pages/PoliticaPublica/IndexPoliticaPublica";
+
+/* Plan de acción */
+import IndexPlanAccion from "./pages/PlanDeAccion/IndexPlanAccion";
+
+/* Bateria De Indicadores */
+import IndexBateriaDeIndicadores from "./pages/BateriaDeIndicadores/IndexBateriaDeIndicadores";
+
+/* Registro De Seguimiento */
 import IndexRegistroSeguimiento from "./pages/RegistroDeSeguimiento/IndexRegistroSeguimiento";
 import TablaRegistroSeguimiento from "./pages/RegistroDeSeguimiento/TablaRegistroSeguimiento";
 import CargueAvance from "./pages/RegistroDeSeguimiento/CargueAvance";
+
+/* Informe De Seguimiento */
+import IndexInformesSeguimiento from "./pages/InformesDeSeguimiento/IndexInformesSeguimiento";
+import InformeEjecutivo from "./pages/InformesDeSeguimiento/InformeEjecutivo";
+import InformeAnalitico from "./pages/InformesDeSeguimiento/InformeAnalitico";
+import InformeCostos from "./pages/InformesDeSeguimiento/InformeCostos";
+import SeguimientoCualitativo from "./pages/InformesDeSeguimiento/SeguimientoCualitativo";
+import HojaDeVidaIndicador from "./pages/InformesDeSeguimiento/HojaDeVidaIndicador";
+import ConsultaProductos from "./pages/InformesDeSeguimiento/ConsultaProductos";
+import PlanAccionAvance from "./pages/InformesDeSeguimiento/PlanAccionAvance";
+
 const Router = () => {
   return (
     <>
@@ -39,6 +57,8 @@ const Router = () => {
 
           <Route index element={<Login />} />
           <Route path="/inicio" element={<Index />} />
+
+          {/* Parametrización */}
           <Route
             path="/inicio/parametrizacion/"
             element={<IndexParametrizacion />}
@@ -99,18 +119,22 @@ const Router = () => {
             <Route path="parametros" element={<Parametros></Parametros>} />
           </Route>
 
+          {/* Politicas Publicas */}
           <Route
             path="/inicio/politicasPublicas"
             element={<IndexPoliticaPublica />}
           />
 
+          {/* Plan de acción */}
           <Route path="/inicio/plandeaccion" element={<IndexPlanAccion />} />
 
+          {/* Bacteria de Indicadores */}
           <Route
             path="/inicio/bateriadeindicadores"
             element={<IndexBateriaDeIndicadores />}
           />
 
+          {/* Registro de seguimiento */}
           <Route
             path="/inicio/registrodeseguimiento"
             element={<IndexRegistroSeguimiento />}
@@ -118,79 +142,28 @@ const Router = () => {
             <Route index element={<TablaRegistroSeguimiento />} />
             <Route path="cargueavance" element={<CargueAvance />} />
           </Route>
-        </Routes>
 
-        {/* Esta es la forma de prueba (Que pinte la url de cada componente) */}
-        {/* <div id="wrapper">
-          <OpcionesNavegacion></OpcionesNavegacion>
-          <div id="content-wrapper" className="d-flex flex-column">
-            <div id="content">
-              <Navbar></Navbar>
-              <div className="container-fluid">
-                <Routes>
-                  <Route
-                    path="/parametrizacion/sector"
-                    element={<Sector></Sector>}
-                  />
-                  <Route
-                    path="/parametrizacion/Entidad"
-                    element={<Entidad></Entidad>}
-                  />
-                  <Route
-                    path="/parametrizacion/documentosDeAdopcion"
-                    element={<DocumentosAdopcion></DocumentosAdopcion>}
-                  />
-                  <Route
-                    path="/parametrizacion/unidadesDeMedida"
-                    element={<UnidadesMedida></UnidadesMedida>}
-                  />
-                  <Route
-                    path="/parametrizacion/rangoSemaforo"
-                    element={<RangoSemaforo></RangoSemaforo>}
-                  />
-                  <Route
-                    path="/parametrizacion/metaODS"
-                    element={<MetaODS></MetaODS>}
-                  />
-                  <Route
-                    path="/parametrizacion/documentosAsociados"
-                    element={<DocumentosAsociados></DocumentosAsociados>}
-                  />
-                  <Route
-                    path="/parametrizacion/fuentesDeFinanciacion"
-                    element={<FuentesFinanciacion></FuentesFinanciacion>}
-                  />
-                  <Route
-                    path="/parametrizacion/desarrolloSostenible"
-                    element={
-                      <ObjetivoDesarrolloSostenible></ObjetivoDesarrolloSostenible>
-                    }
-                  />
-                  <Route
-                    path="/parametrizacion/nivelTerritorializacion"
-                    element={
-                      <NivelTerritorializacion></NivelTerritorializacion>
-                    }
-                  />
-                  <Route
-                    path="/parametrizacion/planDesarrollo"
-                    element={<PlanDesarrollo></PlanDesarrollo>}
-                  />
-                  <Route
-                    path="/parametrizacion/indicadorPlanDesarrollo"
-                    element={
-                      <IndicadorPlanDesarrollo></IndicadorPlanDesarrollo>
-                    }
-                  />
-                  <Route
-                    path="/parametrizacion/parametros"
-                    element={<Parametros></Parametros>}
-                  />
-                </Routes>
-              </div>
-            </div>
-          </div>
-        </div> */}
+          {/* Informes de Seguimiento */}
+          <Route
+            path="/inicio/informesdeseguimiento"
+            element={<IndexInformesSeguimiento />}
+          >
+            <Route index element={<InformeEjecutivo />} />
+            <Route path="informeejecutivo" element={<InformeEjecutivo />} />
+            <Route path="informeanalitico" element={<InformeAnalitico />} />
+            <Route path="informecostos" element={<InformeCostos />} />
+            <Route
+              path="seguimientocualitativo"
+              element={<SeguimientoCualitativo />}
+            />
+            <Route
+              path="hojadevidadelindicador"
+              element={<HojaDeVidaIndicador />}
+            />
+            <Route path="consultaproductos" element={<ConsultaProductos />} />
+            <Route path="plandeaccionyavance" element={<PlanAccionAvance />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </>
   );

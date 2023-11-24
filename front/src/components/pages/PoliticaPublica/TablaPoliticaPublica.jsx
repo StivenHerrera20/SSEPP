@@ -175,20 +175,22 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
               </tbody>
             </table>
           </div>
-          <Button
-            className="btn btn-primary"
-            variant="primary"
-            onClick={handleAnterior}
-          >
-            Anterior
-          </Button>
-          <Button
-            className="btn btn-primary"
-            variant="primary"
-            onClick={handleSiguiente}
-          >
-            Siguiente
-          </Button>
+          <div className="d-flex justify-content-center">
+            <Button
+              className="btn btn-primary m-2"
+              variant="primary"
+              onClick={handleAnterior}
+            >
+              Anterior
+            </Button>
+            <Button
+              className="btn btn-primary m-2"
+              variant="primary"
+              onClick={handleSiguiente}
+            >
+              Siguiente
+            </Button>
+          </div>
         </div>
       </div>
     </>
