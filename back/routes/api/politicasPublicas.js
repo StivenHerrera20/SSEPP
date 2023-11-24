@@ -93,4 +93,15 @@ router.get("/traerId", async (req, res) => {
   );
   res.json({ resultado: busqueda });
 });
+router.get("/traerFechas", async (req, res) => {
+  const busqueda = await sequelize.query(
+    "select fecha_inicio,fecha_fin from politica_publica where nombre like '%" +
+      req.query.nombre +
+      "%'",
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  res.json({ resultado: busqueda });
+});
 module.exports = router;

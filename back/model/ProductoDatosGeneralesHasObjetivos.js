@@ -13,7 +13,7 @@ module.exports = (sequelize, type) => {
         type: type.STRING,
         allowNull: false,
       },
-      id_resultado_datos_generales: {
+      id_producto_datos_generales: {
         type: type.INTEGER,
         allowNull: false,
         references: {

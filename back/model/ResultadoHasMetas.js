@@ -1,7 +1,7 @@
-const Politica = require("./ProductoDatosGenerales");
+const Politica = require("./PoliticasPublicas");
 module.exports = (sequelize, type) => {
   return sequelize.define(
-    "producto_datos_generales_has_enfoques",
+    "resultado_has_metas",
     {
       id: {
         type: type.INTEGER,
@@ -9,11 +9,19 @@ module.exports = (sequelize, type) => {
         autoIncrement: true,
         allowNull: false,
       },
-      enfoque: {
+      year: {
         type: type.STRING,
         allowNull: false,
       },
-      id_producto_datos_generales: {
+      meta: {
+        type: type.STRING,
+        allowNull: false,
+      },
+      meta_total: {
+        type: type.STRING,
+        allowNull: false,
+      },
+      id_politica: {
         type: type.INTEGER,
         allowNull: false,
         references: {
@@ -24,7 +32,7 @@ module.exports = (sequelize, type) => {
     },
     {
       timestamps: false, // Desactiva la funcionalidad de timestamps
-      tableName: "producto_datos_generales_has_enfoques",
+      tableName: "resultado_has_metas",
     }
   );
 };

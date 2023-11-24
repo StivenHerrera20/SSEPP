@@ -8,6 +8,9 @@ const Resultado = () => {
   const [busqueda, setBusqueda] = useState("");
   const [Plan, setPlan] = useState([]);
   const [Indicador, setIndicador] = useState([]);
+  const [fechaInicio, setFechaInicio] = useState(0);
+  const [fechaFin, setFechaFin] = useState(0);
+  const [items, setItems] = useState([]);
   useEffect(() => {
     fetch("http://127.0.0.1:3900/api/sector/listarTodos")
       .then((response) => {
@@ -15,6 +18,18 @@ const Resultado = () => {
       })
       .then((doc) => {
         setSectores(doc);
+      });
+    fetch(
+      `http://127.0.0.1:3900/api/politicasPublicas/traerFechas/?nombre=${localStorage.getItem(
+        "nombre"
+      )}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setFechaInicio(doc.resultado[0].fecha_inicio.slice(0, 4));
+        setFechaFin(doc.resultado[0].fecha_fin.slice(0, 4));
       });
     fetch("http://127.0.0.1:3900/api/entidad/listarTodos")
       .then((response) => {
@@ -44,7 +59,38 @@ const Resultado = () => {
       .then((doc) => {
         setEnfoque(doc);
       });
-  }, []);
+    const generarItems = () => {
+      if (fechaInicio && fechaFin) {
+        let resta = fechaFin - fechaInicio;
+        const generatedItems = [];
+        for (let i = 0; i <= resta; i++) {
+          const year = parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
+          generatedItems.push({
+            title: year.toString(), // Establece el año como título
+            cardDetailedText: "000", // Establece el valor por defecto "000"
+          });
+        }
+        return generatedItems;
+      }
+      return [];
+    };
+    const itemsGenerated = generarItems();
+    setItems(itemsGenerated);
+  }, [fechaInicio, fechaFin]);
+  const renderYears = () => {
+    return items.map((item, index) => (
+      <div key={index} className="mb-3">
+        <label htmlFor="" className="form-label">
+          {item.title}
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          defaultValue={item.cardDetailedText}
+        />
+      </div>
+    ));
+  };
 
   const handleSearch = (event) => {
     const searchText = event.target.value;
@@ -72,7 +118,17 @@ const Resultado = () => {
     }
   };
 
-  const items = [
+  /* let items = [];
+  for (let i = 0; i <= resta; i++) {
+    const year = parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
+    items.push({
+      title: year.toString(), // Establece el año como título
+      cardDetailedText: "000", // Establece el valor por defecto "000"
+    });
+  }
+  console.log(items); */
+
+  /* const items2 = [
     {
       title: "2020",
       cardDetailedText: "000",
@@ -98,6 +154,7 @@ const Resultado = () => {
       cardDetailedText: "000",
     },
   ];
+  console.log(items2); */
   return (
     <>
       <div className="card card-body">
@@ -192,23 +249,6 @@ const Resultado = () => {
                           'input[type="checkbox"]:checked'
                         );
                         let idResultado = res.doc[0].max;
-                        //TODO::
-                        /* fetch(
-                          "http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/editar/" +
-                            idResultado,
-                          {
-                            method: "UPDATE",
-                            headers: {
-                              "Content-Type":
-                                "application/x-www-form-urlencoded",
-                            },
-                            body: `importancia_relativa=${importancia.value}`,
-                          }
-                        )
-                          .then((res) => {
-                            return response.json();
-                          })
-                          .then((res) => {}); */
                         for (let i = 0; i < checkboxes.length; i++) {
                           // Envía los valores seleccionados al servidor, por ejemplo, como un JSON en el cuerpo de la solicitud
                           fetch(
@@ -576,6 +616,8 @@ const Resultado = () => {
                       }
                     }
                   }
+                  localStorage.setItem("tipo", tipoAnulacion.value);
+                  localStorage.setItem("linea", fuenteIndicador.value);
                 }}
               >
                 <div className="mb-3">
@@ -615,8 +657,9 @@ const Resultado = () => {
                     aria-label="Default select example"
                     id="tipoAnulacion"
                   >
-                    <option value="aa">aa</option>
-                    <option value="bb">bb</option>
+                    <option value="Creciente">Creciente</option>
+                    <option value="Decreciente">Decreciente</option>
+                    <option value="Constante">Constante</option>
                   </select>
                 </div>
                 <div className="row mb-3">
@@ -764,20 +807,24 @@ const Resultado = () => {
             >
               <div className="row mt-3 mb-3">
                 <div className="col-9 w-100">
-                  <div style={{ height: "950px" }}>
-                    <Chrono
-                      items={items}
-                      theme={{
-                        primary: "#4e73df",
-                        secondary: "#36b9cc",
-                        titleColor: "black",
-                        titleColorActive: "black",
-                      }}
-                      mode="VERTICAL_ALTERNATING"
-                      hideControls
-                      cardHeight={"20px"}
-                    />
-                  </div>
+                  {items.length > 0 && (
+                    <div style={{ height: "950px" }}>
+                      {console.log(items)}
+                      <Chrono
+                        items={items}
+                        theme={{
+                          primary: "#4e73df",
+                          secondary: "#36b9cc",
+                          titleColor: "black",
+                          titleColorActive: "black",
+                        }}
+                        mode="VERTICAL_ALTERNATING"
+                        hideControls
+                        cardHeight={"20px"}
+                      />
+                    </div>
+                  )}
+                  {items.length == 0 && <p>Vaciooo</p>}
                 </div>
                 <div className="col-3">
                   <h1>0,00</h1>
@@ -819,38 +866,13 @@ const Resultado = () => {
                             ></button>
                           </div>
                           <div className="modal-body">
-                            <div className="mb-3">Tipo anualización: ...</div>
-                            <div className="mb-3">Linea Base: ...</div>
                             <div className="mb-3">
-                              <label htmlFor="" className="form-label">
-                                2020
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
+                              Tipo anualización: {localStorage.getItem("tipo")}
                             </div>
                             <div className="mb-3">
-                              <label htmlFor="" className="form-label">
-                                2021
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
+                              Linea Base: {localStorage.getItem("linea")}
                             </div>
-                            <div className="mb-3">
-                              <label htmlFor="" className="form-label">
-                                2022
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
-                            </div>
+                            {renderYears()}
                             <div className="mb-3">
                               <label htmlFor="" className="form-label">
                                 Meta total Resultado
