@@ -11,6 +11,9 @@ const Resultado = () => {
   const [fechaInicio, setFechaInicio] = useState(0);
   const [fechaFin, setFechaFin] = useState(0);
   const [items, setItems] = useState([]);
+  const [values, setValues] = useState([]);
+  const [meta, setMeta] = useState([]);
+  const [totalMeta, setTotalMeta] = useState("0.00");
   useEffect(() => {
     fetch("http://127.0.0.1:3900/api/sector/listarTodos")
       .then((response) => {
@@ -59,25 +62,69 @@ const Resultado = () => {
       .then((doc) => {
         setEnfoque(doc);
       });
-    const generarItems = () => {
-      if (fechaInicio && fechaFin) {
-        let resta = fechaFin - fechaInicio;
-        const generatedItems = [];
-        for (let i = 0; i <= resta; i++) {
-          const year = parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
-          generatedItems.push({
-            title: year.toString(), // Establece el año como título
-            cardDetailedText: "000", // Establece el valor por defecto "000"
-          });
+    fetch(
+      `http://127.0.0.1:3900/api/resultadoHasMeta/listarMeta/` +
+        localStorage.getItem("idPolitica")
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setMeta(doc.resultado);
+        if (doc.resultado.length > 0) {
+          const generarItems = () => {
+            if (fechaInicio && fechaFin) {
+              let resta = fechaFin - fechaInicio;
+              const generatedItems = [];
+              for (let i = 0; i <= resta; i++) {
+                const year = parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
+                generatedItems.push({
+                  title: year.toString(), // Establece el año como título
+                  cardDetailedText: doc.resultado[i].meta, // Establece el valor por defecto "000"
+                });
+              }
+              return generatedItems;
+            }
+            return [];
+          };
+          const itemsGenerated = generarItems();
+          setItems(itemsGenerated);
+          setTotalMeta(doc.resultado[doc.resultado.length - 1].meta);
+        } else {
+          const generarItems = () => {
+            if (fechaInicio && fechaFin) {
+              let resta = fechaFin - fechaInicio;
+              const generatedItems = [];
+              for (let i = 0; i <= resta; i++) {
+                const year = parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
+                generatedItems.push({
+                  title: year.toString(), // Establece el año como título
+                  cardDetailedText: "000", // Establece el valor por defecto "000"
+                });
+              }
+              return generatedItems;
+            }
+            return [];
+          };
+          const itemsGenerated = generarItems();
+          setItems(itemsGenerated);
+          setTotalMeta("000");
         }
-        return generatedItems;
-      }
-      return [];
-    };
-    const itemsGenerated = generarItems();
-    setItems(itemsGenerated);
+      });
   }, [fechaInicio, fechaFin]);
+
   const renderYears = () => {
+    const updateTotalMeta = (index, value) => {
+      const newValues = [...values];
+      newValues[index] = value;
+      setValues(newValues);
+
+      // Solo actualiza totalMeta si es el último input modificado
+      if (index === items.length - 1) {
+        setTotalMeta(value);
+      }
+    };
+
     return items.map((item, index) => (
       <div key={index} className="mb-3">
         <label htmlFor="" className="form-label">
@@ -87,6 +134,7 @@ const Resultado = () => {
           type="text"
           className="form-control"
           defaultValue={item.cardDetailedText}
+          onChange={(e) => updateTotalMeta(index, e.target.value)}
         />
       </div>
     ));
@@ -809,7 +857,7 @@ const Resultado = () => {
                 <div className="col-9 w-100">
                   {items.length > 0 && (
                     <div style={{ height: "950px" }}>
-                      {console.log(items)}
+                      {/* {console.log(items)} */}
                       <Chrono
                         items={items}
                         theme={{
@@ -827,7 +875,7 @@ const Resultado = () => {
                   {items.length == 0 && <p>Vaciooo</p>}
                 </div>
                 <div className="col-3">
-                  <h1>0,00</h1>
+                  <h1>{totalMeta}</h1>
                   <h5>Meta Total del resultado</h5>
                   <div className="row">
                     <div className="col">
@@ -853,51 +901,120 @@ const Resultado = () => {
                         className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
                         role="document"
                       >
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <h5 className="modal-title" id="modalTitleId">
-                              Registrar Metas
-                            </h5>
-                            <button
-                              type="button"
-                              className="btn-close"
-                              data-bs-dismiss="modal"
-                              aria-label="Close"
-                            ></button>
-                          </div>
-                          <div className="modal-body">
-                            <div className="mb-3">
-                              Tipo anualización: {localStorage.getItem("tipo")}
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            let total = document.querySelector("#totalMeta");
+                            if (total.value.length > 0) {
+                              let j = 0;
+                              for (let i = fechaInicio; i <= fechaFin; i++) {
+                                fetch(
+                                  "http://127.0.0.1:3900/api/resultadoHasMeta/agregar",
+                                  {
+                                    method: "POST",
+                                    headers: {
+                                      "Content-Type":
+                                        "application/x-www-form-urlencoded",
+                                    },
+                                    body: `year=${i}&meta=${
+                                      values[j]
+                                    }&meta_total=${
+                                      total.value
+                                    }&id_politica=${localStorage.getItem(
+                                      "idPolitica"
+                                    )}`,
+                                  }
+                                )
+                                  .then((response) => {
+                                    return response.json();
+                                  })
+                                  .then((res) => {
+                                    fetch(
+                                      `http://127.0.0.1:3900/api/resultadoHasMeta/listarMeta/` +
+                                        localStorage.getItem("idPolitica")
+                                    )
+                                      .then((response) => {
+                                        return response.json();
+                                      })
+                                      .then((doc) => {
+                                        const generarItems = () => {
+                                          if (fechaInicio && fechaFin) {
+                                            let resta = fechaFin - fechaInicio;
+                                            const generatedItems = [];
+                                            for (let i = 0; i <= resta; i++) {
+                                              const year =
+                                                parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
+                                              generatedItems.push({
+                                                title: year.toString(), // Establece el año como título
+                                                cardDetailedText:
+                                                  doc.resultado[i].meta, // Establece el valor por defecto "000"
+                                              });
+                                            }
+                                            return generatedItems;
+                                          }
+                                          return [];
+                                        };
+                                        const itemsGenerated = generarItems();
+                                        setItems(itemsGenerated);
+                                        renderYears();
+                                      });
+                                  });
+                                j++;
+                              }
+                            } else {
+                              alert("No hay datos");
+                            }
+                          }}
+                        >
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h5 className="modal-title" id="modalTitleId">
+                                Registrar Metas
+                              </h5>
+                              <button
+                                type="button"
+                                className="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              ></button>
                             </div>
-                            <div className="mb-3">
-                              Linea Base: {localStorage.getItem("linea")}
+                            <div className="modal-body">
+                              <div className="mb-3">
+                                Tipo anualización:{" "}
+                                {localStorage.getItem("tipo")}
+                              </div>
+                              <div className="mb-3">
+                                Linea Base: {localStorage.getItem("linea")}
+                              </div>
+                              {renderYears()}
+                              <div className="mb-3">
+                                <label htmlFor="" className="form-label">
+                                  Meta total Resultado
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="0,00"
+                                  value={totalMeta}
+                                  disabled
+                                  id="totalMeta"
+                                />
+                              </div>
                             </div>
-                            {renderYears()}
-                            <div className="mb-3">
-                              <label htmlFor="" className="form-label">
-                                Meta total Resultado
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                                disabled
-                              />
+                            <div className="modal-footer">
+                              <button
+                                type="button"
+                                className="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                              >
+                                Cancelar
+                              </button>
+                              <button type="submit" className="btn btn-primary">
+                                Guardar
+                              </button>
                             </div>
                           </div>
-                          <div className="modal-footer">
-                            <button
-                              type="button"
-                              className="btn btn-secondary"
-                              data-bs-dismiss="modal"
-                            >
-                              Cancelar
-                            </button>
-                            <button type="button" className="btn btn-primary">
-                              Guardar
-                            </button>
-                          </div>
-                        </div>
+                        </form>
                       </div>
                     </div>
                   </div>

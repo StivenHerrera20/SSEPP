@@ -158,7 +158,11 @@ const TablaPlanAccion = ({ controlPD, setControlPD }) => {
                             let nombre =
                               e.target.parentElement.parentElement.children[3]
                                 .textContent;
+                            let idPolitica =
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent;
                             localStorage.setItem("nombre", nombre);
+                            localStorage.setItem("idPolitica", idPolitica);
                             setControlPD(1);
                           }}
                         ></button>

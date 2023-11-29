@@ -7,5 +7,11 @@ router.post("/agregar", async (req, res) => {
     mensaje: "Agregado Correctamente",
   });
 });
-
+router.get("/listarMeta/:id_politica", async (req, res) => {
+  let options = {
+    where: { id_politica: req.params.id_politica },
+  };
+  const { count, rows } = await resultadoHasMeta.findAndCountAll(options);
+  res.json({ resultado: rows });
+});
 module.exports = router;
