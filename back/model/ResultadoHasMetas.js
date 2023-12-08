@@ -1,4 +1,4 @@
-const Politica = require("./PoliticasPublicas");
+const Politica = require("./politicaHasObjetivoEspecifico");
 module.exports = (sequelize, type) => {
   return sequelize.define(
     "resultado_has_metas",
@@ -21,7 +21,7 @@ module.exports = (sequelize, type) => {
         type: type.STRING,
         allowNull: false,
       },
-      id_politica: {
+      id_objetivo: {
         type: type.INTEGER,
         allowNull: false,
         references: {

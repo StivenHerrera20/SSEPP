@@ -23,41 +23,15 @@ router.put("/editar/:id", async (req, res) => {
   });
 });
 router.get("/listar", async (req, res) => {
-  const busqueda = await sequelize.query(
-    "select max(id) as max from politica_publica",
-    {
-      type: QueryTypes.SELECT,
-    }
-  );
   const { page = 0, size = 5 } = req.query;
   let options = {
     limit: +size,
     offset: +page * +size,
-    where: { id_politica: busqueda[0].max },
   };
   const { count, rows } = await resultadoDatosGenerales.findAndCountAll(
     options
   );
   res.json({ total: count, desarrollo: rows, fila: size, page: page });
-});
-router.get("/listarEscrito", async (req, res) => {
-  const busquedaId = await sequelize.query(
-    "select max(id) as max from politica_publica",
-    {
-      type: QueryTypes.SELECT,
-    }
-  );
-  console.log(req.query.Nombre);
-  const busqueda = await sequelize.query(
-    "select * from politica_publica_has_objetivo_especifico where objetivo like '%" +
-      req.query.Nombre +
-      "%' AND id_politica=" +
-      busquedaId[0].max,
-    {
-      type: QueryTypes.SELECT,
-    }
-  );
-  res.json({ resultado: busqueda });
 });
 router.delete("/eliminar/:id", async (req, res) => {
   await resultadoDatosGenerales.destroy({
@@ -68,10 +42,10 @@ router.delete("/eliminar/:id", async (req, res) => {
     mensaje: "Eliminado correctamente",
   });
 });
-router.get("/listarTodos/:id", async (req, res) => {
-  const unidad = await resultadoDatosGenerales.findAll({
-    where: { id_politica: req.params.id },
+router.get("/listarTodos/:id_objetivo", async (req, res) => {
+  const doc = await resultadoDatosGenerales.findAndCountAll({
+    where: { id_objetivo: req.params.id_objetivo },
   });
-  res.json(unidad);
+  res.json({ resultado: doc });
 });
 module.exports = router;

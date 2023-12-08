@@ -31,6 +31,11 @@ const productoDatosGeneralesHasEnfoquesRouter = require("./api/productosDatosGen
 const productoDatosGeneralesHasObjetivosRouter = require("./api/productoDatosGeneralesHasObjetivos");
 const productoIndicadorRouter = require("./api/productoIndicador");
 const resultadoHasMetaRouter = require("./api/resultadoHasMeta");
+const productoHasMetaRouter = require("./api/prodcuctoHasMeta");
+const productoHasCostoRouter = require("./api/productoHasCosto");
+const productoCostoHasFuenteRouter = require("./api/productoCostoHasFuentes");
+const fichaTecnicaInformacionRouter = require("./api/fichaTecnicaInformacion");
+const fichaTecnicaMedicionRouter = require("./api/fichaTecnicaMedicion");
 router.use("/documentosAsociados", apiDocumentosAsociadosRouter);
 router.use("/documentosDeAdopcion", apiDocumentosDeAdopcionRouter);
 router.use("/enfoqueNivelCuatro", enfoqueNivelCuatroRouter);
@@ -59,6 +64,11 @@ router.use("/resultadoIndicador", resultadoIndicadorRouter);
 router.use("/productoDatosGenerales", productoDatosGeneralesRouter);
 router.use("/productoIndicador", productoIndicadorRouter);
 router.use("/resultadoHasMeta", resultadoHasMetaRouter);
+router.use("/prodcuctoHasMeta", productoHasMetaRouter);
+router.use("/productoHasCosto", productoHasCostoRouter);
+router.use("/productoCostoHasFuentes", productoCostoHasFuenteRouter);
+router.use("/fichaTecnicaInformacion", fichaTecnicaInformacionRouter);
+router.use("/fichaTecnicaMedicion", fichaTecnicaMedicionRouter);
 router.use(
   "/productoDatosGeneralesHasObjetivos",
   productoDatosGeneralesHasObjetivosRouter

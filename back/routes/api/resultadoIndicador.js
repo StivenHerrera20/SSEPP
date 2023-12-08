@@ -7,4 +7,13 @@ router.post("/agregar", async (req, res) => {
     mensaje: "Agregado Correctamente",
   });
 });
+router.get("/listar", async (req, res) => {
+  const { page = 0, size = 5 } = req.query;
+  let options = {
+    limit: +size,
+    offset: +page * +size,
+  };
+  const { count, rows } = await resultadoIndicador.findAndCountAll(options);
+  res.json({ total: count, desarrollo: rows, fila: size, page: page });
+});
 module.exports = router;

@@ -37,6 +37,19 @@ module.exports = (sequelize, type) => {
           key: "id",
         },
       },
+      politica: {
+        type: type.STRING,
+        allowNull: false,
+      },
+      objetivo: {
+        type: type.STRING,
+        allowNull: false,
+      },
+      estado: {
+        type: type.STRING,
+        allowNull: false,
+        defaultValue: "Incompleto",
+      },
     },
     {
       timestamps: false, // Desactiva la funcionalidad de timestamps

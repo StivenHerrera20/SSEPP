@@ -13,5 +13,19 @@ router.post("/agregar", async (req, res) => {
     mensaje: "Agregado Correctamente",
   });
 });
-
+router.get("/listar", async (req, res) => {
+  const { page = 0, size = 5 } = req.query;
+  let options = {
+    limit: +size,
+    offset: +page * +size,
+  };
+  const { count, rows } = await productoDatosGenerales.findAndCountAll(options);
+  res.json({ total: count, desarrollo: rows, fila: size, page: page });
+});
+router.get("/listarTodos/:id_objetivo", async (req, res) => {
+  const doc = await productoDatosGenerales.findAndCountAll({
+    where: { id_objetivo: req.params.id_objetivo },
+  });
+  res.json({ resultado: doc });
+});
 module.exports = router;

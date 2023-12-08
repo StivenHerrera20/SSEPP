@@ -22,13 +22,106 @@ const Producto = () => {
   const [objetivosCheckedItems, setObjetivosCheckedItems] = useState([]);
   const [Plan, setPlan] = useState([]);
   const [Indicador, setIndicador] = useState([]);
+  const [fechaInicio, setFechaInicio] = useState(0);
+  const [fechaFin, setFechaFin] = useState(0);
+  const [items, setItems] = useState([]);
+  const [values, setValues] = useState([]);
+  const [meta, setMeta] = useState([]);
+  const [totalMeta, setTotalMeta] = useState("0.00");
+  const [totalSuma, setTotalSuma] = useState(0);
+  const [data, setData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Estimado",
+        data: [],
+        responsive: true,
+        backgroundColor: "aqua",
+        borderColor: "black",
+        borderWidth: 1,
+      },
+      {
+        label: "Disponible",
+        data: [],
+        backgroundColor: "green",
+        borderColor: "black",
+        borderWidth: 1,
+      },
+    ],
+  });
+  const [config, setConfig] = useState({
+    type: "bar",
+    data: data,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+
   useEffect(() => {
+    fetch(
+      `http://127.0.0.1:3900/api/productoHasCosto/listarCosto/${localStorage.getItem(
+        "idObjetivo"
+      )}`
+    )
+      .then((response) => response.json())
+      .then((apiData) => {
+        let years = [];
+        let dataUno = [];
+        let dataDos = [];
+        for (let i = 0; i < apiData.resultado.length; i++) {
+          years.push(apiData.resultado[i].year);
+          dataUno.push(apiData.resultado[i].estimado);
+          dataDos.push(apiData.resultado[i].disponible);
+        }
+        console.log(dataUno);
+        let datos = {
+          labels: years,
+          datasets: [
+            {
+              label: "Estimado",
+              data: dataUno,
+              responsive: true,
+              backgroundColor: "aqua",
+              borderColor: "black",
+              borderWidth: 1,
+            },
+            {
+              label: "Disponible",
+              data: dataDos,
+              backgroundColor: "green",
+              borderColor: "black",
+              borderWidth: 1,
+            },
+          ],
+        };
+        setData(datos);
+      })
+      .catch((error) => {
+        console.error("Error al obtener datos de la API:", error);
+      });
+    // Este efecto se ejecuta solo una vez al montar el componente
+    // Aquí puedes usar 'data' para lo que necesites, como mostrarlo en gráficos
+    /*  console.log(data); */
     fetch("http://127.0.0.1:3900/api/planDeDesarrollo/listarTodos")
       .then((response) => {
         return response.json();
       })
       .then((doc) => {
         setIndicador(doc);
+      });
+    fetch(
+      "http://127.0.0.1:3900/api/productoHasCosto/traerTotal/" +
+        localStorage.getItem("idObjetivo")
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setTotalSuma(doc.resultado[0].total);
       });
     fetch("http://127.0.0.1:3900/api/plan/listarTodos")
       .then((response) => {
@@ -65,7 +158,312 @@ const Producto = () => {
       .then((doc) => {
         setObjetivos(doc);
       });
-  }, []);
+    fetch(
+      `http://127.0.0.1:3900/api/politicasPublicas/traerFechas/?nombre=${localStorage.getItem(
+        "nombre"
+      )}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setFechaInicio(doc.resultado[0].fecha_inicio.slice(0, 4));
+        setFechaFin(doc.resultado[0].fecha_fin.slice(0, 4));
+      });
+    fetch(
+      `http://127.0.0.1:3900/api/prodcuctoHasMeta/listarMeta/` +
+        localStorage.getItem("idObjetivo")
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setMeta(doc.resultado);
+        if (doc.resultado.length > 0) {
+          const generarItems = () => {
+            if (fechaInicio && fechaFin) {
+              let resta = fechaFin - fechaInicio;
+              const generatedItems = [];
+              for (let i = 0; i <= resta; i++) {
+                const year = parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
+                generatedItems.push({
+                  title: year.toString(), // Establece el año como título
+                  cardDetailedText: doc.resultado[i].meta, // Establece el valor por defecto "000"
+                });
+              }
+              return generatedItems;
+            }
+            return [];
+          };
+          const itemsGenerated = generarItems();
+          setItems(itemsGenerated);
+          setTotalMeta(doc.resultado[doc.resultado.length - 1].meta);
+        } else {
+          const generarItems = () => {
+            if (fechaInicio && fechaFin) {
+              let resta = fechaFin - fechaInicio;
+              const generatedItems = [];
+              for (let i = 0; i <= resta; i++) {
+                const year = parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
+                generatedItems.push({
+                  title: year.toString(), // Establece el año como título
+                  cardDetailedText: "000", // Establece el valor por defecto "000"
+                });
+              }
+              return generatedItems;
+            }
+            return [];
+          };
+          const itemsGenerated = generarItems();
+          setItems(itemsGenerated);
+          setTotalMeta("000");
+        }
+      });
+  }, [fechaInicio, fechaFin]);
+  useEffect(() => {
+    // Actualiza 'config' solo cuando 'data' cambie
+    setConfig({
+      ...config,
+      data: data,
+    });
+  }, [data]);
+  const renderYears = () => {
+    const updateTotalMeta = (index, value) => {
+      const newValues = [...values];
+      newValues[index] = value;
+      setValues(newValues);
+
+      // Solo actualiza totalMeta si es el último input modificado
+      if (index === items.length - 1) {
+        setTotalMeta(value);
+      }
+    };
+
+    return items.map((item, index) => (
+      <div key={index} className="mb-3">
+        <label htmlFor="" className="form-label">
+          {item.title}
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          defaultValue={item.cardDetailedText}
+          onChange={(e) => updateTotalMeta(index, e.target.value)}
+        />
+      </div>
+    ));
+  };
+  let yearsCostos = [];
+  const total = (fechaInicio, fechaFin) => {
+    fechaInicio = parseInt(fechaInicio);
+    fechaFin = parseInt(fechaFin);
+    for (let i = fechaInicio; i <= fechaFin; i++) {
+      yearsCostos.push(i);
+    }
+  };
+
+  const YearCostoItem = ({ item, index, guardarDatos }) => {
+    const [costoEstimado, setCostoEstimado] = useState(0);
+    const [recursoDisponible, setRecursoDisponible] = useState(0);
+    const [fuentesSeleccionadas, setFuentesSeleccionadas] = useState([]);
+    const [fuentesDisponibles, setFuentesDisponibles] = useState([
+      "SGP - SISTEMA GENERAL DE PARTICIPACIONES",
+      "RP - RECURSOS PROPIOS",
+      "PAE - PLAN DE ALIMENTACION ESCOLAR",
+      "SGR REGALÍAS",
+      "COOPERACIÓN",
+      "DONACIÓN",
+      "CRÉDITO",
+      "OTROS",
+    ]);
+    const handleGuardar = () => {
+      guardarDatos(
+        item,
+        costoEstimado,
+        recursoDisponible,
+        fuentesSeleccionadas
+      );
+    };
+
+    const handleClickFuenteDisponible = (fuente) => {
+      const newFuentesDisponibles = fuentesDisponibles.filter(
+        (item) => item !== fuente
+      );
+      setFuentesDisponibles(newFuentesDisponibles);
+      setFuentesSeleccionadas([...fuentesSeleccionadas, fuente]);
+    };
+
+    const handleClickFuenteSeleccionada = (fuente) => {
+      const newFuentesSeleccionadas = fuentesSeleccionadas.filter(
+        (item) => item !== fuente
+      );
+      setFuentesSeleccionadas(newFuentesSeleccionadas);
+      setFuentesDisponibles([...fuentesDisponibles, fuente]);
+    };
+
+    return (
+      <div className="row mb-3 mt-3" key={index}>
+        <div className="col-1">
+          <h5>Año</h5>
+          <b>
+            <h3>{item}</h3>
+          </b>
+        </div>
+        <div className="col-2">
+          <label htmlFor={`costoEstimado${index}`} className="form-label">
+            Costo Estimado
+          </label>
+          <div className="input-group mb-3">
+            <span className="input-group-text">$</span>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="0,00"
+              id={`costoEstimado${index}`}
+              value={costoEstimado}
+              onChange={(e) => setCostoEstimado(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="col-2">
+          <label for="exampleInputPassword1" className="form-label">
+            Recurso Disponible
+          </label>
+          <div className="input-group mb-3">
+            <span className="input-group-text">$</span>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="0,00"
+              value={recursoDisponible}
+              onChange={(e) => setRecursoDisponible(e.target.value)}
+            />
+          </div>
+        </div>
+        {/* Resto de tu estructura para mostrar los datos */}
+        <div className="col-3">
+          <label for="exampleInputPassword1" className="form-label">
+            Fuentes Disponibles
+          </label>
+          <div
+            className="card card-body"
+            style={{
+              height: "90px",
+              scrollbarWidth: "none",
+              overflow: "auto",
+              overflowX: "hidden",
+            }}
+          >
+            {fuentesDisponibles.map((fuente, idx) => (
+              <button
+                key={idx}
+                className="btn my-0 py-0 text-dark"
+                onClick={() => handleClickFuenteDisponible(fuente)}
+              >
+                {fuente}
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* Resto de tu estructura para mostrar los datos */}
+        <div className="col-3">
+          <label for="exampleInputPassword1" className="form-label">
+            Fuentes Seleccionadas
+          </label>
+          <div
+            className="card card-body"
+            style={{
+              height: "90px",
+              scrollbarWidth: "none",
+              overflow: "auto",
+              overflowX: "hidden",
+            }}
+          >
+            {fuentesSeleccionadas.map((fuente, idx) => (
+              <button
+                key={idx}
+                className="btn my-0 py-0 text-dark"
+                onClick={() => handleClickFuenteSeleccionada(fuente)}
+              >
+                {fuente}
+              </button>
+            ))}
+          </div>
+        </div>
+        <button onClick={handleGuardar} className="btn btn-primary">
+          Guardar
+        </button>
+      </div>
+    );
+  };
+  const [dataCostos, setDataCostos] = useState({});
+
+  const handleGuardar = async () => {
+    try {
+      for (const year in dataCostos) {
+        const costoEstimado = dataCostos[year].costoEstimado;
+        const recursoDisponible = dataCostos[year].recursoDisponible;
+        const fuentesSeleccionadas = dataCostos[year].fuentesSeleccionadas;
+
+        const responseCosto = await fetch(
+          "http://127.0.0.1:3900/api/productoHasCosto/agregar",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `year=${year}&estimado=${costoEstimado}&disponible=${recursoDisponible}&id_objetivo=${localStorage.getItem(
+              "idObjetivo"
+            )}`,
+          }
+        );
+
+        const dataCosto = await responseCosto.json();
+        const idCosto = dataCosto.doc[0].max;
+
+        for (let i = 0; i < fuentesSeleccionadas.length; i++) {
+          const responseFuente = await fetch(
+            "http://127.0.0.1:3900/api/productoCostoHasFuentes/agregar",
+            {
+              method: "POST",
+              body: `fuente=${fuentesSeleccionadas[i]}&id_producto_has_costo=${idCosto}`,
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            }
+          );
+
+          const dataFuente = await responseFuente.json();
+          // Maneja la respuesta del servidor para la fuente si es necesario
+        }
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const guardarDatos = (
+    year,
+    costoEstimado,
+    recursoDisponible,
+    fuentesSeleccionadas
+  ) => {
+    setDataCostos((prevData) => ({
+      ...prevData,
+      [year]: { costoEstimado, recursoDisponible, fuentesSeleccionadas },
+    }));
+  };
+  const renderYearsCostos = () => {
+    total(fechaInicio, fechaFin);
+    return yearsCostos.map((item, index) => (
+      <YearCostoItem
+        key={index}
+        item={item}
+        index={index}
+        guardarDatos={guardarDatos}
+      />
+    ));
+  };
   const handleEnfoqueCheckboxChange = (event) => {
     const { value } = event.target;
     const isChecked = event.target.checked;
@@ -142,7 +540,7 @@ const Producto = () => {
         });
     }
   };
-  let items = [
+  /* let items = [
     {
       title: "2020",
       cardDetailedText: "000",
@@ -167,14 +565,14 @@ const Producto = () => {
       title: "2020",
       cardDetailedText: "000",
     },
-  ];
+  ]; */
 
-  const data = {
-    labels: ["2020", "2021", "2022"],
+  /* const data = {
+    labels: [2015, 2016, 2017, 2018, 2019],
     datasets: [
       {
         label: "Estimado",
-        data: [4, 3, 7],
+        data: [1, 2, 3, 4, 5],
         responsive: true,
         backgroundColor: "aqua",
         borderColor: "black",
@@ -182,25 +580,14 @@ const Producto = () => {
       },
       {
         label: "Disponible",
-        data: [4, 3, 7],
+        data: [1, 2, 3, 4, 5],
         backgroundColor: "green",
         borderColor: "black",
         borderWidth: 1,
       },
     ],
-  };
+  }; */
 
-  const config = {
-    type: "bar",
-    data: data,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  };
   return (
     <>
       <div className="card card-body">
@@ -306,7 +693,6 @@ const Producto = () => {
                       })
                       .then((res) => {
                         let idResultado = res.doc[0].max;
-                        console.log(importancia.value);
                         fetch(
                           "http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/editar/" +
                             localStorage.getItem("idObjetivo"),
@@ -345,8 +731,6 @@ const Producto = () => {
                             });
                         } */
                         enfoqueCheckedItems.forEach((value) => {
-                          console.log(value);
-                          console.log(idResultado);
                           fetch(
                             `http://127.0.0.1:3900/api/productoDatosGeneralesHasEnfoques/agregar`,
                             {
@@ -367,8 +751,6 @@ const Producto = () => {
                             });
                         });
                         objetivosCheckedItems.forEach((value) => {
-                          console.log(value);
-                          console.log(idResultado);
                           fetch(
                             `http://127.0.0.1:3900/api/productoDatosGeneralesHasObjetivos/agregar`,
                             {
@@ -663,7 +1045,9 @@ const Producto = () => {
                               fuenteIndicador.value
                             }&id_objetivo=${localStorage.getItem(
                               "idObjetivo"
-                            )}`,
+                            )}&politica=${localStorage.getItem(
+                              "nombre"
+                            )}&objetivo=${localStorage.getItem("objetivo")}`,
                           }
                         )
                           .then((response) => {
@@ -987,37 +1371,41 @@ const Producto = () => {
             >
               <div className="row mt-3 mb-3">
                 <div className="col-9 w-100">
-                  <div style={{ height: "950px" }}>
-                    <Chrono
-                      items={items}
-                      theme={{
-                        primary: "#4e73df",
-                        secondary: "#36b9cc",
-                        titleColor: "black",
-                        titleColorActive: "black",
-                      }}
-                      mode="VERTICAL_ALTERNATING"
-                      hideControls
-                      cardHeight={"20px"}
-                    />
-                  </div>
+                  {items.length > 0 && (
+                    <div style={{ height: "950px" }}>
+                      {/* {console.log(items)} */}
+                      <Chrono
+                        items={items}
+                        theme={{
+                          primary: "#4e73df",
+                          secondary: "#36b9cc",
+                          titleColor: "black",
+                          titleColorActive: "black",
+                        }}
+                        mode="VERTICAL_ALTERNATING"
+                        hideControls
+                        cardHeight={"20px"}
+                      />
+                    </div>
+                  )}
+                  {items.length == 0 && <p>Vaciooo</p>}
                 </div>
                 <div className="col-3">
-                  <h1>0,00</h1>
-                  <h5>Meta Total del Producto</h5>
+                  <h1>{totalMeta}</h1>
+                  <h5>Meta Total del resultado</h5>
                   <div className="row">
                     <div className="col">
                       <button
                         type="button"
                         className="btn btn-primary bi bi-pencil"
                         data-bs-toggle="modal"
-                        data-bs-target="#metaProducto"
+                        data-bs-target="#modalId"
                       ></button>
                     </div>
 
                     <div
                       className="modal fade"
-                      id="metaProducto"
+                      id="modalId"
                       tabIndex="-1"
                       data-bs-backdrop="static"
                       data-bs-keyboard="false"
@@ -1029,76 +1417,120 @@ const Producto = () => {
                         className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
                         role="document"
                       >
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <h5 className="modal-title" id="modalTitleId">
-                              Registrar Metas
-                            </h5>
-                            <button
-                              type="button"
-                              className="btn-close"
-                              data-bs-dismiss="modal"
-                              aria-label="Close"
-                            ></button>
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            let total = document.querySelector("#totalMeta");
+                            if (total.value.length > 0) {
+                              let j = 0;
+                              for (let i = fechaInicio; i <= fechaFin; i++) {
+                                fetch(
+                                  "http://127.0.0.1:3900/api/prodcuctoHasMeta/agregar",
+                                  {
+                                    method: "POST",
+                                    headers: {
+                                      "Content-Type":
+                                        "application/x-www-form-urlencoded",
+                                    },
+                                    body: `year=${i}&meta=${
+                                      values[j]
+                                    }&meta_total=${
+                                      total.value
+                                    }&id_objetivo=${localStorage.getItem(
+                                      "idObjetivo"
+                                    )}`,
+                                  }
+                                )
+                                  .then((response) => {
+                                    return response.json();
+                                  })
+                                  .then((res) => {
+                                    fetch(
+                                      `http://127.0.0.1:3900/api/prodcuctoHasMeta/listarMeta/` +
+                                        localStorage.getItem("idObjetivo")
+                                    )
+                                      .then((response) => {
+                                        return response.json();
+                                      })
+                                      .then((doc) => {
+                                        const generarItems = () => {
+                                          if (fechaInicio && fechaFin) {
+                                            let resta = fechaFin - fechaInicio;
+                                            const generatedItems = [];
+                                            for (let i = 0; i <= resta; i++) {
+                                              const year =
+                                                parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
+                                              generatedItems.push({
+                                                title: year.toString(), // Establece el año como título
+                                                cardDetailedText:
+                                                  doc.resultado[i].meta, // Establece el valor por defecto "000"
+                                              });
+                                            }
+                                            return generatedItems;
+                                          }
+                                          return [];
+                                        };
+                                        const itemsGenerated = generarItems();
+                                        setItems(itemsGenerated);
+                                        renderYears();
+                                      });
+                                  });
+                                j++;
+                              }
+                            } else {
+                              alert("No hay datos");
+                            }
+                          }}
+                        >
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h5 className="modal-title" id="modalTitleId">
+                                Registrar Metas
+                              </h5>
+                              <button
+                                type="button"
+                                className="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              ></button>
+                            </div>
+                            <div className="modal-body">
+                              <div className="mb-3">
+                                Tipo anualización:{" "}
+                                {localStorage.getItem("tipo")}
+                              </div>
+                              <div className="mb-3">
+                                Linea Base: {localStorage.getItem("linea")}
+                              </div>
+                              {renderYears()}
+                              <div className="mb-3">
+                                <label htmlFor="" className="form-label">
+                                  Meta total Resultado
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="0,00"
+                                  value={totalMeta}
+                                  disabled
+                                  id="totalMeta"
+                                />
+                              </div>
+                            </div>
+                            <div className="modal-footer">
+                              <button
+                                type="button"
+                                className="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                              >
+                                Cancelar
+                              </button>
+                              <button type="submit" className="btn btn-primary">
+                                Guardar
+                              </button>
+                            </div>
                           </div>
-                          <div className="modal-body">
-                            <div className="mb-3">Tipo anualización: ...</div>
-                            <div className="mb-3">Linea Base: ...</div>
-                            <div className="mb-3">
-                              <label htmlFor="" className="form-label">
-                                2020
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
-                            </div>
-                            <div className="mb-3">
-                              <label htmlFor="" className="form-label">
-                                2021
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
-                            </div>
-                            <div className="mb-3">
-                              <label htmlFor="" className="form-label">
-                                2022
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
-                            </div>
-                            <div className="mb-3">
-                              <label htmlFor="" className="form-label">
-                                Meta total Producto
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                                disabled
-                              />
-                            </div>
-                          </div>
-                          <div className="modal-footer">
-                            <button
-                              type="button"
-                              className="btn btn-secondary"
-                              data-bs-dismiss="modal"
-                            >
-                              Cancelar
-                            </button>
-                            <button type="button" className="btn btn-primary">
-                              Guardar
-                            </button>
-                          </div>
-                        </div>
+                        </form>
                       </div>
                     </div>
                   </div>
@@ -1111,7 +1543,7 @@ const Producto = () => {
               role="tabpanel"
               aria-labelledby="costos-tab"
             >
-              <h1>0,00</h1>
+              <h1>{totalSuma}</h1>
               <h5>
                 Costo Total Estimado del Producto, Valores en Millones de Pesos
               </h5>
@@ -1124,13 +1556,16 @@ const Producto = () => {
                     data-bs-target="#costosProducto"
                   ></button>
                 </div>
-                <div className="row">
-                  <div className="col">
-                    {/*Inicio grafica*/}
-                    <Bar data={data} options={config} />
-                    {/*Fin grafica*/}
+                {
+                  <div className="row">
+                    <div className="col">
+                      {/*Inicio grafica*/}
+                      {/* {alert(data)} */}
+                      <Bar data={data} options={config} />
+                      {/*Fin grafica*/}
+                    </div>
                   </div>
-                </div>
+                }
                 {/* Inicio Modal de los costos */}
                 <div
                   className="modal fade"
@@ -1162,118 +1597,8 @@ const Producto = () => {
                         <div className="row mb-3">
                           <b>Valores en Millones de Pesos</b>
                         </div>
-                        <div className="row mb-3 ">
-                          <div className="col-6">
-                            <div className="row">
-                              <div className="col d-flex justify-content-center ">
-                                <h5>Costo total estimado</h5>
-                              </div>
-                            </div>
-                            <div className="row">
-                              <div className="col-8 d-flex justify-content-center ms-3">
-                                <span className="">0,00</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-6 ">
-                            {" "}
-                            <h5>Recurso total disponible</h5>
-                            <span className="text-center">0,00</span>
-                          </div>
-                        </div>
                         <hr className="bg-black mx-0 my-0" />
-                        <div className="row mb-3 mt-3">
-                          {/*Aca va un ciclo que coloque la cantidad de inputs necesarios segun las fechas*/}
-                          <div className="col-1">
-                            <h5>Año</h5>
-                            <b>
-                              <h3>2020</h3>
-                            </b>
-                          </div>
-                          <div className="col-2">
-                            <label
-                              for="exampleInputPassword1"
-                              className="form-label"
-                            >
-                              Costo Estimado
-                            </label>
-                            <div className="input-group mb-3">
-                              <span className="input-group-text">$</span>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-2">
-                            <label
-                              for="exampleInputPassword1"
-                              className="form-label"
-                            >
-                              Recurso Disponible
-                            </label>
-                            <div className="input-group mb-3">
-                              <span className="input-group-text">$</span>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="0,00"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-3">
-                            <label
-                              for="exampleInputPassword1"
-                              className="form-label"
-                            >
-                              Fuentes Disponibles
-                            </label>
-                            <div
-                              className="card card-body"
-                              style={{
-                                height: "90px",
-                                scrollbarWidth: "none",
-                                overflow: "auto",
-                                overflowX: "hidden",
-                              }}
-                            >
-                              <button className="btn my-0 py-0 text-dark">
-                                dasdasdas
-                              </button>
-                              <button className="btn my-0 pd-0 text-dark">
-                                dasdasdas
-                              </button>
-                              <button className="btn my-0 pd-0 text-dark">
-                                dasdasdas
-                              </button>
-                              <button className="btn my-0 pd-0 text-dark">
-                                dasdasdas
-                              </button>
-                              <button className="btn my-0 pd-0 text-dark">
-                                dasdasdas
-                              </button>
-                            </div>
-                          </div>
-                          <div className="col-3">
-                            <label
-                              for="exampleInputPassword1"
-                              className="form-label"
-                            >
-                              Fuentes Disponibles
-                            </label>
-                            <div
-                              className="card card-body"
-                              style={{
-                                height: "90px",
-                                scrollbarWidth: "none",
-                                overflow: "auto",
-                                overflowX: "hidden",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        {/* Incluir este hr dentro del ciclo */}
+                        {renderYearsCostos()}
                         <hr className="bg-black mx-0 my-0" />
                       </div>
                       <div className="modal-footer">
@@ -1284,7 +1609,12 @@ const Producto = () => {
                         >
                           Cancelar
                         </button>
-                        <button type="button" className="btn btn-primary">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          id="enviarDatos"
+                          onClick={handleGuardar}
+                        >
                           Guardar
                         </button>
                       </div>

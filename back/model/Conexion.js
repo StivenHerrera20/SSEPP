@@ -32,6 +32,11 @@ const productoDatosGeneralesHasEnfoquesModel = require("./ProductoDatosGenerales
 const productoDatosGeneralesHasObjetivosModel = require("./ProductoDatosGeneralesHasObjetivos");
 const productoIndicadorModel = require("./ProductoIndicador");
 const resultadoHasMetaModel = require("./ResultadoHasMetas");
+const productoHasMetaModel = require("./ProductoHasMetas");
+const productoHasCostoModel = require("./ProductoHasCosto");
+const productoHasCostoHasFuenteModel = require("./ProductoCostoHasFuentes");
+const fichaTecnicaInformacionModel = require("./FichaTecnicaInformacion");
+const fichaTecnicaMedicionModel = require("./FichaTecnicaMedicion");
 
 // metodo para conectarnos a la bd, usando async -- await funciones asincronicas
 const sequelize = new Sequelize("politicas_publicas", "root", "", {
@@ -66,6 +71,17 @@ const documentosAsociadosPP = documentosAsociadosPPModel(sequelize, Sequelize);
 const resultadoIndicador = resultadoIndicadorModel(sequelize, Sequelize);
 const productoIndicador = productoIndicadorModel(sequelize, Sequelize);
 const resultadoHasMeta = resultadoHasMetaModel(sequelize, Sequelize);
+const productoHasMeta = productoHasMetaModel(sequelize, Sequelize);
+const productoHasCosto = productoHasCostoModel(sequelize, Sequelize);
+const FichaTecnicaMedicion = fichaTecnicaMedicionModel(sequelize, Sequelize);
+const FichaTecnicaInformacion = fichaTecnicaInformacionModel(
+  sequelize,
+  Sequelize
+);
+const ProductoCostoHasFuentes = productoHasCostoHasFuenteModel(
+  sequelize,
+  Sequelize
+);
 const productoDatosGeneralesHasObjetivos =
   productoDatosGeneralesHasObjetivosModel(sequelize, Sequelize);
 const productoDatosGeneralesHasEnfoques =
@@ -121,4 +137,9 @@ module.exports = {
   productoDatosGeneralesHasObjetivos,
   productoIndicador,
   resultadoHasMeta,
+  productoHasMeta,
+  productoHasCosto,
+  ProductoCostoHasFuentes,
+  FichaTecnicaInformacion,
+  FichaTecnicaMedicion,
 };

@@ -64,7 +64,7 @@ const Resultado = () => {
       });
     fetch(
       `http://127.0.0.1:3900/api/resultadoHasMeta/listarMeta/` +
-        localStorage.getItem("idPolitica")
+        localStorage.getItem("idObjetivo")
     )
       .then((response) => {
         return response.json();
@@ -285,7 +285,17 @@ const Resultado = () => {
                         headers: {
                           "Content-Type": "application/x-www-form-urlencoded",
                         },
-                        body: `nombre_resultado=${nombre.value}&importancia_relativa=${importancia.value}&sector_responsable=${sector.value}&entidad_responsable=${entidad.value}&id_objetivo=${id}`,
+                        body: `nombre_resultado=${
+                          nombre.value
+                        }&importancia_relativa=${
+                          importancia.value
+                        }&sector_responsable=${
+                          sector.value
+                        }&entidad_responsable=${
+                          entidad.value
+                        }&id_objetivo=${id}&politica=${localStorage.getItem(
+                          "nombre"
+                        )}&objetivo=${localStorage.getItem("objetivo")}`,
                       }
                     )
                       .then((response) => {
@@ -528,7 +538,9 @@ const Resultado = () => {
                               fuenteIndicador.value
                             }&id_objetivo=${localStorage.getItem(
                               "idObjetivo"
-                            )}`,
+                            )}&politica=${localStorage.getItem(
+                              "nombre"
+                            )}&objetivo=${localStorage.getItem("objetivo")}`,
                           }
                         )
                           .then((response) => {
@@ -920,8 +932,8 @@ const Resultado = () => {
                                       values[j]
                                     }&meta_total=${
                                       total.value
-                                    }&id_politica=${localStorage.getItem(
-                                      "idPolitica"
+                                    }&id_objetivo=${localStorage.getItem(
+                                      "idObjetivo"
                                     )}`,
                                   }
                                 )
@@ -931,7 +943,7 @@ const Resultado = () => {
                                   .then((res) => {
                                     fetch(
                                       `http://127.0.0.1:3900/api/resultadoHasMeta/listarMeta/` +
-                                        localStorage.getItem("idPolitica")
+                                        localStorage.getItem("idObjetivo")
                                     )
                                       .then((response) => {
                                         return response.json();

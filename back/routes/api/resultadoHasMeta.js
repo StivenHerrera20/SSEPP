@@ -7,9 +7,9 @@ router.post("/agregar", async (req, res) => {
     mensaje: "Agregado Correctamente",
   });
 });
-router.get("/listarMeta/:id_politica", async (req, res) => {
+router.get("/listarMeta/:id_objetivo", async (req, res) => {
   let options = {
-    where: { id_politica: req.params.id_politica },
+    where: { id_objetivo: req.params.id_objetivo },
   };
   const { count, rows } = await resultadoHasMeta.findAndCountAll(options);
   res.json({ resultado: rows });

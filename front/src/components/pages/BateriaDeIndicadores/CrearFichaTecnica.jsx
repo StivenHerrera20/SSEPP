@@ -3,9 +3,101 @@ import { Chrono } from "react-chrono";
 const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
   const [enable, setEnable] = useState("");
   const [publicar, setPublicar] = useState(0);
-  useEffect(() => {}, []);
+  const [resultado, setResultado] = useState("");
+  const [producto, setProducto] = useState("");
+  const [sector, setSector] = useState("");
+  const [entidad, setEntidad] = useState("");
+  const [totalMeta, setTotalMeta] = useState(0);
+  const [items, setItems] = useState([]);
+  const [fechaInicio, setFechaInicio] = useState(0);
+  const [fechaFin, setFechaFin] = useState(0);
+  const [meta, setMeta] = useState([]);
+  useEffect(() => {
+    fetch(
+      `http://127.0.0.1:3900/api/politicasPublicas/traerFechas/?nombre=${localStorage.getItem(
+        "nombre"
+      )}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setFechaInicio(doc.resultado[0].fecha_inicio.slice(0, 4));
+        setFechaFin(doc.resultado[0].fecha_fin.slice(0, 4));
+      });
+    fetch(`http://127.0.0.1:3900/api/resultadoHasMeta/listarMeta/6`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setMeta(doc.resultado);
+        if (doc.resultado.length > 0) {
+          const generarItems = () => {
+            if (fechaInicio && fechaFin) {
+              let resta = fechaFin - fechaInicio;
+              const generatedItems = [];
+              for (let i = 0; i <= resta; i++) {
+                const year = parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
+                generatedItems.push({
+                  title: year.toString(), // Establece el año como título
+                  cardDetailedText: doc.resultado[i].meta, // Establece el valor por defecto "000"
+                });
+              }
+              return generatedItems;
+            }
+            return [];
+          };
+          const itemsGenerated = generarItems();
+          setItems(itemsGenerated);
+          setTotalMeta(doc.resultado[doc.resultado.length - 1].meta);
+        } else {
+          const generarItems = () => {
+            if (fechaInicio && fechaFin) {
+              let resta = fechaFin - fechaInicio;
+              const generatedItems = [];
+              for (let i = 0; i <= resta; i++) {
+                const year = parseInt(fechaInicio) + i; // Incrementa el año desde fechaInicio hasta fechaFin
+                generatedItems.push({
+                  title: year.toString(), // Establece el año como título
+                  cardDetailedText: "000", // Establece el valor por defecto "000"
+                });
+              }
+              return generatedItems;
+            }
+            return [];
+          };
+          const itemsGenerated = generarItems();
+          setItems(itemsGenerated);
+          setTotalMeta("000");
+        }
+      });
+    fetch(
+      `http://127.0.0.1:3900/api/resultadoDatosGenerales/listarTodos/${localStorage.getItem(
+        "idObj"
+      )}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setResultado(doc.resultado.rows[0].nombre_resultado);
+        setSector(doc.resultado.rows[0].sector_responsable);
+        setEntidad(doc.resultado.rows[0].entidad_responsable);
+      });
+    fetch(
+      `http://127.0.0.1:3900/api/productoDatosGenerales/listarTodos/${localStorage.getItem(
+        "idObj"
+      )}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setProducto(doc.resultado.rows[0].nombre_resultado);
+      });
+  }, [fechaInicio, fechaFin]);
 
-  let items = [
+  /* let items = [
     {
       title: "2020",
       cardDetailedText: "000",
@@ -30,7 +122,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
       title: "2020",
       cardDetailedText: "000",
     },
-  ];
+  ]; */
   return (
     <>
       <div className="card shadow mb-4">
@@ -147,9 +239,10 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                           </label>
                           <textarea
                             className="form-control"
-                            id="exampleFormControlTextarea1"
+                            id="nombreIndicador"
                             rows="2"
                             disabled
+                            value={localStorage.getItem("nombreIndicador")}
                             style={{ resize: "none" }}
                           ></textarea>
                         </div>
@@ -162,8 +255,9 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                           </label>
                           <textarea
                             className="form-control"
-                            id="exampleFormControlTextarea2"
+                            id="politicaAsociada"
                             rows="2"
+                            value={localStorage.getItem("politicaAsociada")}
                             style={{ resize: "none" }}
                             disabled
                           ></textarea>
@@ -177,9 +271,10 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                           </label>
                           <textarea
                             className="form-control"
-                            id="exampleFormControlTextarea3"
+                            id="objetivoAsociado"
                             rows="2"
                             disabled
+                            value={localStorage.getItem("objetivoAsociado")}
                             style={{ resize: "none" }}
                           ></textarea>
                         </div>
@@ -192,9 +287,10 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                           </label>
                           <textarea
                             className="form-control"
-                            id="exampleFormControlTextarea3"
+                            id="resultado"
                             rows="2"
                             disabled
+                            value={resultado}
                             style={{ resize: "none" }}
                           ></textarea>
                         </div>
@@ -207,9 +303,10 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                           </label>
                           <textarea
                             className="form-control"
-                            id="exampleFormControlTextarea3"
+                            id="producto"
                             rows="2"
                             disabled
+                            value={producto}
                             style={{ resize: "none" }}
                           ></textarea>
                         </div>
@@ -217,29 +314,27 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                           <label htmlFor="" className="form-label">
                             Sector Responsable
                           </label>
-                          <select
+                          <textarea
+                            className="form-control"
+                            id="sector"
+                            rows="2"
                             disabled
-                            className="form-select"
-                            aria-label="Default select example"
-                          >
-                            <option value="1">...</option>
-                            <option value="2">...</option>
-                            <option value="3">...</option>
-                          </select>
+                            value={sector}
+                            style={{ resize: "none" }}
+                          ></textarea>
                         </div>
                         <div className="mb-3">
                           <label htmlFor="" className="form-label">
                             Entidad Responsable
                           </label>
-                          <select
+                          <textarea
+                            className="form-control"
+                            id="entidad"
+                            rows="2"
                             disabled
-                            className="form-select"
-                            aria-label="Default select example"
-                          >
-                            <option value="1">...</option>
-                            <option value="2">...</option>
-                            <option value="3">...</option>
-                          </select>
+                            value={entidad}
+                            style={{ resize: "none" }}
+                          ></textarea>
                         </div>
                         <div className="mb-1">
                           <h6>Plan Distrital de Desarrollo - PDD</h6>
@@ -250,35 +345,77 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                               <label htmlFor="" className="form-label">
                                 Plan de Desarrollo
                               </label>
-                              <select
+                              <textarea
+                                className="form-control"
+                                id="pdd"
+                                rows="2"
                                 disabled
-                                className="form-select"
-                                aria-label="Default select example"
-                              >
-                                <option value="1">...</option>
-                                <option value="2">...</option>
-                                <option value="3">...</option>
-                              </select>
+                                value={localStorage.getItem("pdd")}
+                                style={{ resize: "none" }}
+                              ></textarea>
                             </div>
                             <div className="col-4">
                               <label htmlFor="" className="form-label">
                                 Indicador PDD
                               </label>
-                              <select
+                              <textarea
+                                className="form-control"
+                                id="indicador"
+                                rows="2"
                                 disabled
-                                className="form-select"
-                                aria-label="Default select example"
-                              >
-                                <option value="1">...</option>
-                                <option value="2">...</option>
-                                <option value="3">...</option>
-                              </select>
+                                value={localStorage.getItem("indicador")}
+                                style={{ resize: "none" }}
+                              ></textarea>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div className="col-4">
-                        <form action="">
+                        <form
+                          action=""
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            let nombreIndicador =
+                              document.querySelector("#nombreIndicador");
+                            let politicaAsociada =
+                              document.querySelector("#politicaAsociada");
+                            let objetivoAsociado =
+                              document.querySelector("#objetivoAsociado");
+                            let resultado =
+                              document.querySelector("#resultado");
+                            let producto = document.querySelector("#producto");
+                            let sector = document.querySelector("#sector");
+                            let entidad = document.querySelector("#entidad");
+                            let pdd = document.querySelector("#pdd");
+                            let indicador =
+                              document.querySelector("#indicador");
+                            let descripcion =
+                              document.querySelector("#descripcion");
+                            let aspectos = document.querySelector("#aspectos");
+                            if (
+                              descripcion.value.length > 0 &&
+                              aspectos.value.length > 0
+                            ) {
+                              fetch(
+                                "http://127.0.0.1:3900/api/fichaTecnicaInformacion/agregar",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type":
+                                      "application/x-www-form-urlencoded",
+                                  },
+                                  body: `nombre_indicador=${nombreIndicador.value}&politica_asociada=${politicaAsociada.value}&objetivo_asociado=${objetivoAsociado.value}&resultado=${resultado.value}&producto=${producto.value}&sector=${sector.value}&entidad=${entidad.value}&pdd=${pdd.value}&indicador_pdd=${indicador.value}&descripcion=${descripcion.value}&aspectos=${aspectos.value}`,
+                                }
+                              )
+                                .then((response) => {
+                                  return response.json();
+                                })
+                                .then((res) => {});
+                            } else {
+                              alert("Datos Incompletos");
+                            }
+                          }}
+                        >
                           <div className="mb-3">
                             <label
                               htmlFor="exampleFormControlTextareaDesProd"
@@ -288,7 +425,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                             </label>
                             <textarea
                               className="form-control"
-                              id="exampleFormControlTextareaDesProd"
+                              id="descripcion"
                               rows="2"
                               style={{ resize: "none" }}
                             ></textarea>
@@ -303,7 +440,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                             </label>
                             <textarea
                               className="form-control"
-                              id="exampleFormControlTextareaAspectCons"
+                              id="aspectos"
                               rows="2"
                               style={{ resize: "none" }}
                             ></textarea>
@@ -329,201 +466,308 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                     role="tabpanel"
                     aria-labelledby="medicion-tab"
                   >
-                    <div className="mb-3">
-                      <label
-                        htmlFor="exampleFormControlTextarea1"
-                        className="form-label"
-                      >
-                        Fórmula de cálculo
-                      </label>
-                      <textarea
-                        className="form-control"
-                        id="exampleFormControlTextarea1"
-                        rows="2"
-                        disabled
-                        style={{ resize: "none" }}
-                      ></textarea>
-                    </div>
-
-                    <div className="row mb-3">
-                      <div className="col-4">
-                        <label htmlFor="" className="form-label">
-                          Unidad de medida
-                        </label>
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
+                    <form
+                      action=""
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        let formula = document.querySelector("#formula");
+                        let unidad = document.querySelector("#unidad");
+                        let periodicidad =
+                          document.querySelector("#periodicidad");
+                        let valor = document.querySelector("#valor");
+                        let fechaBase = document.querySelector("#fechaBase");
+                        let fuente = document.querySelector("#fuente");
+                        let fechaInicio =
+                          document.querySelector("#fechaInicio");
+                        let fechaFin = document.querySelector("#fechaFin");
+                        let territorializacion = document.querySelector(
+                          "#territorializacion"
+                        );
+                        let metodologia =
+                          document.querySelector("#metodologia");
+                        let fuentes = document.querySelector("#fuentes");
+                        let dias = document.querySelector("#dias");
+                        let serie = document.querySelector("#serie");
+                        if (
+                          metodologia.value.length > 0 &&
+                          fuentes.value.length > 0 &&
+                          dias.value.length > 0 &&
+                          serie.value.length > 0
+                        ) {
+                          fetch(
+                            "http://127.0.0.1:3900/api/fichaTecnicaMedicion/agregar",
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type":
+                                  "application/x-www-form-urlencoded",
+                              },
+                              body: `formula=${formula.value}&unidad=${unidad.value}&periodicidad=${periodicidad.value}&valor=${valor.value}&fechaBase=${fechaBase.value}&fuenteBase=${fuente.value}&fechaBaseInicio=${fechaInicio.value}&fechaBaseFin=${fechaFin.value}&territorializacion=${territorializacion.value}&metodologia=${metodologia.value}&fuentes=${fuentes.value}&dias_rezago=${dias.value}&serie=${serie.value}`,
+                            }
+                          )
+                            .then((response) => {
+                              return response.json();
+                            })
+                            .then((res) => {});
+                        } else {
+                          alert("Datos Incompletos");
+                        }
+                      }}
+                    >
+                      <div className="mb-3">
+                        <label
+                          htmlFor="exampleFormControlTextarea1"
+                          className="form-label"
                         >
-                          <option value="1">...</option>
-                          <option value="2">...</option>
-                          <option value="3">...</option>
-                        </select>
+                          Fórmula de cálculo
+                        </label>
+                        <textarea
+                          className="form-control"
+                          id="formula"
+                          rows="2"
+                          disabled
+                          value={localStorage.getItem("formula")}
+                          style={{ resize: "none" }}
+                        ></textarea>
                       </div>
-                      <div className="col-4 d-flex">
-                        <div className="form-check m-auto">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id=""
-                          />
-                          <label className="form-check-label" htmlFor="">
-                            Otra medida
+
+                      <div className="row mb-3">
+                        <div className="col-4">
+                          <label htmlFor="" className="form-label">
+                            Unidad de medida
                           </label>
+                          <select
+                            className="form-select"
+                            aria-label="Default select example"
+                            id="unidad"
+                          >
+                            <option value="Acuerdos">Acuerdos</option>
+                            <option value="Habitantes">Habitantes</option>
+                            <option value="Hectareas">Hectareas</option>
+                            <option value="Kilometros">Kilometros</option>
+                            <option value="Kilos">Kilos</option>
+                            <option value="Metros">Metros</option>
+                            <option value="Millas">Millas</option>
+                            <option value="Personas">Personas</option>
+                            <option value="Porcentaje">Porcentaje</option>
+                            <option value="Tasa">Tasa</option>
+                            <option value="Toneladas">Toneladas</option>
+                            <option value="Unidad Productiva Rural">
+                              Unidad Productiva Rural
+                            </option>
+                            <option value="Indice">Indice</option>
+                          </select>
+                        </div>
+                        <div className="col-4 d-flex">
+                          <div className="form-check m-auto">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              id=""
+                            />
+                            <label className="form-check-label" htmlFor="">
+                              Otra medida
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-4">
+                          {" "}
+                          <label htmlFor="" className="form-label">
+                            ¿Cúal?
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            disabled
+                          />
                         </div>
                       </div>
-                      <div className="col-4">
-                        {" "}
-                        <label htmlFor="" className="form-label">
-                          ¿Cúal?
-                        </label>
-                        <input type="text" className="form-control" disabled />
-                      </div>
-                    </div>
 
-                    <div className="mb-3">
-                      <label htmlFor="" className="form-label">
-                        Peridicidad de medición
-                      </label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                      >
-                        <option value="1">...</option>
-                        <option value="2">...</option>
-                        <option value="3">...</option>
-                      </select>
-                    </div>
-                    <h6 className="mb-2">Linea Base</h6>
-                    <div className="row mb-3">
-                      <div className="col-4">
+                      <div className="mb-3">
                         <label htmlFor="" className="form-label">
-                          Valor
-                        </label>
-                        <input type="text" className="form-control" disabled />
-                      </div>
-                      <div className="col-4">
-                        {" "}
-                        <label htmlFor="" className="form-label">
-                          Fecha de la línea base
-                        </label>
-                        <input type="text" className="form-control" disabled />
-                      </div>
-                      <div className="col-4">
-                        {" "}
-                        <label htmlFor="" className="form-label">
-                          Fuente de la línea base
-                        </label>
-                        <input type="text" className="form-control" disabled />
-                      </div>
-                    </div>
-                    <h6 className="mb-2 ">Tiempo de ejecución</h6>
-                    <div className="row mb-3">
-                      <div className="col-4">
-                        <label htmlFor="" className="form-label">
-                          Inicio
-                        </label>
-                        <input type="text" className="form-control" disabled />
-                      </div>
-                      <div className="col-4">
-                        <label htmlFor="" className="form-label">
-                          Fin
-                        </label>
-                        <input type="text" className="form-control" disabled />
-                      </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col-4">
-                        <label htmlFor="" className="form-label">
-                          Territorialización del indicador
-                        </label>
-                        <select
-                          className="form-select w-25"
-                          aria-label="Default select example"
-                        >
-                          <option value="1">Si</option>
-                          <option value="2">No</option>
-                        </select>
-                      </div>
-                      <div className="col-4">
-                        <label htmlFor="" className="form-label">
-                          Nivel
+                          Peridicidad de medición
                         </label>
                         <select
                           className="form-select"
                           aria-label="Default select example"
+                          id="periodicidad"
                         >
-                          <option value="1">...</option>
-                          <option value="2">...</option>
+                          <option value="Mensual">Mensual</option>
+                          <option value="Bimestral">Bimestral</option>
+                          <option value="Trimestral">Trimestral</option>
+                          <option value="Semestral">Semestral</option>
+                          <option value="Anual">Anual</option>
                         </select>
                       </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label
-                          htmlFor="exampleFormControlTextareaMetod"
-                          className="form-label"
-                        >
-                          Metodologia de medición
-                        </label>
-                        <textarea
-                          className="form-control "
-                          id="exampleFormControlTextareaMetod"
-                          rows="2"
-                          style={{ resize: "none" }}
-                        ></textarea>
+                      <h6 className="mb-2">Linea Base</h6>
+                      <div className="row mb-3">
+                        <div className="col-4">
+                          <label htmlFor="" className="form-label">
+                            Valor
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            disabled
+                            id="valor"
+                            value={localStorage.getItem("valorBase")}
+                          />
+                        </div>
+                        <div className="col-4">
+                          {" "}
+                          <label htmlFor="" className="form-label">
+                            Fecha de la línea base
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            disabled
+                            id="fechaBase"
+                            value={localStorage.getItem("fechaBase")}
+                          />
+                        </div>
+                        <div className="col-4">
+                          {" "}
+                          <label htmlFor="" className="form-label">
+                            Fuente de la línea base
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            disabled
+                            id="fuente"
+                            value={localStorage.getItem("fuente")}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label
-                          htmlFor="exampleFormControlTextarea3"
-                          className="form-label"
-                        >
-                          Fuentes de información
-                        </label>
-                        <textarea
-                          className="form-control "
-                          id="exampleFormControlTextarea3"
-                          rows="2"
-                          style={{ resize: "none" }}
-                        ></textarea>
+                      <h6 className="mb-2 ">Tiempo de ejecución</h6>
+                      <div className="row mb-3">
+                        <div className="col-4">
+                          <label htmlFor="" className="form-label">
+                            Inicio
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            disabled
+                            id="fechaInicio"
+                            value={localStorage.getItem("fechaInicio")}
+                          />
+                        </div>
+                        <div className="col-4">
+                          <label htmlFor="" className="form-label">
+                            Fin
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            disabled
+                            id="fechaFin"
+                            value={localStorage.getItem("fechaFin")}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label
-                          htmlFor="exampleFormControlTextarea3"
-                          className="form-label"
-                        >
-                          Dias de rezago
-                        </label>
-                        <input type="number" className="form-control w-25" />
+                      <div className="row mb-3">
+                        <div className="col-4">
+                          <label htmlFor="" className="form-label">
+                            Territorialización del indicador
+                          </label>
+                          <select
+                            className="form-select w-25"
+                            aria-label="Default select example"
+                            id="territorializacion"
+                          >
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                          </select>
+                        </div>
+                        <div className="col-4">
+                          <label htmlFor="" className="form-label">
+                            Nivel
+                          </label>
+                          <select
+                            className="form-select"
+                            aria-label="Default select example"
+                          >
+                            <option value="1">...</option>
+                            <option value="2">...</option>
+                          </select>
+                        </div>
                       </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label
-                          htmlFor="exampleFormControlTextarea3"
-                          className="form-label"
-                        >
-                          Serie disponible
-                        </label>
-                        <textarea
-                          className="form-control "
-                          id="exampleFormControlTextarea3"
-                          rows="2"
-                          style={{ resize: "none" }}
-                        ></textarea>
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label
+                            htmlFor="exampleFormControlTextareaMetod"
+                            className="form-label"
+                          >
+                            Metodologia de medición
+                          </label>
+                          <textarea
+                            className="form-control "
+                            id="metodologia"
+                            rows="2"
+                            style={{ resize: "none" }}
+                          ></textarea>
+                        </div>
                       </div>
-                    </div>
-                    <div className="row">
-                      <div className="col d-flex justify-content-end">
-                        <button className="btn btn-primary m-1">Guardar</button>
-                        <button className="btn btn-secondary m-1">
-                          Cancelar
-                        </button>
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label
+                            htmlFor="exampleFormControlTextarea3"
+                            className="form-label"
+                          >
+                            Fuentes de información
+                          </label>
+                          <textarea
+                            className="form-control "
+                            id="fuentes"
+                            rows="2"
+                            style={{ resize: "none" }}
+                          ></textarea>
+                        </div>
                       </div>
-                    </div>
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label
+                            htmlFor="exampleFormControlTextarea3"
+                            className="form-label"
+                          >
+                            Dias de rezago
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control w-25"
+                            id="dias"
+                          />
+                        </div>
+                      </div>
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label
+                            htmlFor="exampleFormControlTextarea3"
+                            className="form-label"
+                          >
+                            Serie disponible
+                          </label>
+                          <textarea
+                            className="form-control "
+                            id="serie"
+                            rows="2"
+                            style={{ resize: "none" }}
+                          ></textarea>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col d-flex justify-content-end">
+                          <button className="btn btn-primary m-1">
+                            Guardar
+                          </button>
+                          <button className="btn btn-secondary m-1">
+                            Cancelar
+                          </button>
+                        </div>
+                      </div>
+                    </form>
                   </div>
                   <div
                     className="tab-pane fade"
@@ -533,23 +777,27 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                   >
                     <div className="row mt-3 mb-3">
                       <div className="col-9 w-100">
-                        <div style={{ height: "950px" }}>
-                          <Chrono
-                            items={items}
-                            theme={{
-                              primary: "#4e73df",
-                              secondary: "#36b9cc",
-                              titleColor: "black",
-                              titleColorActive: "black",
-                            }}
-                            mode="VERTICAL_ALTERNATING"
-                            hideControls
-                            cardHeight={"20px"}
-                          />
-                        </div>
+                        {items.length > 0 && (
+                          <div style={{ height: "950px" }}>
+                            {/* {console.log(items)} */}
+                            <Chrono
+                              items={items}
+                              theme={{
+                                primary: "#4e73df",
+                                secondary: "#36b9cc",
+                                titleColor: "black",
+                                titleColorActive: "black",
+                              }}
+                              mode="VERTICAL_ALTERNATING"
+                              hideControls
+                              cardHeight={"20px"}
+                            />
+                          </div>
+                        )}
+                        {items.length == 0 && <p>Vaciooo</p>}
                       </div>
                       <div className="col-3">
-                        <h1>80</h1>
+                        <h1>{totalMeta}</h1>
                         <h5>Meta Total del Producto</h5>
                         <h5>Tipo de Anualización: CRECIENTE</h5>
                       </div>
