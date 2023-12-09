@@ -64,6 +64,10 @@ module.exports = (sequelize, type) => {
         type: type.INTEGER,
         allowNull: false,
       },
+      idIndicador: {
+        type: type.INTEGER,
+        allowNull: false,
+      },
     },
     {
       timestamps: false, // Desactiva la funcionalidad de timestamps

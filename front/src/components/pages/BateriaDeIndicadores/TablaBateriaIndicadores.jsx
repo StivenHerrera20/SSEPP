@@ -104,6 +104,7 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
       <table className="table table-bordered" id="dataTable" width="100%">
         <thead>
           <tr>
+            <th>#</th>
             <th>Tipo</th>
             <th>Nombre</th>
             <th>Politica pública</th>
@@ -117,6 +118,7 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
           {tablaResultado.map((res) => {
             return (
               <tr key={res.id}>
+                <td>{res.id}</td>
                 <td>Resultado</td>
                 <td>{res.nombre}</td>
                 <td>{res.politica}</td>
@@ -140,6 +142,7 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
                       localStorage.setItem("fechaBase", res.fecha_base);
                       localStorage.setItem("fuente", res.fuente);
                       localStorage.setItem("fechaInicio", res.inicio);
+                      localStorage.setItem("idIndicador", res.id);
                       setControlBI(1);
                     }}
                   ></button>
@@ -156,6 +159,7 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
       <table className="table table-bordered" id="dataTable" width="100%">
         <thead>
           <tr>
+            <th>#</th>
             <th>Tipo</th>
             <th>Nombre</th>
             <th>Politica pública</th>
@@ -169,6 +173,7 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
           {tablaProducto.map((res) => {
             return (
               <tr key={res.id}>
+                <td>{res.id}</td>
                 <td>Producto</td>
                 <td>{res.nombre}</td>
                 <td>{res.politica}</td>
@@ -192,6 +197,7 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
                       localStorage.setItem("fechaBase", res.fecha_base);
                       localStorage.setItem("fuente", res.fuente);
                       localStorage.setItem("fechaInicio", res.inicio);
+                      localStorage.setItem("idIndicador", res.id);
                       setControlBI(1);
                     }}
                   ></button>
@@ -242,7 +248,6 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
             </select>
           </div>
           <h2 className="m-0 font-weight-bold text-center justify-content-center m-auto">
-            {/* <img src={megafono} alt="" style={{ height: "3rem" }} />{" "} */}
             Bateria de Indicadores
           </h2>
         </div>

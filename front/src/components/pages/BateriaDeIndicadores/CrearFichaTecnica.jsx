@@ -25,7 +25,11 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
         setFechaInicio(doc.resultado[0].fecha_inicio.slice(0, 4));
         setFechaFin(doc.resultado[0].fecha_fin.slice(0, 4));
       });
-    fetch(`http://127.0.0.1:3900/api/resultadoHasMeta/listarMeta/6`)
+    fetch(
+      `http://127.0.0.1:3900/api/resultadoHasMeta/listarMeta/${localStorage.getItem(
+        "idObj"
+      )}`
+    )
       .then((response) => {
         return response.json();
       })
@@ -404,7 +408,23 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                     "Content-Type":
                                       "application/x-www-form-urlencoded",
                                   },
-                                  body: `nombre_indicador=${nombreIndicador.value}&politica_asociada=${politicaAsociada.value}&objetivo_asociado=${objetivoAsociado.value}&resultado=${resultado.value}&producto=${producto.value}&sector=${sector.value}&entidad=${entidad.value}&pdd=${pdd.value}&indicador_pdd=${indicador.value}&descripcion=${descripcion.value}&aspectos=${aspectos.value}`,
+                                  body: `nombre_indicador=${
+                                    nombreIndicador.value
+                                  }&politica_asociada=${
+                                    politicaAsociada.value
+                                  }&objetivo_asociado=${
+                                    objetivoAsociado.value
+                                  }&resultado=${resultado.value}&producto=${
+                                    producto.value
+                                  }&sector=${sector.value}&entidad=${
+                                    entidad.value
+                                  }&pdd=${pdd.value}&indicador_pdd=${
+                                    indicador.value
+                                  }&descripcion=${descripcion.value}&aspectos=${
+                                    aspectos.value
+                                  }&idIndicador=${localStorage.getItem(
+                                    "idIndicador"
+                                  )}`,
                                 }
                               )
                                 .then((response) => {
@@ -502,7 +522,25 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                 "Content-Type":
                                   "application/x-www-form-urlencoded",
                               },
-                              body: `formula=${formula.value}&unidad=${unidad.value}&periodicidad=${periodicidad.value}&valor=${valor.value}&fechaBase=${fechaBase.value}&fuenteBase=${fuente.value}&fechaBaseInicio=${fechaInicio.value}&fechaBaseFin=${fechaFin.value}&territorializacion=${territorializacion.value}&metodologia=${metodologia.value}&fuentes=${fuentes.value}&dias_rezago=${dias.value}&serie=${serie.value}`,
+                              body: `formula=${formula.value}&unidad=${
+                                unidad.value
+                              }&periodicidad=${periodicidad.value}&valor=${
+                                valor.value
+                              }&fechaBase=${fechaBase.value}&fuenteBase=${
+                                fuente.value
+                              }&fechaBaseInicio=${
+                                fechaInicio.value
+                              }&fechaBaseFin=${
+                                fechaFin.value
+                              }&territorializacion=${
+                                territorializacion.value
+                              }&metodologia=${metodologia.value}&fuentes=${
+                                fuentes.value
+                              }&dias_rezago=${dias.value}&serie=${
+                                serie.value
+                              }&idIndicador=${localStorage.getItem(
+                                "idIndicador"
+                              )}`,
                             }
                           )
                             .then((response) => {

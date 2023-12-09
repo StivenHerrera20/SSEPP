@@ -7,5 +7,10 @@ router.post("/agregar", async (req, res) => {
     mensaje: "Agregado Correctamente",
   });
 });
-
+router.get("/listar/:idIndicador", async (req, res) => {
+  const consulta = await FichaTecnicaInformacion.findAndCountAll({
+    where: { idIndicador: req.params.idIndicador },
+  });
+  res.json({ respuesta: consulta });
+});
 module.exports = router;

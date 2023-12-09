@@ -82,6 +82,10 @@ module.exports = (sequelize, type) => {
         allowNull: false,
         defaultValue: "Incompleto",
       },
+      ultimoPeriodoRegistrado: {
+        type: type.STRING,
+        allowNull: true,
+      },
     },
     {
       timestamps: false, // Desactiva la funcionalidad de timestamps

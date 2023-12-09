@@ -14,6 +14,8 @@ const Resultado = () => {
   const [values, setValues] = useState([]);
   const [meta, setMeta] = useState([]);
   const [totalMeta, setTotalMeta] = useState("0.00");
+  const [linea, setLinea] = useState("");
+  const [tipo, setTipo] = useState("");
   useEffect(() => {
     fetch("http://127.0.0.1:3900/api/sector/listarTodos")
       .then((response) => {
@@ -246,6 +248,10 @@ const Resultado = () => {
                 role="tab"
                 aria-controls="meta"
                 aria-selected="false"
+                onClick={() => {
+                  setLinea(localStorage.getItem("linea"));
+                  setTipo(localStorage.getItem("tipo"));
+                }}
               >
                 Meta
               </button>
@@ -992,12 +998,9 @@ const Resultado = () => {
                             </div>
                             <div className="modal-body">
                               <div className="mb-3">
-                                Tipo anualización:{" "}
-                                {localStorage.getItem("tipo")}
+                                Tipo anualización: {tipo}
                               </div>
-                              <div className="mb-3">
-                                Linea Base: {localStorage.getItem("linea")}
-                              </div>
+                              <div className="mb-3">Linea Base: {linea}</div>
                               {renderYears()}
                               <div className="mb-3">
                                 <label htmlFor="" className="form-label">

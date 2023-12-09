@@ -685,7 +685,19 @@ const Producto = () => {
                         headers: {
                           "Content-Type": "application/x-www-form-urlencoded",
                         },
-                        body: `nombre_resultado=${nombre.value}&nombre_producto=${nombreProducto.value}&importancia_relativa=${importancia.value}%&sector_responsable=${sector.value}&entidad_responsable=${entidad.value}&id_objetivo=${id}`,
+                        body: `nombre_resultado=${
+                          nombre.value
+                        }&nombre_producto=${
+                          nombreProducto.value
+                        }&importancia_relativa=${
+                          importancia.value
+                        }%&sector_responsable=${
+                          sector.value
+                        }&entidad_responsable=${
+                          entidad.value
+                        }&id_objetivo=${id}&politica=${localStorage.getItem(
+                          "nombre"
+                        )}&objetivo=${localStorage.getItem("objetivo")}`,
                       }
                     )
                       .then((response) => {
