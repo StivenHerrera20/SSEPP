@@ -49,10 +49,6 @@ module.exports = (sequelize, type) => {
         type: type.STRING,
         allowNull: false,
       },
-      valor: {
-        type: type.INTEGER,
-        allowNull: false,
-      },
       fecha_base: {
         type: type.DATE,
         allowNull: false,
