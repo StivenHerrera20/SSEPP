@@ -16,4 +16,13 @@ router.get("/listar", async (req, res) => {
   const { count, rows } = await productoIndicador.findAndCountAll(options);
   res.json({ total: count, desarrollo: rows, fila: size, page: page });
 });
+router.put("/editar/:id", async (req, res) => {
+  await productoIndicador.update(req.body, {
+    where: { id: req.params.id },
+  });
+  res.json({
+    status: "OK",
+    mensaje: "Actualizado Correctamente",
+  });
+});
 module.exports = router;

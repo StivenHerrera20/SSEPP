@@ -132,6 +132,19 @@ const TablaRegistroSeguimiento = () => {
                   <button
                     onClick={() => {
                       localStorage.setItem("idIndicadorSeg", res.id);
+                      localStorage.setItem("politicaSeg", res.politica);
+                      localStorage.setItem("objetivoSeg", res.objetivo);
+                      localStorage.setItem("nombreIndSeg", res.nombre);
+                      localStorage.setItem("tiposSeg", "resultado");
+                      localStorage.setItem("inicioSeg", res.inicio);
+                      localStorage.setItem("finSeg", res.fin);
+                      localStorage.setItem("valorSeg", res.valor);
+                      localStorage.setItem("fechaBaseSeg", res.fecha_base);
+                      localStorage.setItem("fuenteSeg", res.fuente);
+                      localStorage.setItem(
+                        "anualizacionSef",
+                        res.tipo_anulacion
+                      );
                       window.location =
                         "/inicio/registrodeseguimiento/cargueavance";
                     }}
@@ -179,6 +192,19 @@ const TablaRegistroSeguimiento = () => {
                   <button
                     onClick={() => {
                       localStorage.setItem("idIndicadorSeg", res.id);
+                      localStorage.setItem("politicaSeg", res.politica);
+                      localStorage.setItem("objetivoSeg", res.objetivo);
+                      localStorage.setItem("nombreIndSeg", res.nombre);
+                      localStorage.setItem("tiposSeg", "producto");
+                      localStorage.setItem("inicioSeg", res.inicio);
+                      localStorage.setItem("finSeg", res.fin);
+                      localStorage.setItem("valorSeg", res.valor);
+                      localStorage.setItem("fechaBaseSeg", res.fecha_base);
+                      localStorage.setItem("fuenteSeg", res.fuente);
+                      localStorage.setItem(
+                        "anualizacionSef",
+                        res.tipo_anulacion
+                      );
                       window.location =
                         "/inicio/registrodeseguimiento/cargueavance";
                     }}

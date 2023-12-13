@@ -50,9 +50,7 @@ const CargueAvance = () => {
                       rows="2"
                       style={{ resize: "none" }}
                       disabled
-                      defaultValue={
-                        "Politica Pública de Cultura Ciudadana 2019-2038 "
-                      }
+                      defaultValue={localStorage.getItem("politicaSeg")}
                     ></textarea>
                   </div>
                   <div className="row mb-3">
@@ -69,7 +67,7 @@ const CargueAvance = () => {
                       rows="2"
                       style={{ resize: "none" }}
                       disabled
-                      defaultValue={"Acción colectiva ... "}
+                      defaultValue={localStorage.getItem("objetivoSeg")}
                     ></textarea>
                   </div>
                   <div className="row mb-3">
@@ -86,7 +84,7 @@ const CargueAvance = () => {
                       rows="2"
                       style={{ resize: "none" }}
                       disabled
-                      defaultValue={"..."}
+                      defaultValue={""}
                     ></textarea>
                   </div>
                   <div className="row mb-3">
@@ -103,7 +101,7 @@ const CargueAvance = () => {
                       rows="2"
                       style={{ resize: "none" }}
                       disabled
-                      defaultValue={"..."}
+                      defaultValue={""}
                     ></textarea>
                   </div>
                   <div className="row mb-3">
@@ -120,7 +118,7 @@ const CargueAvance = () => {
                       rows="2"
                       style={{ resize: "none" }}
                       disabled
-                      defaultValue={"..."}
+                      defaultValue={localStorage.getItem("nombreIndSeg")}
                     ></textarea>
                   </div>
                   <div className="row mb-3">
@@ -137,7 +135,7 @@ const CargueAvance = () => {
                       rows="2"
                       style={{ resize: "none" }}
                       disabled
-                      defaultValue={"..."}
+                      defaultValue={""}
                     ></textarea>
                   </div>
                   <div className="row mb-3">
@@ -153,7 +151,7 @@ const CargueAvance = () => {
                       id=""
                       className="form-control"
                       disabled
-                      value={"DECRECIENTE"}
+                      value={localStorage.getItem("anualizacionSef")}
                     />
                   </div>
                   <div className="row mb-3">
@@ -169,7 +167,7 @@ const CargueAvance = () => {
                       id=""
                       className="form-control"
                       disabled
-                      value={"500"}
+                      value={""}
                     />
                   </div>
                   <div className="row mb-3">
@@ -185,7 +183,7 @@ const CargueAvance = () => {
                       id=""
                       className="form-control"
                       disabled
-                      value={"estrategia"}
+                      value={""}
                     />
                   </div>
                   <div className="row mb-3">
@@ -201,7 +199,7 @@ const CargueAvance = () => {
                       id=""
                       className="form-control"
                       disabled
-                      value={"0"}
+                      value={""}
                     />
                   </div>
                   <div className="row mb-3">
@@ -217,7 +215,7 @@ const CargueAvance = () => {
                       id=""
                       className="form-control"
                       disabled
-                      value={"ANUAL"}
+                      value={""}
                     />
                   </div>
                   <div className="row mb-3">
@@ -226,13 +224,23 @@ const CargueAvance = () => {
                       <label htmlFor="" className="form-label">
                         Inicio
                       </label>
-                      <input type="date" className="form-control" disabled />
+                      <input
+                        type="date"
+                        className="form-control"
+                        disabled
+                        value={localStorage.getItem("inicioSeg")}
+                      />
                     </div>
                     <div className="col-6 pe-0 ">
                       <label htmlFor="" className="form-label">
                         Fin
                       </label>
-                      <input type="date" className="form-control" disabled />
+                      <input
+                        type="date"
+                        className="form-control"
+                        disabled
+                        value={localStorage.getItem("finSeg")}
+                      />
                     </div>
                   </div>
                   <div className="row mb-3">
@@ -251,13 +259,19 @@ const CargueAvance = () => {
                         id=""
                         className="form-control"
                         disabled
+                        value={localStorage.getItem("valorSeg")}
                       />
                     </div>
                     <div className="col-6 pe-0 ">
                       <label htmlFor="" className="form-label">
                         Fecha de la Línea Base
                       </label>
-                      <input type="date" className="form-control" disabled />
+                      <input
+                        type="date"
+                        className="form-control"
+                        disabled
+                        value={localStorage.getItem("fechaBaseSeg")}
+                      />
                     </div>
                   </div>
                   <div className="row mb-3">
@@ -273,6 +287,7 @@ const CargueAvance = () => {
                       id=""
                       className="form-control"
                       disabled
+                      value={localStorage.getItem("fuenteSeg")}
                     />
                   </div>
                 </div>

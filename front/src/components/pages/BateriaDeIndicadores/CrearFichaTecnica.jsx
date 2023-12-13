@@ -1065,7 +1065,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                           <textarea
                                             className="form-control"
                                             name=""
-                                            id="descripcionDocumentosAdopcion"
+                                            id="justificacion"
                                             rows="5"
                                             style={{ resize: "none" }}
                                           ></textarea>
@@ -1075,6 +1075,26 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                         <button
                                           type="button"
                                           class="btn btn-primary"
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            let justificacion =
+                                              document.querySelector(
+                                                "#justificacion"
+                                              );
+                                            if (
+                                              justificacion.value.length > 0
+                                            ) {
+                                              setPublicar(1);
+                                              localStorage.setItem(
+                                                "justificacion",
+                                                justificacion.value
+                                              );
+                                            } else {
+                                              alert(
+                                                "llenar el campo por favor"
+                                              );
+                                            }
+                                          }}
                                         >
                                           Guardar
                                         </button>
@@ -1082,10 +1102,6 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                           type="button"
                                           class="btn btn-secondary"
                                           data-bs-dismiss="modal"
-                                          onClick={(e) => {
-                                            e.preventDefault();
-                                            setPublicar(1);
-                                          }}
                                         >
                                           Cancelar
                                         </button>
@@ -1129,77 +1145,172 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                   >
                                     <div class="modal-dialog" role="document">
                                       <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h5
-                                            class="modal-title"
-                                            id="modalTitleId"
-                                          >
-                                            Aprobación del Indicador
-                                          </h5>
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="modal"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                        <div class="modal-body">
-                                          <div className="mb-3">
-                                            <label
-                                              for="exampleInputPassword1"
-                                              className="form-label"
+                                        <form onSubmit={(e) => {}}>
+                                          <div class="modal-header">
+                                            <h5
+                                              class="modal-title"
+                                              id="modalTitleId"
                                             >
-                                              Estado{" "}
-                                              <b className="text-danger">*</b>
-                                            </label>
-                                            <select
-                                              className="form-select"
-                                              aria-label="Default select example"
-                                            >
-                                              <option value="1">
-                                                Aprobada
-                                              </option>
-                                              <option value="2">
-                                                Rechazada
-                                              </option>
-                                            </select>
+                                              Aprobación del Indicador
+                                            </h5>
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="modal"
+                                              aria-label="Close"
+                                            ></button>
                                           </div>
-                                          <div className="mb-3">
-                                            <label
-                                              for="exampleInputPassword1"
-                                              className="form-label"
-                                            >
-                                              Justificación{" "}
-                                              <b className="text-danger">*</b>
-                                            </label>
-                                            <textarea
-                                              className="form-control"
-                                              name=""
-                                              id="descripcionDocumentosAdopcion"
-                                              rows="5"
-                                              style={{ resize: "none" }}
-                                            ></textarea>
+                                          <div class="modal-body">
+                                            <div className="mb-3">
+                                              <label
+                                                for="exampleInputPassword1"
+                                                className="form-label"
+                                              >
+                                                Estado{" "}
+                                                <b className="text-danger">*</b>
+                                              </label>
+                                              <select
+                                                className="form-select"
+                                                aria-label="Default select example"
+                                                id="estado"
+                                              >
+                                                <option value="Aprobada">
+                                                  Aprobada
+                                                </option>
+                                                <option value="Rechazada">
+                                                  Rechazada
+                                                </option>
+                                              </select>
+                                            </div>
+                                            <div className="mb-3">
+                                              <label
+                                                for="exampleInputPassword1"
+                                                className="form-label"
+                                              >
+                                                Observaciones{" "}
+                                                <b className="text-danger">*</b>
+                                              </label>
+                                              <textarea
+                                                className="form-control"
+                                                name=""
+                                                id="observaciones"
+                                                rows="5"
+                                                style={{ resize: "none" }}
+                                              ></textarea>
+                                            </div>
                                           </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button
-                                            type="button"
-                                            class="btn btn-primary"
-                                          >
-                                            Guardar
-                                          </button>
-                                          <button
-                                            type="button"
-                                            class="btn btn-secondary"
-                                            data-bs-dismiss="modal"
-                                            onClick={(e) => {
-                                              e.preventDefault();
-                                              setPublicar(1);
-                                            }}
-                                          >
-                                            Cancelar
-                                          </button>
-                                        </div>
+                                          <div class="modal-footer">
+                                            <button
+                                              type="button"
+                                              class="btn btn-primary"
+                                              onClick={(e) => {
+                                                e.preventDefault();
+                                                let fechaActual = new Date();
+                                                // Formatear la fecha en el formato que necesitas (por ejemplo, YYYY-MM-DD)
+                                                let fechaFormateada =
+                                                  fechaActual
+                                                    .toISOString()
+                                                    .split("T")[0];
+                                                let Observaciones =
+                                                  document.querySelector(
+                                                    "#observaciones"
+                                                  );
+                                                let estado =
+                                                  document.querySelector(
+                                                    "#estado"
+                                                  );
+                                                if (
+                                                  Observaciones.value.length > 0
+                                                ) {
+                                                  fetch(
+                                                    "http://127.0.0.1:3900/api/fichaTecnicaAprobacion/agregar",
+                                                    {
+                                                      method: "POST",
+                                                      headers: {
+                                                        "Content-Type":
+                                                          "application/x-www-form-urlencoded",
+                                                      },
+                                                      body: `fecha=${fechaFormateada}&funcionario=${
+                                                        funcionario.value
+                                                      }&usuario=${"TODO::"}&estado=${
+                                                        estado.value
+                                                      }&observaciones=${
+                                                        Observaciones.value
+                                                      }&idIndicador=${localStorage.getItem(
+                                                        "idIndicador"
+                                                      )}&justificacion=${localStorage.getItem(
+                                                        "justificacion"
+                                                      )}`,
+                                                    }
+                                                  )
+                                                    .then((response) => {
+                                                      return response.json();
+                                                    })
+                                                    .then((res) => {
+                                                      let tableBody =
+                                                        document.querySelector(
+                                                          "#tablaFin"
+                                                        );
+                                                      tableBody.innerHTML = "";
+                                                      let row =
+                                                        tableBody.insertRow(-1);
+                                                      let cellFecha =
+                                                        row.insertCell(0);
+                                                      let cellUsuario =
+                                                        row.insertCell(1);
+                                                      let cellEstado =
+                                                        row.insertCell(2);
+                                                      let cellObservaciones =
+                                                        row.insertCell(3);
+                                                      cellFecha.innerHTML =
+                                                        fechaFormateada; // Reemplaza item.fecha con la propiedad correcta de tu objeto que contiene la fecha
+                                                      cellUsuario.innerHTML =
+                                                        "TODO::"; // Reemplaza item.usuario con la propiedad correcta de tu objeto que contiene el usuario
+                                                      cellEstado.innerHTML =
+                                                        estado.value; // Reemplaza item.estadoValidacion con la propiedad correcta de tu objeto que contiene el estado de validación
+                                                      cellObservaciones.innerHTML =
+                                                        Observaciones.value;
+                                                      if (
+                                                        localStorage.getItem(
+                                                          "tipo"
+                                                        ) == "Producto"
+                                                      ) {
+                                                        fetch(
+                                                          `http://127.0.0.1:3900/api/productoIndicador/editar/${localStorage.getItem(
+                                                            "idIndicador"
+                                                          )}`,
+                                                          {
+                                                            method: "PUT",
+                                                            headers: {
+                                                              "Content-Type":
+                                                                "application/x-www-form-urlencoded",
+                                                            },
+                                                            body: `estado=${estado.value}`,
+                                                          }
+                                                        )
+                                                          .then((response) => {
+                                                            return response.json();
+                                                          })
+                                                          .then((res) => {});
+                                                      }
+                                                    });
+                                                } else {
+                                                  alert("Datos Incompletos");
+                                                }
+                                                setPublicar(1);
+                                              }}
+                                            >
+                                              Guardar
+                                            </button>
+                                            <button
+                                              type="button"
+                                              class="btn btn-secondary"
+                                              data-bs-dismiss="modal"
+                                            >
+                                              Cancelar
+                                            </button>
+                                          </div>
+                                        </form>
                                       </div>
                                     </div>
                                   </div>
@@ -1233,7 +1344,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                               </tr>
                             </thead>
 
-                            <tbody></tbody>
+                            <tbody id="tablaFin"></tbody>
                           </table>
                         </div>
                       </div>

@@ -143,6 +143,7 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
                       localStorage.setItem("fuente", res.fuente);
                       localStorage.setItem("fechaInicio", res.inicio);
                       localStorage.setItem("idIndicador", res.id);
+                      localStorage.setItem("tipo", "Resultado");
                       setControlBI(1);
                     }}
                   ></button>
@@ -198,6 +199,7 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
                       localStorage.setItem("fuente", res.fuente);
                       localStorage.setItem("fechaInicio", res.inicio);
                       localStorage.setItem("idIndicador", res.id);
+                      localStorage.setItem("tipo", "Producto");
                       setControlBI(1);
                     }}
                   ></button>
