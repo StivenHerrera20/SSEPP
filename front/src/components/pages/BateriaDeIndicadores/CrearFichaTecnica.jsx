@@ -847,87 +847,154 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                     role="tabpanel"
                     aria-labelledby="responsable-tab"
                   >
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label htmlFor="" className="form-label">
-                          Entidad
-                        </label>
-                        <select
-                          disabled
-                          className="form-select"
-                          aria-label="Default select example"
-                        >
-                          <option value="1">...</option>
-                          <option value="2">...</option>
-                          <option value="3">...</option>
-                        </select>
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        let entidad = document.querySelector("#entidad");
+                        let funcionario =
+                          document.querySelector("#funcionario");
+                        let cargo = document.querySelector("#cargo");
+                        let dependencia =
+                          document.querySelector("#dependencia");
+                        let roles = document.querySelector("#roles");
+                        let correo = document.querySelector("#correo");
+                        let telefono = document.querySelector("#telefono");
+                        if (
+                          entidad.value.length > 0 &&
+                          funcionario.value.length > 0 &&
+                          cargo.value.length > 0 &&
+                          dependencia.value.length > 0 &&
+                          roles.value.length > 0 &&
+                          correo.value.length > 0 &&
+                          telefono.value.length > 0
+                        ) {
+                          fetch(
+                            "http://127.0.0.1:3900/api/fichaTecnicaResponsable/agregar",
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type":
+                                  "application/x-www-form-urlencoded",
+                              },
+                              body: `entidad=${entidad.value}&funcionario=${
+                                funcionario.value
+                              }&cargo=${cargo.value}&dependencia=${
+                                dependencia.value
+                              }&roles=${roles.value}&correo=${
+                                correo.value
+                              }&telefono=${
+                                telefono.value
+                              }&idIndicador=${localStorage.getItem(
+                                "idIndicador"
+                              )}`,
+                            }
+                          )
+                            .then((response) => {
+                              return response.json();
+                            })
+                            .then((res) => {});
+                        } else {
+                          alert("Datos Incompletos");
+                        }
+                      }}
+                    >
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label htmlFor="" className="form-label">
+                            Entidad
+                          </label>
+                          <textarea
+                            className="form-control"
+                            id="entidad"
+                            rows="2"
+                            disabled
+                            value={entidad}
+                            style={{ resize: "none" }}
+                          ></textarea>
+                        </div>
                       </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label htmlFor="" className="form-label">
-                          Nombre Funcionario
-                        </label>
-                        <select
-                          disabled
-                          className="form-select"
-                          aria-label="Default select example"
-                        >
-                          <option value="1">...</option>
-                          <option value="2">...</option>
-                          <option value="3">...</option>
-                        </select>
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label htmlFor="" className="form-label">
+                            Nombre Funcionario
+                          </label>
+                          <input
+                            id="funcionario"
+                            type="text"
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label htmlFor="" className="form-label">
-                          Cargo
-                        </label>
-                        <input type="text" className="form-control" />
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label htmlFor="" className="form-label">
+                            Cargo
+                          </label>
+                          <input
+                            id="cargo"
+                            type="text"
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label htmlFor="" className="form-label">
-                          Dependencia
-                        </label>
-                        <input type="text" className="form-control" />
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label htmlFor="" className="form-label">
+                            Dependencia
+                          </label>
+                          <input
+                            id="dependencia"
+                            type="text"
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label htmlFor="" className="form-label">
-                          Roles
-                        </label>
-                        <input type="text" className="form-control" disabled />
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label htmlFor="" className="form-label">
+                            Roles
+                          </label>
+                          <input
+                            id="roles"
+                            type="text"
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label htmlFor="" className="form-label">
-                          Correo electronico
-                        </label>
-                        <input type="text" className="form-control" disabled />
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label htmlFor="" className="form-label">
+                            Correo electronico
+                          </label>
+                          <input
+                            id="correo"
+                            type="text"
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="row mb-3">
-                      <div className="col">
-                        <label htmlFor="" className="form-label">
-                          Telefono
-                        </label>
-                        <input type="text" className="form-control" disabled />
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label htmlFor="" className="form-label">
+                            Telefono
+                          </label>
+                          <input
+                            id="telefono"
+                            type="text"
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="d-flex justify-content-end">
-                      <button type="sumit" className="btn btn-primary m-1">
-                        Guardar
-                      </button>
-                      <button className="btn btn-secondary m-1">
-                        Cancelar
-                      </button>
-                    </div>
+                      <div className="d-flex justify-content-end">
+                        <button type="sumit" className="btn btn-primary m-1">
+                          Guardar
+                        </button>
+                        <button className="btn btn-secondary m-1">
+                          Cancelar
+                        </button>
+                      </div>
+                    </form>
                   </div>
 
                   <div
