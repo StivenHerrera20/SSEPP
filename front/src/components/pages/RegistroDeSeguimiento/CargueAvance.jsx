@@ -8,7 +8,68 @@ import AvanceCualitativo from "./AvanceCualitativo";
 
 const CargueAvance = () => {
   const [controladorTabla, setControladorTabla] = useState(1);
-  useEffect(() => {}, []);
+  const [nombreResultado, setNombreResultado] = useState([]);
+  const [nombreProducto, setNombreProducto] = useState([]);
+  const [nombreFuncionario, setNombreFuncionario] = useState([]);
+  const [unidadMedida, setUnidadMedida] = useState([]);
+  const [diasRezago, setDiasRezago] = useState([]);
+  const [periodicidad, setPeriodicidad] = useState([]);
+  useEffect(() => {
+    if (localStorage.getItem("tiposSeg") == "producto") {
+      fetch(
+        `http://127.0.0.1:3900/api/productoDatosGenerales/listarTodos/${localStorage.getItem(
+          "idObjSeg"
+        )}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          setNombreResultado(doc.resultado.rows[0].nombre_resultado);
+          setNombreProducto(doc.resultado.rows[0].nombre_producto);
+          localStorage.setItem("idEnfoquesSeg", doc.resultado.rows[0].id);
+        });
+    } else if (localStorage.getItem("tiposSeg") == "resultado") {
+      fetch(
+        `http://127.0.0.1:3900/api/resultadoDatosGenerales/listarTodos/${localStorage.getItem(
+          "idObjSeg"
+        )}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          setNombreResultado(doc.resultado.rows[0].nombre_resultado);
+          localStorage.setItem("idEnfoquesSeg", doc.resultado.rows[0].id);
+        });
+    }
+    fetch(
+      `http://127.0.0.1:3900/api/fichaTecnicaResponsable/listar/${localStorage.getItem(
+        "idIndicadorSeg"
+      )}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setNombreFuncionario(doc.resultado.rows[0].funcionario);
+      });
+    fetch(
+      `http://127.0.0.1:3900/api/fichaTecnicaMedicion/listar/${localStorage.getItem(
+        "idIndicadorSeg"
+      )}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setUnidadMedida(doc.resultado.rows[0].unidad);
+        setDiasRezago(doc.resultado.rows[0].dias_rezago);
+        setPeriodicidad(doc.resultado.rows[0].periodicidad);
+        localStorage.setItem("periodicidadSeg", periodicidad);
+      });
+  }, []);
+
   return (
     <>
       <div className="card shadow mb-4">
@@ -84,7 +145,7 @@ const CargueAvance = () => {
                       rows="2"
                       style={{ resize: "none" }}
                       disabled
-                      defaultValue={""}
+                      defaultValue={nombreResultado}
                     ></textarea>
                   </div>
                   <div className="row mb-3">
@@ -101,7 +162,7 @@ const CargueAvance = () => {
                       rows="2"
                       style={{ resize: "none" }}
                       disabled
-                      defaultValue={""}
+                      defaultValue={nombreProducto}
                     ></textarea>
                   </div>
                   <div className="row mb-3">
@@ -135,7 +196,7 @@ const CargueAvance = () => {
                       rows="2"
                       style={{ resize: "none" }}
                       disabled
-                      defaultValue={""}
+                      defaultValue={nombreFuncionario}
                     ></textarea>
                   </div>
                   <div className="row mb-3">
@@ -183,7 +244,7 @@ const CargueAvance = () => {
                       id=""
                       className="form-control"
                       disabled
-                      value={""}
+                      value={unidadMedida}
                     />
                   </div>
                   <div className="row mb-3">
@@ -199,7 +260,7 @@ const CargueAvance = () => {
                       id=""
                       className="form-control"
                       disabled
-                      value={""}
+                      value={diasRezago}
                     />
                   </div>
                   <div className="row mb-3">
@@ -215,7 +276,7 @@ const CargueAvance = () => {
                       id=""
                       className="form-control"
                       disabled
-                      value={""}
+                      value={periodicidad}
                     />
                   </div>
                   <div className="row mb-3">

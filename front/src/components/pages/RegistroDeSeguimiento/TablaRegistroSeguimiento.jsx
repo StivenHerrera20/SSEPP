@@ -141,6 +141,7 @@ const TablaRegistroSeguimiento = () => {
                       localStorage.setItem("valorSeg", res.valor);
                       localStorage.setItem("fechaBaseSeg", res.fecha_base);
                       localStorage.setItem("fuenteSeg", res.fuente);
+                      localStorage.setItem("idObjSeg", res.id_objetivo);
                       localStorage.setItem(
                         "anualizacionSef",
                         res.tipo_anulacion
@@ -201,6 +202,7 @@ const TablaRegistroSeguimiento = () => {
                       localStorage.setItem("valorSeg", res.valor);
                       localStorage.setItem("fechaBaseSeg", res.fecha_base);
                       localStorage.setItem("fuenteSeg", res.fuente);
+                      localStorage.setItem("idObjSeg", res.id_objetivo);
                       localStorage.setItem(
                         "anualizacionSef",
                         res.tipo_anulacion

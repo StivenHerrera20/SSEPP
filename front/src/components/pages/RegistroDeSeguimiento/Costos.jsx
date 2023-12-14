@@ -10,28 +10,27 @@ import {
 ChartJS.register(LinearScale, CategoryScale, Tooltip, Legend, BarElement);
 import { Bar } from "react-chartjs-2";
 const Costos = () => {
-  const data = {
-    labels: ["2020", "2021", "2022"],
+  const [data, setData] = useState({
+    labels: [],
     datasets: [
       {
-        label: "",
-        data: [4, 3, 7],
+        label: "Estimado",
+        data: [],
         responsive: true,
-        backgroundColor: "#4d72a6",
+        backgroundColor: "aqua",
         borderColor: "black",
         borderWidth: 1,
       },
       {
-        label: "",
-        data: [4, 3, 7],
-        backgroundColor: "#74b458 ",
+        label: "Disponible",
+        data: [],
+        backgroundColor: "green",
         borderColor: "black",
         borderWidth: 1,
       },
     ],
-  };
-
-  const config = {
+  });
+  const [config, setConfig] = useState({
     type: "bar",
     data: data,
     options: {
@@ -41,7 +40,99 @@ const Costos = () => {
         },
       },
     },
-  };
+  });
+  const [enfoques, setEnfoques] = useState([]);
+  useEffect(() => {
+    if (localStorage.getItem("tiposSeg") == "producto") {
+      fetch(
+        `http://127.0.0.1:3900/api/productoDatosGeneralesHasEnfoques/listar/${localStorage.getItem(
+          "idEnfoquesSeg"
+        )}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          let array = [];
+          for (let i = 0; i < doc.resultado.rows.length; i++) {
+            array.push(doc.resultado.rows[i].enfoque);
+          }
+          setEnfoques(array);
+          console.log(doc.resultado);
+        });
+    } else if (localStorage.getItem("tiposSeg") == "resultado") {
+      fetch(
+        `http://127.0.0.1:3900/api/resultadoDatosGeneralesHasEnfoques/listar/${localStorage.getItem(
+          "idEnfoquesSeg"
+        )}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          let array = [];
+          for (let i = 0; i < doc.resultado.rows.length; i++) {
+            array.push(doc.resultado.rows[i].enfoque);
+          }
+          setEnfoques(array);
+          console.log(doc.resultado);
+        });
+    }
+    fetch(
+      `http://127.0.0.1:3900/api/productoHasCosto/listarCosto/${localStorage.getItem(
+        "idObjetivo"
+      )}`
+    )
+      .then((response) => response.json())
+      .then((apiData) => {
+        let years = [];
+        let dataUno = [];
+        let dataDos = [];
+        for (let i = 0; i < apiData.resultado.length; i++) {
+          years.push(apiData.resultado[i].year);
+          dataUno.push(apiData.resultado[i].estimado);
+          dataDos.push(apiData.resultado[i].ejecutado);
+        }
+        let datos = {
+          labels: years,
+          datasets: [
+            {
+              label: "Estimado",
+              data: dataUno,
+              responsive: true,
+              backgroundColor: "aqua",
+              borderColor: "black",
+              borderWidth: 1,
+            },
+            {
+              label: "Disponible",
+              data: dataDos,
+              backgroundColor: "green",
+              borderColor: "black",
+              borderWidth: 1,
+            },
+          ],
+        };
+        setData(datos);
+      })
+      .catch((error) => {
+        console.error("Error al obtener datos de la API:", error);
+      });
+  }, []);
+  let fin = localStorage.getItem("finSeg");
+  let inicio = localStorage.getItem("inicioSeg");
+  let yearFin = fin.split("-");
+  let totalFin = yearFin[0];
+  let yearInicio = inicio.split("-");
+  let totalInicio = yearInicio[0];
+  const opciones = [];
+  for (let i = totalInicio; i <= totalFin; i++) {
+    opciones.push(
+      <option key={i} value={i}>
+        {i}
+      </option>
+    );
+  }
   return (
     <>
       <div className="row mb-3">
@@ -93,7 +184,7 @@ const Costos = () => {
                   <label for="exampleInputPassword1" className="form-label">
                     Mes del Periodo
                   </label>
-                  <select name="" id="" className="form-select">
+                  <select name="" id="mes" className="form-select">
                     <option value="enero">ENERO</option>
                     <option value="febrero">FEBRERO</option>
                     <option value="marzo">MARZO</option>
@@ -112,8 +203,8 @@ const Costos = () => {
                   <label for="exampleInputPassword1" className="form-label">
                     Año del Periodo
                   </label>
-                  <select name="" id="" className="form-select">
-                    <option value="enero">...</option>
+                  <select name="" id="year" className="form-select">
+                    {opciones}
                   </select>
                 </div>
                 <div className="col-3">
@@ -123,14 +214,35 @@ const Costos = () => {
                   <div className="input-group">
                     <span className="input-group-text">$</span>
                     <input
-                      type="text"
+                      type="number"
+                      id="recurso"
                       className="form-control"
                       aria-label="Amount (to the nearest dollar)"
                     />
                   </div>
                 </div>
                 <div className="col-3 d-flex align-items-end">
-                  <button type="button" className="btn btn-primary w-100">
+                  <button
+                    type="button"
+                    className="btn btn-primary w-100"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      let recurso = document.querySelector("#recurso");
+                      if (recurso.value.length > 0) {
+                        let observacion =
+                          document.querySelector("#observacion");
+                        let mes = document.querySelector("#mes");
+                        let year = document.querySelector("#year");
+                        mes.setAttribute("disabled", true);
+                        year.setAttribute("disabled", true);
+                        recurso.setAttribute("disabled", true);
+                        observacion.removeAttribute("disabled");
+                        localStorage.setItem("recursoSeg", recurso.value);
+                      } else {
+                        alert("llenar los campos");
+                      }
+                    }}
+                  >
                     Validar Avance
                   </button>
                 </div>
@@ -147,6 +259,7 @@ const Costos = () => {
                     style={{ resize: "none" }}
                     className="form-control"
                     disabled
+                    defaultValue={enfoques}
                   ></textarea>
                 </div>
               </div>
@@ -157,7 +270,7 @@ const Costos = () => {
                   </label>
                   <textarea
                     name=""
-                    id=""
+                    id="observacion"
                     rows="3"
                     style={{ resize: "none" }}
                     className="form-control"

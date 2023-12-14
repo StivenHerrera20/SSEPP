@@ -20,22 +20,11 @@ router.put("/editar/:id", async (req, res) => {
     mensaje: "Actualizado Correctamente",
   });
 });
-router.get("/listar", async (req, res) => {
-  const busqueda = await sequelize.query(
-    "select max(id) as max from politica_publica",
-    {
-      type: QueryTypes.SELECT,
-    }
-  );
-  const { page = 0, size = 5 } = req.query;
-  let options = {
-    limit: +size,
-    offset: +page * +size,
-    where: { id_politica: busqueda[0].max },
-  };
-  const { count, rows } =
-    await resultadoDatosGeneralesHasEnfoques.findAndCountAll(options);
-  res.json({ total: count, desarrollo: rows, fila: size, page: page });
+router.get("/listar/:id", async (req, res) => {
+  const doc = await resultadoDatosGeneralesHasEnfoques.findAndCountAll({
+    where: { id_resultado_datos_generales: req.params.id },
+  });
+  res.json({ resultado: doc });
 });
 router.get("/listarEscrito", async (req, res) => {
   const busquedaId = await sequelize.query(
