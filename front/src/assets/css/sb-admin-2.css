@@ -2267,6 +2267,36 @@ fieldset:disabled a.btn {
   background-color: #2653d4;
   border-color: #244ec9;
 }
+.btn-orange {
+  color: #fff;
+  background-color: #ff8f00;
+  border-color: #ff8f00;
+}
+.btn-orange:hover {
+  color: #fff;
+  background-color: #d38013;
+  border-color: #b86f10;
+}
+.btn-orange.focus,
+.btn-orange:focus {
+  color: #fff;
+  background-color: #d38013;
+  border-color: #b86f10;
+  box-shadow: 0 0 0 0.2rem rgba(105, 136, 228, 0.5);
+}
+.btn-orange.disabled,
+.btn-orange:disabled {
+  color: #fff;
+  background-color: #ff8f00;
+  border-color: #ff8f00;
+}
+.btn-orange:not(:disabled):not(.disabled).active,
+.btn-orange:not(:disabled):not(.disabled):active,
+.show > .btn-orange.dropdown-toggle {
+  color: #fff;
+  background-color: #b86f10;
+  border-color: #ac6c1a;
+}
 .btn-primary:not(:disabled):not(.disabled).active:focus,
 .btn-primary:not(:disabled):not(.disabled):active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
@@ -2274,26 +2304,26 @@ fieldset:disabled a.btn {
 }
 .btn-secondary {
   color: #fff;
-  background-color: #858796;
-  border-color: #858796;
+  background-color: #2854a5;
+  border-color: #2854a5;
 }
 .btn-secondary:hover {
   color: #fff;
-  background-color: #717384;
-  border-color: #6b6d7d;
+  background-color: #5d6bee;
+  border-color: #5d6bee;
 }
 .btn-secondary.focus,
 .btn-secondary:focus {
   color: #fff;
-  background-color: #717384;
-  border-color: #6b6d7d;
+  background-color: #5d6bee;
+  border-color: #404dad;
   box-shadow: 0 0 0 0.2rem rgba(151, 153, 166, 0.5);
 }
 .btn-secondary.disabled,
 .btn-secondary:disabled {
   color: #fff;
-  background-color: #858796;
-  border-color: #858796;
+  background-color: #2854a5;
+  border-color: #2854a5;
 }
 .btn-secondary:not(:disabled):not(.disabled).active,
 .btn-secondary:not(:disabled):not(.disabled):active,
@@ -5914,6 +5944,11 @@ a.close.disabled {
 .bg-primary {
   background-color: #4e73df !important;
 }
+
+.bg-orange {
+  background-color: #ff8f00 !important;
+}
+
 a.bg-primary:focus,
 a.bg-primary:hover,
 button.bg-primary:focus,

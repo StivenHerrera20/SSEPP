@@ -17,6 +17,10 @@ import Parametros from "./Parametros";
 import EnfoqueDos from "./EnfoqueDos";
 import EnfoqueTres from "./EnfoqueTres";
 import EnfoqueCuatro from "./EnfoqueCuatro";
+import logo from "../../../assets/images/LogoSEGUIPOP.png";
+import footerUno from "../../../assets/images/FooterUno.png";
+import footerDos from "../../../assets/images/FooterDos.png";
+import { Container } from "react-bootstrap";
 
 const IndexParametrizacion = () => {
   const [control, setControl] = useState(1);
@@ -27,15 +31,15 @@ const IndexParametrizacion = () => {
       <div id="wrapper">
         <nav
           className="navbar-nav bg-primary sidebar sidebar-dark"
-          /* style={{ height: window.innerHeight - 200 }} */
+          /* style={{ height: window.innerHeight + 226 }} */
           id="accordionSidebar"
         >
           <a
             className="sidebar-brand d-flex align-items-center justify-content-center "
             href="/inicio"
+            style={{ height: "7rem" }}
           >
-            <div className="sidebar-brand-icon rotate-n-15">logo</div>
-            <div className="sidebar-brand-text mx-3">SSEPP</div>
+            <div className="sidebar-brand-text mx-3">PARAMETRIZACION</div>
           </a>
 
           <hr className="sidebar-divider my-0" />
@@ -327,8 +331,11 @@ const IndexParametrizacion = () => {
         </nav>
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
-            <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-              <h5 className="d-flex">
+            <nav
+              className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+              style={{ height: "7rem" }}
+            >
+              <h2 className="d-flex">
                 <a
                   href="/inicio"
                   className="text-secondary mx-0 px-1"
@@ -417,55 +424,16 @@ const IndexParametrizacion = () => {
                     }
                   })()}
                 </a>{" "}
-              </h5>
+              </h2>
 
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item dropdown no-arrow">
-                  <a href="#" className="btn btn-icon-split btn-primary">
-                    <span className="icon text-white-50">
-                      <i className="fa fa-user"></i>
-                    </span>
-                    <span className="text">Iniciar Sesion</span>
-                  </a>
-                  {/* <!-- <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  id="userDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <span className="mr-2 d-none d-lg-inline text-gray-600 small"
-                    >Douglas McGee</span
-                  >
-                  <img
-                    className="img-profile rounded-circle"
-                    src="img/undraw_profile.svg"
-                  />
-                </a>
-                 
-                <div
-                  className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                  aria-labelledby="userDropdown"
-                >
-                  <a
-                    className="dropdown-item"
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#logoutModal"
-                  >
-                    <i
-                      className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
-                    ></i>
-                    Logout
-                  </a>
-                </div> --> */}
+                  <img src={logo} alt="" className="img-fluid" width={200} />
                 </li>
               </ul>
             </nav>
 
-            <div className="container-fluid">
+            <div className="container-fluid ">
               {
                 //Control de seleccion
               }
@@ -560,10 +528,35 @@ const IndexParametrizacion = () => {
               <Outlet />
             </div>
           </div>
-          <footer className="sticky-footer bg-white">
-            <div className="container my-auto">
-              <div className="copyright text-center my-auto">
-                <span>Copyright &copy; Your Website 2023</span>
+          <footer className="sticky-footer bg-white py-0">
+            <div className="container my-2 py-0">
+              <div className="copyright text-center my-0 d-flex justify-content-center">
+                <div className="col-3 d-flex justify-content-center align-items-center">
+                  <img
+                    src={footerUno}
+                    alt=""
+                    className="img-fluid"
+                    width={60}
+                  />
+                </div>
+                <div className="col-4 text-start ">
+                  <p className="py-0 my-2">www.cartago.gov.co</p>
+                  <p className="py-0 my-2">
+                    CAM CENTRO DE ADMINISTRACIÓN MUNICIPAL
+                  </p>
+                  <p className="py-0 my-2">
+                    Calle 8 No.6-52, Teléfono: (2)- 2114101
+                  </p>
+                  <p className="py-0 my-2">Código Postal: 762021</p>
+                </div>
+                <div className="col-3 d-flex justify-content-center align-items-center">
+                  <img
+                    src={footerDos}
+                    alt=""
+                    className="img-fluid"
+                    width={60}
+                  />
+                </div>
               </div>
             </div>
           </footer>
