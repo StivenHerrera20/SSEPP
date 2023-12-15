@@ -41,8 +41,9 @@ const AvanceCualitativo = () => {
           setEnfoques(array);
         });
     }
+    const filtro = localStorage.getItem("idIndicadorSeg");
     fetch(
-      `http://127.0.0.1:3900/api/avanceCualitativo/listarTabla?page=${pagina}&size=${fila}`
+      `http://127.0.0.1:3900/api/avanceCualitativo/listarTabla?page=${pagina}&size=${fila}&filtro=${filtro}`
     )
       .then((response) => {
         return response.json();
@@ -270,6 +271,7 @@ const AvanceCualitativo = () => {
                   <label for="exampleInputPassword1" className="form-label">
                     Enfoques
                   </label>
+                  {console.log(enfoques)}
                   <textarea
                     name=""
                     id=""
@@ -346,7 +348,9 @@ const AvanceCualitativo = () => {
                       })
                       .then((doc) => {
                         fetch(
-                          `http://127.0.0.1:3900/api/avanceCualitativo/listarTabla?page=${pagina}&size=${fila}`
+                          `http://127.0.0.1:3900/api/avanceCualitativo/listarTabla?page=${pagina}&size=${fila}&filtro=${localStorage.getItem(
+                            "idIndicadorSeg"
+                          )}`
                         )
                           .then((response) => {
                             return response.json();

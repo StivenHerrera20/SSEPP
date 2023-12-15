@@ -29,6 +29,10 @@ module.exports = (sequelize, type) => {
           key: "id",
         },
       },
+      ejecutado: {
+        type: type.STRING,
+        allowNull: false,
+      },
     },
     {
       timestamps: false, // Desactiva la funcionalidad de timestamps

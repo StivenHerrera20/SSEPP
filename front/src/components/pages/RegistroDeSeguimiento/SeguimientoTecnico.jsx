@@ -10,7 +10,38 @@ import {
 ChartJS.register(LinearScale, CategoryScale, Tooltip, Legend, BarElement);
 import { Bar } from "react-chartjs-2";
 const SeguimientoTecnico = () => {
-  const data = {
+  const [data, setData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Meta",
+        data: [],
+        responsive: true,
+        backgroundColor: "aqua",
+        borderColor: "black",
+        borderWidth: 1,
+      },
+      {
+        label: "Ejecutado",
+        data: [],
+        backgroundColor: "green",
+        borderColor: "black",
+        borderWidth: 1,
+      },
+    ],
+  });
+  const [config, setConfig] = useState({
+    type: "bar",
+    data: data,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+  /* const data = {
     labels: ["2020", "2021", "2022"],
     datasets: [
       {
@@ -41,7 +72,96 @@ const SeguimientoTecnico = () => {
         },
       },
     },
-  };
+  }; */
+  useEffect(() => {
+    if (localStorage.getItem("tiposSeg") == "producto") {
+      fetch(
+        `http://127.0.0.1:3900/api/prodcuctoHasMeta/listarMeta/${localStorage.getItem(
+          "idObjSeg"
+        )}`
+      )
+        .then((response) => response.json())
+        .then((apiData) => {
+          console.log(apiData);
+          let years = [];
+          let dataUno = [];
+          let dataDos = [];
+          for (let i = 0; i < apiData.resultado.length; i++) {
+            years.push(apiData.resultado[i].year);
+            dataUno.push(apiData.resultado[i].meta);
+            dataDos.push(apiData.resultado[i].ejecutado);
+          }
+          let datos = {
+            labels: years,
+            datasets: [
+              {
+                label: "Meta",
+                data: dataUno,
+                responsive: true,
+                backgroundColor: "aqua",
+                borderColor: "black",
+                borderWidth: 1,
+              },
+              {
+                label: "Ejecutado",
+                data: dataDos,
+                backgroundColor: "green",
+                borderColor: "black",
+                borderWidth: 1,
+              },
+            ],
+          };
+          setData(datos);
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error("Error al obtener datos de la API:", error);
+        });
+    } else if (localStorage.getItem("tiposSeg") == "resultado") {
+      fetch(
+        `http://127.0.0.1:3900/api/resultadoHasMeta/listarMeta/${localStorage.getItem(
+          "idObjSeg"
+        )}`
+      )
+        .then((response) => response.json())
+        .then((apiData) => {
+          console.log(apiData);
+          let years = [];
+          let dataUno = [];
+          let dataDos = [];
+          for (let i = 0; i < apiData.resultado.length; i++) {
+            years.push(apiData.resultado[i].year);
+            dataUno.push(apiData.resultado[i].metas);
+            dataDos.push(apiData.resultado[i].ejecutado);
+          }
+          let datos = {
+            labels: years,
+            datasets: [
+              {
+                label: "Meta",
+                data: dataUno,
+                responsive: true,
+                backgroundColor: "aqua",
+                borderColor: "black",
+                borderWidth: 1,
+              },
+              {
+                label: "Ejecutado",
+                data: dataDos,
+                backgroundColor: "green",
+                borderColor: "black",
+                borderWidth: 1,
+              },
+            ],
+          };
+          setData(datos);
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error("Error al obtener datos de la API:", error);
+        });
+    }
+  }, []);
   return (
     <>
       <div className="row mb-3">
