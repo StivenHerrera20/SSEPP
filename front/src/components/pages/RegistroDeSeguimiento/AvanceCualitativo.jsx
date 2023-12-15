@@ -109,11 +109,11 @@ const AvanceCualitativo = () => {
             data-bs-target="#agregarAvanceCualitativo"
           ></button>
         </div>
-        <div className="col-1">
+        <div className="col d-flex justify-content-end">
           <select
             name=""
             id="numeroFilas"
-            className="form-select ms-3"
+            className="form-select ms-3 w-25"
             onChange={selectPagina}
           >
             <option value="1">1</option>

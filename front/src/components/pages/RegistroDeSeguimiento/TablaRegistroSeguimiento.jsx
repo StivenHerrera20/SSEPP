@@ -130,6 +130,7 @@ const TablaRegistroSeguimiento = () => {
                 <td>{res.ultimoPeriodoRegistrado}</td>
                 <td className="text-center">
                   <button
+                    className="btn btn-secondary bi bi-pencil"
                     onClick={() => {
                       localStorage.setItem("idIndicadorSeg", res.id);
                       localStorage.setItem("politicaSeg", res.politica);
@@ -149,9 +150,7 @@ const TablaRegistroSeguimiento = () => {
                       window.location =
                         "/inicio/registrodeseguimiento/cargueavance";
                     }}
-                  >
-                    Editar
-                  </button>{" "}
+                  ></button>{" "}
                 </td>
               </tr>
             );
@@ -191,6 +190,7 @@ const TablaRegistroSeguimiento = () => {
                 <td>{res.ultimoPeriodoRegistrado}</td>
                 <td className="text-center">
                   <button
+                    className="btn btn-secondary bi bi-pencil"
                     onClick={() => {
                       localStorage.setItem("idIndicadorSeg", res.id);
                       localStorage.setItem("politicaSeg", res.politica);
@@ -210,9 +210,7 @@ const TablaRegistroSeguimiento = () => {
                       window.location =
                         "/inicio/registrodeseguimiento/cargueavance";
                     }}
-                  >
-                    Editar
-                  </button>{" "}
+                  ></button>{" "}
                 </td>
               </tr>
             );
@@ -225,7 +223,7 @@ const TablaRegistroSeguimiento = () => {
     <>
       <div className="card shadow mb-4">
         <div className="card-header py-3 d-flex">
-          <div>
+          <div className="me-2">
             <select
               name=""
               id="numeroFilas"
