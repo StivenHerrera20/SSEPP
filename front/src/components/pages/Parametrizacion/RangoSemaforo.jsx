@@ -74,7 +74,7 @@ const RangoSemaforo = () => {
                       <td className="text-center">
                         {" "}
                         <button
-                          className="btn btn-success fa fa-pencil "
+                          className="btn btn-secondary fa fa-pencil "
                           onClick={handleShowEdit}
                         ></button>
                       </td>

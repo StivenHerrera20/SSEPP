@@ -105,7 +105,7 @@ const EnfoqueDos = () => {
       <div className="card shadow mb-4">
         <div className="card-header py-3 d-flex">
           <Button
-            className="btn btn-primary fa fa-plus"
+            className="btn btn-secondary fa fa-plus"
             variant="primary"
             onClick={handleShow}
           ></Button>
@@ -173,7 +173,7 @@ const EnfoqueDos = () => {
                       <td className="text-center">
                         {" "}
                         <button
-                          className="btn btn-success fa fa-pencil"
+                          className="btn btn-secondary fa fa-pencil"
                           onClick={handleShowEdit}
                         ></button>
                       </td>
@@ -185,14 +185,14 @@ const EnfoqueDos = () => {
           </div>
           <div className="d-flex justify-content-center">
             <Button
-              className="btn btn-primary m-2"
+              className="btn btn-secondary m-2"
               variant="primary"
               onClick={handleAnterior}
             >
               Anterior
             </Button>
             <Button
-              className="btn btn-primary m-2"
+              className="btn btn-secondary m-2"
               variant="primary"
               onClick={handleSiguiente}
             >
