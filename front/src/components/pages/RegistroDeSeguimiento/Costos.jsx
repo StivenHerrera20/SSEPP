@@ -80,11 +80,12 @@ const Costos = () => {
     }
     fetch(
       `http://127.0.0.1:3900/api/productoHasCosto/listarCosto/${localStorage.getItem(
-        "idObjetivo"
+        "idObjSeg"
       )}`
     )
       .then((response) => response.json())
       .then((apiData) => {
+        console.log(apiData);
         let years = [];
         let dataUno = [];
         let dataDos = [];
@@ -114,6 +115,7 @@ const Costos = () => {
           ],
         };
         setData(datos);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error al obtener datos de la API:", error);
