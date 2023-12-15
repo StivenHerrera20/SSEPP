@@ -661,7 +661,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                   <hr className="sidebar-divider my-0 " />
                   <div className="row mb-3">
                     <div className="col d-flex justify-content-end">
-                      <button className="btn btn-primary m-2">Guardar</button>
+                      <button className="btn btn-secondary m-2">Guardar</button>
                       <button className="btn btn-secondary m-2">
                         Cancelar
                       </button>
@@ -1150,7 +1150,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                               <td>{res.objetivo}</td>
                               <td className="text-center">
                                 {" "}
-                                <button className="btn btn-success fa fa-pencil "></button>
+                                <button className="btn btn-secondary fa fa-pencil "></button>
                               </td>
                               <td className="text-center">
                                 {" "}

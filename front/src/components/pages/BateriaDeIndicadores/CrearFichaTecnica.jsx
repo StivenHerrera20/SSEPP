@@ -12,6 +12,9 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
   const [fechaInicio, setFechaInicio] = useState(0);
   const [fechaFin, setFechaFin] = useState(0);
   const [meta, setMeta] = useState([]);
+  const [checkEnable, setCheckEnable] = useState(false);
+  const [enableTerritorializacion, setEnableTerritorializacion] =
+    useState(true);
   useEffect(() => {
     fetch(
       `http://127.0.0.1:3900/api/politicasPublicas/traerFechas/?nombre=${localStorage.getItem(
@@ -570,37 +573,85 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                       </div>
 
                       <div className="row mb-3">
-                        <div className="col-4">
-                          <label htmlFor="" className="form-label">
-                            Unidad de medida
-                          </label>
-                          <select
-                            className="form-select"
-                            aria-label="Default select example"
-                            id="unidad"
-                          >
-                            <option value="Acuerdos">Acuerdos</option>
-                            <option value="Habitantes">Habitantes</option>
-                            <option value="Hectareas">Hectareas</option>
-                            <option value="Kilometros">Kilometros</option>
-                            <option value="Kilos">Kilos</option>
-                            <option value="Metros">Metros</option>
-                            <option value="Millas">Millas</option>
-                            <option value="Personas">Personas</option>
-                            <option value="Porcentaje">Porcentaje</option>
-                            <option value="Tasa">Tasa</option>
-                            <option value="Toneladas">Toneladas</option>
-                            <option value="Unidad Productiva Rural">
-                              Unidad Productiva Rural
-                            </option>
-                            <option value="Indice">Indice</option>
-                          </select>
-                        </div>
+                        {(() => {
+                          if (checkEnable === true) {
+                            return (
+                              <>
+                                <div className="col-4">
+                                  <label htmlFor="" className="form-label">
+                                    Unidad de medida
+                                  </label>
+                                  <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                    id="unidad"
+                                    onClick={() => {
+                                      document.getElementById(
+                                        "OtraMedidaBateria"
+                                      ).value = null;
+                                    }}
+                                  >
+                                    <option value="Acuerdos">Acuerdos</option>
+                                    <option value="Habitantes">
+                                      Habitantes
+                                    </option>
+                                    <option value="Hectareas">Hectareas</option>
+                                    <option value="Kilometros">
+                                      Kilometros
+                                    </option>
+                                    <option value="Kilos">Kilos</option>
+                                    <option value="Metros">Metros</option>
+                                    <option value="Millas">Millas</option>
+                                    <option value="Personas">Personas</option>
+                                    <option value="Porcentaje">
+                                      Porcentaje
+                                    </option>
+                                    <option value="Tasa">Tasa</option>
+                                    <option value="Toneladas">Toneladas</option>
+                                    <option value="Unidad Productiva Rural">
+                                      Unidad Productiva Rural
+                                    </option>
+                                    <option value="Indice">Indice</option>
+                                  </select>
+                                </div>
+                              </>
+                            );
+                          } else {
+                            return (
+                              <>
+                                <div className="col-4">
+                                  <label htmlFor="" className="form-label">
+                                    Unidad de medida
+                                  </label>
+                                  <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                    id="unidad"
+                                    disabled="true"
+                                  ></select>
+                                </div>
+                              </>
+                            );
+                          }
+                        })()}
                         <div className="col-4 d-flex">
                           <div className="form-check m-auto">
                             <input
                               className="form-check-input"
                               type="checkbox"
+                              onClick={() => {
+                                if (checkEnable === false) {
+                                  setCheckEnable(true);
+                                  document.getElementById(
+                                    "OtraMedidaBateria"
+                                  ).value = null;
+                                } else {
+                                  setCheckEnable(false);
+                                }
+                                document.getElementById(
+                                  "OtraMedidaBateria"
+                                ).value = null;
+                              }}
                               id=""
                             />
                             <label className="form-check-label" htmlFor="">
@@ -609,15 +660,32 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                           </div>
                         </div>
                         <div className="col-4">
-                          {" "}
-                          <label htmlFor="" className="form-label">
-                            ¿Cúal?
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            disabled
-                          />
+                          {(() => {
+                            if (checkEnable === true) {
+                              return (
+                                <>
+                                  <label htmlFor="" className="form-label">
+                                    ¿Cúal?
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    disabled
+                                    id="OtraMedidaBateria"
+                                  />
+                                </>
+                              );
+                            } else {
+                              return (
+                                <>
+                                  <label htmlFor="" className="form-label">
+                                    ¿Cúal?
+                                  </label>
+                                  <input type="text" className="form-control" />
+                                </>
+                              );
+                            }
+                          })()}
                         </div>
                       </div>
 
@@ -715,22 +783,44 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                             aria-label="Default select example"
                             id="territorializacion"
                           >
-                            <option value="Si">Si</option>
-                            <option value="No">No</option>
+                            <option
+                              value="Si"
+                              onClick={() => {
+                                setEnableTerritorializacion(true);
+                              }}
+                            >
+                              Si
+                            </option>
+                            <option
+                              value="No"
+                              onClick={() => {
+                                setEnableTerritorializacion(false);
+                              }}
+                            >
+                              No
+                            </option>
                           </select>
                         </div>
-                        <div className="col-4">
-                          <label htmlFor="" className="form-label">
-                            Nivel
-                          </label>
-                          <select
-                            className="form-select"
-                            aria-label="Default select example"
-                          >
-                            <option value="1">...</option>
-                            <option value="2">...</option>
-                          </select>
-                        </div>
+                        {(() => {
+                          if (enableTerritorializacion === true) {
+                            return (
+                              <>
+                                <div className="col-4">
+                                  <label htmlFor="" className="form-label">
+                                    Nivel
+                                  </label>
+                                  <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                  >
+                                    <option value="1">...</option>
+                                    <option value="2">...</option>
+                                  </select>
+                                </div>
+                              </>
+                            );
+                          }
+                        })()}
                       </div>
                       <div className="row mb-3">
                         <div className="col">
@@ -1030,33 +1120,33 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                 </div>
 
                                 <div
-                                  class="modal fade"
+                                  className="modal fade"
                                   id="modalId"
-                                  tabindex="-1"
+                                  tabIndex="-1"
                                   role="dialog"
                                   aria-labelledby="modalTitleId"
                                   aria-hidden="true"
                                 >
-                                  <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
+                                  <div className="modal-dialog" role="document">
+                                    <div className="modal-content">
+                                      <div className="modal-header">
                                         <h5
-                                          class="modal-title"
+                                          className="modal-title"
                                           id="modalTitleId"
                                         >
                                           Publicación del Indicador
                                         </h5>
                                         <button
                                           type="button"
-                                          class="btn-close"
+                                          className="btn-close"
                                           data-bs-dismiss="modal"
                                           aria-label="Close"
                                         ></button>
                                       </div>
-                                      <div class="modal-body">
+                                      <div className="modal-body">
                                         <div className="mb-3">
                                           <label
-                                            for="exampleInputPassword1"
+                                            htmlFor="exampleInputPassword1"
                                             className="form-label"
                                           >
                                             Justificación{" "}
@@ -1071,10 +1161,10 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                           ></textarea>
                                         </div>
                                       </div>
-                                      <div class="modal-footer">
+                                      <div className="modal-footer">
                                         <button
                                           type="button"
-                                          class="btn btn-primary"
+                                          className="btn btn-primary"
                                           onClick={(e) => {
                                             e.preventDefault();
                                             let justificacion =
@@ -1100,7 +1190,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                         </button>
                                         <button
                                           type="button"
-                                          class="btn btn-secondary"
+                                          className="btn btn-secondary"
                                           data-bs-dismiss="modal"
                                         >
                                           Cancelar
@@ -1136,34 +1226,37 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                   </div>
 
                                   <div
-                                    class="modal fade"
+                                    className="modal fade"
                                     id="confirmarPubli"
-                                    tabindex="-1"
+                                    tabIndex="-1"
                                     role="dialog"
                                     aria-labelledby="modalTitleId"
                                     aria-hidden="true"
                                   >
-                                    <div class="modal-dialog" role="document">
-                                      <div class="modal-content">
+                                    <div
+                                      className="modal-dialog"
+                                      role="document"
+                                    >
+                                      <div className="modal-content">
                                         <form onSubmit={(e) => {}}>
-                                          <div class="modal-header">
+                                          <div className="modal-header">
                                             <h5
-                                              class="modal-title"
+                                              className="modal-title"
                                               id="modalTitleId"
                                             >
                                               Aprobación del Indicador
                                             </h5>
                                             <button
                                               type="button"
-                                              class="btn-close"
+                                              className="btn-close"
                                               data-bs-dismiss="modal"
                                               aria-label="Close"
                                             ></button>
                                           </div>
-                                          <div class="modal-body">
+                                          <div className="modal-body">
                                             <div className="mb-3">
                                               <label
-                                                for="exampleInputPassword1"
+                                                htmlFor="exampleInputPassword1"
                                                 className="form-label"
                                               >
                                                 Estado{" "}
@@ -1184,7 +1277,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                             </div>
                                             <div className="mb-3">
                                               <label
-                                                for="exampleInputPassword1"
+                                                htmlFor="exampleInputPassword1"
                                                 className="form-label"
                                               >
                                                 Observaciones{" "}
@@ -1199,10 +1292,10 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                               ></textarea>
                                             </div>
                                           </div>
-                                          <div class="modal-footer">
+                                          <div className="modal-footer">
                                             <button
                                               type="button"
-                                              class="btn btn-primary"
+                                              className="btn btn-primary"
                                               onClick={(e) => {
                                                 e.preventDefault();
                                                 let fechaActual = new Date();
@@ -1304,7 +1397,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                             </button>
                                             <button
                                               type="button"
-                                              class="btn btn-secondary"
+                                              className="btn btn-secondary"
                                               data-bs-dismiss="modal"
                                             >
                                               Cancelar
@@ -1333,7 +1426,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                             className="table table-bordered"
                             id="dataTable"
                             width="100%"
-                            cellspacing="0"
+                            cellSpacing="0"
                           >
                             <thead>
                               <tr>

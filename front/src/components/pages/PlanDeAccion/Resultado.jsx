@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Chrono } from "react-chrono";
 const Resultado = () => {
-  const [enable, setEnable] = useState("");
+  const [enable, setEnable] = useState(false);
   const [sector, setSectores] = useState([]);
   const [entidad, setEntidades] = useState([]);
   const [enfoque, setEnfoque] = useState([]);
@@ -83,6 +83,9 @@ const Resultado = () => {
                 generatedItems.push({
                   title: year.toString(), // Establece el año como título
                   cardDetailedText: doc.resultado[i].meta, // Establece el valor por defecto "000"
+                  className: {
+                    background: "blue",
+                  },
                 });
               }
               return generatedItems;
@@ -113,7 +116,7 @@ const Resultado = () => {
           setTotalMeta("000");
         }
       });
-  }, [fechaInicio, fechaFin]);
+  }, [fechaInicio, fechaFin, enable]);
 
   const renderYears = () => {
     const updateTotalMeta = (index, value) => {
@@ -205,6 +208,12 @@ const Resultado = () => {
     },
   ];
   console.log(items2); */
+  /* const customContent = [
+    <div>
+      <h3>Custom Card 1</h3>
+      <p>This is the first custom card</p>
+    </div>,
+  ]; */
   return (
     <>
       <div className="card card-body">
@@ -740,56 +749,62 @@ const Resultado = () => {
                     >
                       <option
                         value="Si"
-                        /* onClick={() => {
-                          setEnable("false");
-                        }} */
+                        onClick={() => {
+                          setEnable(false);
+                        }}
                       >
                         Si
                       </option>
                       <option
                         value="No"
                         onClick={() => {
-                          setEnable("true");
+                          setEnable(true);
                         }}
                       >
                         No
                       </option>
                     </select>
                   </div>
-                  <div className="col-3">
-                    <label htmlFor="" className="form-label">
-                      Plan de Desarrollo
-                    </label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      disabled={enable}
-                      id="pdd"
-                    >
-                      {Plan.map((element) => (
-                        <option key={element.id} value={element.Nombre}>
-                          {element.Nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-5">
-                    <label htmlFor="" className="form-label">
-                      Indicador PDD
-                    </label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      disabled={enable}
-                      id="indicadorPdd"
-                    >
-                      {Indicador.map((element) => (
-                        <option key={element.id} value={element.Nombre}>
-                          {element.Nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  {(() => {
+                    if (enable === false) {
+                      return (
+                        <>
+                          <div className="col-3">
+                            <label htmlFor="" className="form-label">
+                              Plan de Desarrollo
+                            </label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              id="pdd"
+                            >
+                              {Plan.map((element) => (
+                                <option key={element.id} value={element.Nombre}>
+                                  {element.Nombre}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-5">
+                            <label htmlFor="" className="form-label">
+                              Indicador PDD
+                            </label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              id="indicadorPdd"
+                            >
+                              {Indicador.map((element) => (
+                                <option key={element.id} value={element.Nombre}>
+                                  {element.Nombre}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </>
+                      );
+                    }
+                  })()}
                 </div>
                 <h6 className="mb-3 ">Tiempo de ejecución</h6>
                 <div className="row mb-3">
@@ -887,7 +902,9 @@ const Resultado = () => {
                         mode="VERTICAL_ALTERNATING"
                         hideControls
                         cardHeight={"20px"}
-                      />
+                      >
+                        {/* {customContent} */}
+                      </Chrono>
                     </div>
                   )}
                   {items.length == 0 && <p>Vaciooo</p>}

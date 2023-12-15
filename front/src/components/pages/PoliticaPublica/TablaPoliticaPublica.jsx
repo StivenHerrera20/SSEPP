@@ -167,7 +167,7 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
                       <td>{res.estado}</td>
                       <td className="text-center">
                         {" "}
-                        <button className="btn btn-success fa fa-pencil "></button>
+                        <button className="btn btn-secondary fa fa-pencil "></button>
                       </td>
                     </tr>
                   );

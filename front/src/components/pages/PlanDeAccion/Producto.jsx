@@ -12,7 +12,7 @@ ChartJS.register(LinearScale, CategoryScale, Tooltip, Legend, BarElement);
 import { Bar } from "react-chartjs-2";
 
 const Producto = () => {
-  const [enable, setEnable] = useState("");
+  const [enable, setEnable] = useState(false);
   const [sector, setSectores] = useState([]);
   const [enfoque, setEnfoque] = useState([]);
   const [busqueda, setBusqueda] = useState("");
@@ -219,7 +219,7 @@ const Producto = () => {
           setTotalMeta("000");
         }
       });
-  }, [fechaInicio, fechaFin]);
+  }, [fechaInicio, fechaFin, enable]);
   useEffect(() => {
     // Actualiza 'config' solo cuando 'data' cambie
     setConfig({
@@ -1251,56 +1251,62 @@ const Producto = () => {
                     >
                       <option
                         value="Si"
-                        /* onClick={() => {
-                          setEnable("false");
-                        }} */
+                        onClick={() => {
+                          setEnable(false);
+                        }}
                       >
                         Si
                       </option>
                       <option
                         value="No"
                         onClick={() => {
-                          setEnable("true");
+                          setEnable(true);
                         }}
                       >
                         No
                       </option>
                     </select>
                   </div>
-                  <div className="col-3">
-                    <label htmlFor="" className="form-label">
-                      Plan de Desarrollo
-                    </label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      disabled={enable}
-                      id="pdd"
-                    >
-                      {Plan.map((element) => (
-                        <option key={element.id} value={element.Nombre}>
-                          {element.Nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-5">
-                    <label htmlFor="" className="form-label">
-                      Indicador PDD
-                    </label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      disabled={enable}
-                      id="indicadorPdd"
-                    >
-                      {Indicador.map((element) => (
-                        <option key={element.id} value={element.Nombre}>
-                          {element.Nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  {(() => {
+                    if (enable === false) {
+                      return (
+                        <>
+                          <div className="col-3">
+                            <label htmlFor="" className="form-label">
+                              Plan de Desarrollo
+                            </label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              id="pdd"
+                            >
+                              {Plan.map((element) => (
+                                <option key={element.id} value={element.Nombre}>
+                                  {element.Nombre}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-5">
+                            <label htmlFor="" className="form-label">
+                              Indicador PDD
+                            </label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              id="indicadorPdd"
+                            >
+                              {Indicador.map((element) => (
+                                <option key={element.id} value={element.Nombre}>
+                                  {element.Nombre}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </>
+                      );
+                    }
+                  })()}
                 </div>
                 <h6 className="mb-3 ">Tiempo de ejecución</h6>
                 <div className="row mb-3">

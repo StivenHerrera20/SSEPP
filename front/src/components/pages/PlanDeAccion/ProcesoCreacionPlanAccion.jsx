@@ -145,11 +145,13 @@ const ProcesoCreacionPlanAccion = () => {
                             }}
                           />
                         </div>
-                        <div className="col-8 border-left border-right h-100">
+                        <div className="col-7 border-left border-right h-100 ">
                           {" "}
-                          {element.objetivo}{" "}
+                          <p className="font-monospace">
+                            {element.objetivo}
+                          </p>{" "}
                         </div>
-                        <div className="col-2 h-100">
+                        <div className="col-3 h-100">
                           {" "}
                           <p className="text-secondary text-center">
                             {element.importancia_relativa}

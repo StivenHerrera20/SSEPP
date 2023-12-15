@@ -152,7 +152,7 @@ const TablaPlanAccion = ({ controlPD, setControlPD }) => {
                       <td className="text-center">
                         {" "}
                         <button
-                          className="btn btn-success fa fa-pencil "
+                          className="btn btn-secondary fa fa-pencil "
                           onClick={(e) => {
                             e.preventDefault();
                             let nombre =
@@ -173,20 +173,22 @@ const TablaPlanAccion = ({ controlPD, setControlPD }) => {
               </tbody>
             </table>
           </div>
-          <Button
-            className="btn btn-primary"
-            variant="primary"
-            onClick={handleAnterior}
-          >
-            Anterior
-          </Button>
-          <Button
-            className="btn btn-primary"
-            variant="primary"
-            onClick={handleSiguiente}
-          >
-            Siguiente
-          </Button>
+          <div className="d-flex justify-content-center">
+            <Button
+              className="btn btn-primary m-2"
+              variant="primary"
+              onClick={handleAnterior}
+            >
+              Anterior
+            </Button>
+            <Button
+              className="btn btn-primary m-2"
+              variant="primary"
+              onClick={handleSiguiente}
+            >
+              Siguiente
+            </Button>
+          </div>
         </div>
       </div>
     </>

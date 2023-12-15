@@ -127,7 +127,7 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
                 <td className="text-center">
                   {" "}
                   <button
-                    className="btn btn-success fa fa-pencil "
+                    className="btn btn-secondary fa fa-pencil "
                     onClick={(e) => {
                       e.preventDefault();
                       localStorage.setItem("nombreIndicador", res.nombre);
@@ -183,7 +183,7 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
                 <td className="text-center">
                   {" "}
                   <button
-                    className="btn btn-success fa fa-pencil "
+                    className="btn btn-secondary fa fa-pencil "
                     onClick={(e) => {
                       e.preventDefault();
                       localStorage.setItem("nombreIndicador", res.nombre);
@@ -215,11 +215,11 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
     <>
       <div className="card shadow mb-4">
         <div className="card-header py-3 d-flex">
-          <div>
+          <div className="me-3">
             <select
               name=""
               id="numeroFilas"
-              className="form-select ms-3"
+              className="form-select ms-3  w-100"
               onChange={selectPagina}
             >
               <option value="1">1</option>
@@ -261,14 +261,14 @@ const TablaBateriaIndicadores = ({ controlBI, setControlBI }) => {
           ) : null}
           <div className="d-flex justify-content-center">
             <Button
-              className="btn btn-primary m-2"
+              className="btn btn-secondary m-2"
               variant="primary"
               onClick={handleAnterior}
             >
               Anterior
             </Button>
             <Button
-              className="btn btn-primary m-2"
+              className="btn btn-secondary m-2"
               variant="primary"
               onClick={handleSiguiente}
             >
