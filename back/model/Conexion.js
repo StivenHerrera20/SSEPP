@@ -39,6 +39,8 @@ const fichaTecnicaInformacionModel = require("./FichaTecnicaInformacion");
 const fichaTecnicaMedicionModel = require("./FichaTecnicaMedicion");
 const fichaTecnicaResponsableModel = require("./FichaTecnicaResponsable");
 const fichaTecnicaAprobacionModel = require("./FichaTecnicaAprobacion");
+const avanceCostosModel = require("./AvanceCostos");
+const avanceCualitativoModel = require("./AvanceCualitativo");
 
 // metodo para conectarnos a la bd, usando async -- await funciones asincronicas
 const sequelize = new Sequelize("politicas_publicas", "root", "", {
@@ -76,6 +78,8 @@ const resultadoHasMeta = resultadoHasMetaModel(sequelize, Sequelize);
 const productoHasMeta = productoHasMetaModel(sequelize, Sequelize);
 const productoHasCosto = productoHasCostoModel(sequelize, Sequelize);
 const FichaTecnicaMedicion = fichaTecnicaMedicionModel(sequelize, Sequelize);
+const AvanceCostos = avanceCostosModel(sequelize, Sequelize);
+const AvanceCualitativo = avanceCualitativoModel(sequelize, Sequelize);
 const FichaTecnicaAprobacion = fichaTecnicaAprobacionModel(
   sequelize,
   Sequelize
@@ -154,4 +158,6 @@ module.exports = {
   FichaTecnicaMedicion,
   fichaTecnicaResponsable,
   FichaTecnicaAprobacion,
+  AvanceCostos,
+  AvanceCualitativo,
 };
