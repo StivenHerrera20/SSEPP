@@ -170,7 +170,11 @@ const AvanceCualitativo = () => {
                       <td>{res.analisis_general}</td>
                       <td>{res.analisis_enfoques}</td>
                       <td className="text-center">
-                        <button className="btn btn-success fa fa-pencil"></button>
+                        <button
+                          className="btn btn-secondary fa fa-pencil"
+                          data-bs-toggle="modal"
+                          data-bs-target="#editarAvanceCualitativo"
+                        ></button>
                       </td>
                     </tr>
                   );
@@ -196,6 +200,8 @@ const AvanceCualitativo = () => {
           </Button>
         </div>
       </div>
+
+      {/* Inicio Modal Agregar */}
       <div
         className="modal fade"
         id="agregarAvanceCualitativo"
@@ -372,6 +378,186 @@ const AvanceCualitativo = () => {
           </div>
         </div>
       </div>
+      {/* Fin Modal Agregar */}
+
+      {/* Inicio Modal Editar */}
+      <div
+        className="modal fade"
+        id="editarAvanceCualitativo"
+        tabIndex="-1"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        role="dialog"
+        aria-labelledby="modalTitleId"
+        aria-hidden="true"
+      >
+        <div
+          className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl"
+          role="document"
+        >
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="modalTitleId">
+                Editar Avance Cualitativo
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <div className="row mb-3">
+                <div className="col-5">
+                  <label for="exampleInputPassword1" className="form-label">
+                    Mes del Periodo
+                  </label>
+                  <select name="" id="mes" className="form-select" disabled>
+                    <option value="Enero">ENERO</option>
+                    <option value="Febrero">FEBRERO</option>
+                    <option value="Marzo">MARZO</option>
+                    <option value="Abril">ABRIL</option>
+                    <option value="Mayo">MAYO</option>
+                    <option value="Junio">JUNIO</option>
+                    <option value="Julio">JULIO</option>
+                    <option value="Agosto">AGOSTO</option>
+                    <option value="Septiembre">SEPTIEMBRE</option>
+                    <option value="Octubre">OCTUBRE</option>
+                    <option value="Noviembre">NOVIEMBRE</option>
+                    <option value="Diciembre">DICIEMBRE</option>
+                  </select>
+                </div>
+                <div className="col-5">
+                  <label for="exampleInputPassword1" className="form-label">
+                    Año del Periodo
+                  </label>
+                  <select name="" id="year" className="form-select" disabled>
+                    {opciones}
+                  </select>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <label for="exampleInputPassword1" className="form-label">
+                    Análisis Cualitativo General
+                  </label>
+                  <textarea
+                    name=""
+                    id="analisisCualitativoGeneral"
+                    rows="3"
+                    style={{ resize: "none" }}
+                    className="form-control"
+                  ></textarea>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <label for="exampleInputPassword1" className="form-label">
+                    Enfoques
+                  </label>
+                  {console.log(enfoques)}
+                  <textarea
+                    name=""
+                    id=""
+                    rows="3"
+                    style={{ resize: "none" }}
+                    className="form-control"
+                    disabled
+                    defaultValue={enfoques}
+                  ></textarea>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <label for="exampleInputPassword1" className="form-label">
+                    Análisis Cualitativo de Enfoques
+                  </label>
+                  <textarea
+                    name=""
+                    id="analisisCualitativoEnfoques"
+                    rows="3"
+                    style={{ resize: "none" }}
+                    className="form-control"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  let fechaActual = new Date();
+                  let fechaFormateada = fechaActual.toISOString().split("T")[0];
+                  let mes = document.querySelector("#mes");
+                  let year = document.querySelector("#year");
+                  let analisisCualitativoGeneral = document.querySelector(
+                    "#analisisCualitativoGeneral"
+                  );
+                  let analisisCualitativoEnfoques = document.querySelector(
+                    "#analisisCualitativoEnfoques"
+                  );
+                  if (
+                    analisisCualitativoGeneral.value.length > 0 &&
+                    analisisCualitativoEnfoques.value.length > 0
+                  ) {
+                    fetch(
+                      "http://127.0.0.1:3900/api/avanceCualitativo/agregar",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: `fecha=${fechaFormateada}&mes=${mes.value}&year=${
+                          year.value
+                        }&analisis_general=${
+                          analisisCualitativoGeneral.value
+                        }&analisis_enfoques=${
+                          analisisCualitativoEnfoques.value
+                        }&idIndicador=${localStorage.getItem(
+                          "idIndicadorSeg"
+                        )}&idObjetivo=${localStorage.getItem("idObjSeg")}`,
+                      }
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        fetch(
+                          `http://127.0.0.1:3900/api/avanceCualitativo/listarTabla?page=${pagina}&size=${fila}&filtro=${localStorage.getItem(
+                            "idIndicadorSeg"
+                          )}`
+                        )
+                          .then((response) => {
+                            return response.json();
+                          })
+                          .then((doc) => {
+                            setAvances(doc.desarrollo);
+                            setTotalRegistros(doc.total);
+                            setTotalPaginas(Math.ceil(doc.total / fila));
+                          });
+                      });
+                  } else {
+                    alert("Datos Incompletos");
+                  }
+                }}
+              >
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Fin Modal Editar */}
     </>
   );
 };

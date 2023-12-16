@@ -574,7 +574,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
 
                       <div className="row mb-3">
                         {(() => {
-                          if (checkEnable === true) {
+                          if (checkEnable === false) {
                             return (
                               <>
                                 <div className="col-4">
@@ -661,7 +661,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                         </div>
                         <div className="col-4">
                           {(() => {
-                            if (checkEnable === true) {
+                            if (checkEnable === false) {
                               return (
                                 <>
                                   <label htmlFor="" className="form-label">
