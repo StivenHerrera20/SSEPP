@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 const InformeEjecutivo = () => {
   const [rangoImportancia, setRangoImportancia] = useState(100);
   useEffect(() => {}, []);

@@ -390,9 +390,14 @@ const Producto = () => {
             ))}
           </div>
         </div>
-        <button onClick={handleGuardar} className="btn btn-primary">
-          Guardar
-        </button>
+        <div className="d-flex justify-content-center mt-3 mb-4">
+          <button
+            onClick={handleGuardar}
+            className="btn btn-primary bi bi-check w-25"
+          >
+            Confirmar Año {item}
+          </button>
+        </div>
       </div>
     );
   };

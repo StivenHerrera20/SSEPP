@@ -47,6 +47,7 @@ import SeguimientoCualitativo from "./pages/InformesDeSeguimiento/SeguimientoCua
 import HojaDeVidaIndicador from "./pages/InformesDeSeguimiento/HojaDeVidaIndicador";
 import ConsultaProductos from "./pages/InformesDeSeguimiento/ConsultaProductos";
 import PlanAccionAvance from "./pages/InformesDeSeguimiento/PlanAccionAvance";
+import PDF from "./pages/InformesDeSeguimiento/PDF";
 
 const Router = () => {
   return (
@@ -163,6 +164,7 @@ const Router = () => {
             <Route path="consultaproductos" element={<ConsultaProductos />} />
             <Route path="plandeaccionyavance" element={<PlanAccionAvance />} />
           </Route>
+          <Route path="pdf" element={<PDF />} />
         </Routes>
       </BrowserRouter>
     </>
