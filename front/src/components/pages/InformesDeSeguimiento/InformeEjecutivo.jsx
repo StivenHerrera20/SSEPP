@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PDF from "./PDF";
 const InformeEjecutivo = () => {
   const [rangoImportancia, setRangoImportancia] = useState(100);
   useEffect(() => {}, []);
@@ -6,6 +7,11 @@ const InformeEjecutivo = () => {
     let rangoI = document.getElementById("rango");
     setRangoImportancia(rangoI.value);
   };
+
+  const generarPDF = () => {
+    window.location = "/pdf";
+  };
+
   return (
     <>
       <div className="card shadow mb-4">
@@ -136,7 +142,9 @@ const InformeEjecutivo = () => {
             </div>
             <div className="row">
               <div className="col d-flex justify-content-end">
-                <button className="btn btn-primary">Consultar</button>
+                <button className="btn btn-primary" onClick={generarPDF}>
+                  Consultar
+                </button>
               </div>
             </div>
           </div>
