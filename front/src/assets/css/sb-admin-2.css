@@ -1469,7 +1469,7 @@ pre code {
 }
 .table-bordered td,
 .table-bordered th {
-  border: 3px solid black;
+  border: 1px solid #e3e6f0;
 }
 .table-bordered thead td,
 .table-bordered thead th {
@@ -6025,7 +6025,7 @@ button.bg-dark:hover {
   background-color: transparent !important;
 }
 .border {
-  border: 3px solid black !important;
+  border: 1px solid #e3e6f0 !important;
 }
 .border-top {
   border-top: 1px solid #e3e6f0 !important;
@@ -6054,18 +6054,25 @@ button.bg-dark:hover {
 .border-left-0 {
   border-left: 0 !important;
 }
-
-.border-y {
+/* pdf */
+.border-pdf {
+  border: 3px solid black !important;
+}
+.border-head-pdf {
+  border: 3px solid black !important;
+  border-bottom: 0 !important;
+}
+.border-y-pdf {
   border-top: 3px solid black !important;
   border-bottom: 3px solid black !important;
 }
-.border-end {
+.border-end-pdf {
   border-right: 3px solid black !important;
 }
-.border-bottom {
+.border-bottom-pdf {
   border-bottom: 3px solid black !important;
 }
-.border-start {
+.border-start-pdf {
   border-right: 3px solid black !important;
   border-left: 3px solid black !important;
   border-bottom: 3px solid black !important;
