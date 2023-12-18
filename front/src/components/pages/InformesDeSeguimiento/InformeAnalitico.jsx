@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
+import PorcentajeAvancePolitica from "./InformeAnalitico/PorcentajeAvancePolitica";
+import AvanceObjetivoEspecifico from "./InformeAnalitico/AvanceObjetivoEspecifico";
+import AvanceIndicadores from "./InformeAnalitico/AvanceIndicadores";
+import RegistroRecursosEjecutados from "./InformeAnalitico/RegistroRecursosEjecutados";
 
 const InformeAnalitico = () => {
+  const [controlDetalle, setControlDetalle] = useState(0);
+  useEffect(() => {}, []);
+
   return (
     <>
       <div className="card shadow mb-4">
@@ -56,12 +63,50 @@ const InformeAnalitico = () => {
             </div>
             <div className="row">
               <div className="col d-flex justify-content-end">
-                <button className="btn btn-primary">Consultar</button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    setControlDetalle(1);
+                  }}
+                >
+                  Consultar
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+      {(() => {
+        if (controlDetalle === 1) {
+          return (
+            <PorcentajeAvancePolitica
+              controlDetalle={controlDetalle}
+              setControlDetalle={setControlDetalle}
+            ></PorcentajeAvancePolitica>
+          );
+        } else if (controlDetalle === 2) {
+          return (
+            <AvanceObjetivoEspecifico
+              controlDetalle={controlDetalle}
+              setControlDetalle={setControlDetalle}
+            ></AvanceObjetivoEspecifico>
+          );
+        } else if (controlDetalle === 3) {
+          return (
+            <AvanceIndicadores
+              controlDetalle={controlDetalle}
+              setControlDetalle={setControlDetalle}
+            ></AvanceIndicadores>
+          );
+        } else if (controlDetalle === 4) {
+          return (
+            <RegistroRecursosEjecutados
+              controlDetalle={controlDetalle}
+              setControlDetalle={setControlDetalle}
+            ></RegistroRecursosEjecutados>
+          );
+        }
+      })()}
     </>
   );
 };
