@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import PDF from "./PDF";
 const InformeEjecutivo = () => {
+  const navigate = useNavigate();
+
   const [rangoImportancia, setRangoImportancia] = useState(100);
   useEffect(() => {}, []);
   const cambiar = () => {
@@ -9,7 +12,7 @@ const InformeEjecutivo = () => {
   };
 
   const generarPDF = () => {
-    window.location = "/pdf";
+    navigate("/pdf");
   };
 
   return (
