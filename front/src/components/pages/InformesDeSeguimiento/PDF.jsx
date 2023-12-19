@@ -20,7 +20,7 @@ const PDF = () => {
 
   return (
     <>
-      <div className="col-12 ">
+      <div className="col-10 ">
         <div className="col-12 p-5">
           <div className="container-fluid text-black" id="contentPDF">
             <div className="row">
