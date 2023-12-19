@@ -13,7 +13,7 @@ const PDF = () => {
         });
         setTimeout(() => {
           window.location = "/inicio/informesdeseguimiento";
-        }, 2000);
+        }, 4000);
       },
     });
   }, []);
