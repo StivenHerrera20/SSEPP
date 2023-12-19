@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const navigate = useNavigate();
   return (
     <>
       <section className="vh-100 " style={{ backgroundColor: "#4E73DF" }}>
@@ -47,7 +49,7 @@ const Login = () => {
                         let emailUser = document.querySelector("#emailUser");
                         if (
                           emailUser.value.length > 0 &&
-                          passUser.length.value > 0
+                          passUser.value.length > 0
                         ) {
                           fetch("http://127.0.0.1:3900/api/usuario/login")
                             .then((response) => {
@@ -58,8 +60,7 @@ const Login = () => {
                                 doc[0].correo == emailUser.value &&
                                 doc[0].pass == passUser.value
                               ) {
-                                window.location =
-                                  "http://127.0.0.1:5173/inicio";
+                                navigate("/inicio");
                               } else {
                                 Swal.fire({
                                   icon: "error",
