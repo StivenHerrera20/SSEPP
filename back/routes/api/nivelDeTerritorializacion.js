@@ -69,4 +69,8 @@ router.get("/listarEscrito", async (req, res) => {
   );
   res.json({ resultado: busqueda });
 });
+router.get("/listarTodos", async (req, res) => {
+  const unidad = await nivelDeTerritorializacion.findAll();
+  res.json(unidad);
+});
 module.exports = router;
