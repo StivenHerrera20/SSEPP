@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-
+import CryptoJS from "crypto-js";
+import Swal from "sweetalert2";
 const Login = () => {
   return (
     <>
@@ -18,7 +19,7 @@ const Login = () => {
                     <div className="form-outline mb-4">
                       <input
                         type="email"
-                        id="typeEmailX-2"
+                        id="emailUser"
                         className="form-control form-control-lg"
                       />
                       <label className="form-label" for="typeEmailX-2">
@@ -29,7 +30,7 @@ const Login = () => {
                     <div className="form-outline mb-4">
                       <input
                         type="password"
-                        id="typePasswordX-2"
+                        id="passUser"
                         className="form-control form-control-lg"
                       />
                       <label className="form-label" for="typePasswordX-2">
@@ -40,6 +41,41 @@ const Login = () => {
                     <button
                       className="btn btn-primary btn-lg btn-block"
                       type="submit"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        let passUser = document.querySelector("#passUser");
+                        let emailUser = document.querySelector("#emailUser");
+                        if (
+                          emailUser.value.length > 0 &&
+                          passUser.length.value > 0
+                        ) {
+                          fetch("http://127.0.0.1:3900/api/usuario/login")
+                            .then((response) => {
+                              return response.json();
+                            })
+                            .then((doc) => {
+                              if (
+                                doc[0].correo == emailUser.value &&
+                                doc[0].pass == passUser.value
+                              ) {
+                                window.location =
+                                  "http://127.0.0.1:5173/inicio";
+                              } else {
+                                Swal.fire({
+                                  icon: "error",
+                                  title: "Error!",
+                                  text: "Correo o contraseña incorrectos",
+                                });
+                              }
+                            });
+                        } else {
+                          Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: "Ingresa todos los datos",
+                          });
+                        }
+                      }}
                     >
                       Iniciar
                     </button>

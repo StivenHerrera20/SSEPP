@@ -16,7 +16,15 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
   const [checkEnable, setCheckEnable] = useState(false);
   const [enableTerritorializacion, setEnableTerritorializacion] =
     useState(true);
+  const [Territorializacion, setTerritorializacion] = useState([]);
   useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/nivelDeTerritorializacion/listarTodos")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setTerritorializacion(doc);
+      });
     fetch(
       `http://127.0.0.1:3900/api/politicasPublicas/traerFechas/?nombre=${localStorage.getItem(
         "nombre"
@@ -504,6 +512,9 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                       action=""
                       onSubmit={(e) => {
                         e.preventDefault();
+                        let checkboxMedida =
+                          document.querySelector("#checkboxMedida");
+                        const isOtraMedidaChecked = checkboxMedida.checked;
                         let formula = document.querySelector("#formula");
                         let unidad = document.querySelector("#unidad");
                         let periodicidad =
@@ -528,45 +539,185 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                           dias.value.length > 0 &&
                           serie.value.length > 0
                         ) {
-                          fetch(
-                            "http://127.0.0.1:3900/api/fichaTecnicaMedicion/agregar",
-                            {
-                              method: "POST",
-                              headers: {
-                                "Content-Type":
-                                  "application/x-www-form-urlencoded",
-                              },
-                              body: `formula=${formula.value}&unidad=${
-                                unidad.value
-                              }&periodicidad=${periodicidad.value}&valor=${
-                                valor.value
-                              }&fechaBase=${fechaBase.value}&fuenteBase=${
-                                fuente.value
-                              }&fechaBaseInicio=${
-                                fechaInicio.value
-                              }&fechaBaseFin=${
-                                fechaFin.value
-                              }&territorializacion=${
-                                territorializacion.value
-                              }&metodologia=${metodologia.value}&fuentes=${
-                                fuentes.value
-                              }&dias_rezago=${dias.value}&serie=${
-                                serie.value
-                              }&idIndicador=${localStorage.getItem(
-                                "idIndicador"
-                              )}`,
+                          if (isOtraMedidaChecked) {
+                            let OtraMedidaBateria =
+                              document.querySelector("#OtraMedidaBateria");
+                            if (territorializacion.value == "Si") {
+                              let nivelTerritorializacion =
+                                document.querySelector(
+                                  "#nivelTerritorializacion"
+                                );
+                              fetch(
+                                "http://127.0.0.1:3900/api/fichaTecnicaMedicion/agregar",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type":
+                                      "application/x-www-form-urlencoded",
+                                  },
+                                  body: `formula=${formula.value}&unidad=${
+                                    OtraMedidaBateria.value
+                                  }&periodicidad=${periodicidad.value}&valor=${
+                                    valor.value
+                                  }&fechaBase=${fechaBase.value}&fuenteBase=${
+                                    fuente.value
+                                  }&fechaBaseInicio=${
+                                    fechaInicio.value
+                                  }&fechaBaseFin=${
+                                    fechaFin.value
+                                  }&territorializacion=${
+                                    territorializacion.value
+                                  }&nivelTerritorializacion=${
+                                    nivelTerritorializacion.value
+                                  }&metodologia=${metodologia.value}&fuentes=${
+                                    fuentes.value
+                                  }&dias_rezago=${dias.value}&serie=${
+                                    serie.value
+                                  }&idIndicador=${localStorage.getItem(
+                                    "idIndicador"
+                                  )}`,
+                                }
+                              )
+                                .then((response) => {
+                                  return response.json();
+                                })
+                                .then((res) => {
+                                  Swal.fire({
+                                    title: "Buen trabajo!",
+                                    text: "Insertado correctamente!",
+                                    icon: "success",
+                                  });
+                                });
+                            } else {
+                              fetch(
+                                "http://127.0.0.1:3900/api/fichaTecnicaMedicion/agregar",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type":
+                                      "application/x-www-form-urlencoded",
+                                  },
+                                  body: `formula=${formula.value}&unidad=${
+                                    OtraMedidaBateria.value
+                                  }&periodicidad=${periodicidad.value}&valor=${
+                                    valor.value
+                                  }&fechaBase=${fechaBase.value}&fuenteBase=${
+                                    fuente.value
+                                  }&fechaBaseInicio=${
+                                    fechaInicio.value
+                                  }&fechaBaseFin=${
+                                    fechaFin.value
+                                  }&territorializacion=${
+                                    territorializacion.value
+                                  }&metodologia=${metodologia.value}&fuentes=${
+                                    fuentes.value
+                                  }&dias_rezago=${dias.value}&serie=${
+                                    serie.value
+                                  }&idIndicador=${localStorage.getItem(
+                                    "idIndicador"
+                                  )}`,
+                                }
+                              )
+                                .then((response) => {
+                                  return response.json();
+                                })
+                                .then((res) => {
+                                  Swal.fire({
+                                    title: "Buen trabajo!",
+                                    text: "Insertado correctamente!",
+                                    icon: "success",
+                                  });
+                                });
                             }
-                          )
-                            .then((response) => {
-                              return response.json();
-                            })
-                            .then((res) => {
-                              Swal.fire({
-                                title: "Buen trabajo!",
-                                text: "Insertado correctamente!",
-                                icon: "success",
-                              });
-                            });
+                          } else {
+                            if (territorializacion.value == "Si") {
+                              let nivelTerritorializacion =
+                                document.querySelector(
+                                  "#nivelTerritorializacion"
+                                );
+                              fetch(
+                                "http://127.0.0.1:3900/api/fichaTecnicaMedicion/agregar",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type":
+                                      "application/x-www-form-urlencoded",
+                                  },
+                                  body: `formula=${formula.value}&unidad=${
+                                    unidad.value
+                                  }&periodicidad=${periodicidad.value}&valor=${
+                                    valor.value
+                                  }&fechaBase=${fechaBase.value}&fuenteBase=${
+                                    fuente.value
+                                  }&fechaBaseInicio=${
+                                    fechaInicio.value
+                                  }&fechaBaseFin=${
+                                    fechaFin.value
+                                  }&territorializacion=${
+                                    territorializacion.value
+                                  }&nivelTerritorializacion=${
+                                    nivelTerritorializacion.value
+                                  }&metodologia=${metodologia.value}&fuentes=${
+                                    fuentes.value
+                                  }&dias_rezago=${dias.value}&serie=${
+                                    serie.value
+                                  }&idIndicador=${localStorage.getItem(
+                                    "idIndicador"
+                                  )}`,
+                                }
+                              )
+                                .then((response) => {
+                                  return response.json();
+                                })
+                                .then((res) => {
+                                  Swal.fire({
+                                    title: "Buen trabajo!",
+                                    text: "Insertado correctamente!",
+                                    icon: "success",
+                                  });
+                                });
+                            } else {
+                              fetch(
+                                "http://127.0.0.1:3900/api/fichaTecnicaMedicion/agregar",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type":
+                                      "application/x-www-form-urlencoded",
+                                  },
+                                  body: `formula=${formula.value}&unidad=${
+                                    unidad.value
+                                  }&periodicidad=${periodicidad.value}&valor=${
+                                    valor.value
+                                  }&fechaBase=${fechaBase.value}&fuenteBase=${
+                                    fuente.value
+                                  }&fechaBaseInicio=${
+                                    fechaInicio.value
+                                  }&fechaBaseFin=${
+                                    fechaFin.value
+                                  }&territorializacion=${
+                                    territorializacion.value
+                                  }&metodologia=${metodologia.value}&fuentes=${
+                                    fuentes.value
+                                  }&dias_rezago=${dias.value}&serie=${
+                                    serie.value
+                                  }&idIndicador=${localStorage.getItem(
+                                    "idIndicador"
+                                  )}`,
+                                }
+                              )
+                                .then((response) => {
+                                  return response.json();
+                                })
+                                .then((res) => {
+                                  Swal.fire({
+                                    title: "Buen trabajo!",
+                                    text: "Insertado correctamente!",
+                                    icon: "success",
+                                  });
+                                });
+                            }
+                          }
                         } else {
                           Swal.fire({
                             icon: "error",
@@ -673,7 +824,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                   "OtraMedidaBateria"
                                 ).value = null;
                               }}
-                              id=""
+                              id="checkboxMedida"
                             />
                             <label className="form-check-label" htmlFor="">
                               Otra medida
@@ -702,7 +853,11 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                   <label htmlFor="" className="form-label">
                                     ¿Cúal?
                                   </label>
-                                  <input type="text" className="form-control" />
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    id="OtraMedidaBateria"
+                                  />
                                 </>
                               );
                             }
@@ -833,9 +988,16 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                   <select
                                     className="form-select"
                                     aria-label="Default select example"
+                                    id="nivelTerritorializacion"
                                   >
-                                    <option value="1">...</option>
-                                    <option value="2">...</option>
+                                    {Territorializacion.map((element) => (
+                                      <option
+                                        key={element.id}
+                                        value={element.Nombre}
+                                      >
+                                        {element.Nombre}
+                                      </option>
+                                    ))}
                                   </select>
                                 </div>
                               </>
@@ -948,7 +1110,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                       <div className="col-3">
                         <h1>{totalMeta}</h1>
                         <h5>Meta Total del Producto</h5>
-                        <h5>Tipo de Anualización: CRECIENTE</h5>
+                        {/* <h5>Tipo de Anualización: CRECIENTE</h5> */}
                       </div>
                     </div>
                   </div>

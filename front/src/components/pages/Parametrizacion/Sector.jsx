@@ -14,7 +14,6 @@ const Sector = () => {
   const [idEditar, setIdEditar] = useState(0);
   const [nombreEditar, setNombreEditar] = useState("");
   const [descripcionEditar, setDescripcionEditar] = useState("");
-
   useEffect(() => {
     fetch(`http://127.0.0.1:3900/api/sector/listar?page=${pagina}&size=${fila}`)
       .then((response) => {
