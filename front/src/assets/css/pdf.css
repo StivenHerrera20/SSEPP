@@ -1,0 +1,15 @@
+p {
+  font-size: 0.7rem;
+}
+b {
+  font-size: 0.7rem;
+}
+
+.titulo {
+  text-align: start;
+  font-size: 1.3rem;
+}
+
+.font * {
+  font-size: 0.7rem;
+}
