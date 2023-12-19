@@ -8,6 +8,7 @@ const PDF = () => {
     const doc = new jsPDF("p", "pt", "a4");
     doc.html(document.getElementById("contentPDF"), {
       callback: function (pdf) {
+        pdf.setFontSize(12);
         pdf.output("dataurlnewwindow", {
           filename: "informePoliticaPublica.pdf",
         });

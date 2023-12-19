@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PDF from "./PDF";
+import pdfDown from "../../../assets/document/InformePoliticaPublica.pdf";
+
 const InformeEjecutivo = () => {
   const navigate = useNavigate();
 
@@ -145,9 +147,12 @@ const InformeEjecutivo = () => {
             </div>
             <div className="row">
               <div className="col d-flex justify-content-end">
-                <button className="btn btn-primary" onClick={generarPDF}>
+                {/* <button className="btn btn-primary" onClick={generarPDF}>
                   Consultar
-                </button>
+                </button> */}
+                <a href={pdfDown} download className="btn btn-primary">
+                  Consultar
+                </a>
               </div>
             </div>
           </div>
