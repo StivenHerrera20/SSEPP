@@ -7,6 +7,11 @@ const Login = () => {
   const navigate = useNavigate();
   return (
     <>
+      <div className="row">
+        <h1 className="text-primary text-center">
+          Sistema Seguimiento de Políticas Públicas
+        </h1>
+      </div>
       <section className="vh-100 " style={{ backgroundColor: "#4E73DF" }}>
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">

@@ -39,7 +39,7 @@ const IndexParametrizacion = () => {
             href="/inicio"
             style={{ height: "7rem" }}
           >
-            <div className="sidebar-brand-text mx-3">PARAMETRIZACION</div>
+            <div className="text-monospace mx-3">Parametrizacion</div>
           </a>
 
           <hr className="sidebar-divider my-0" />
