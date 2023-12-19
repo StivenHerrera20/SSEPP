@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/images/LogoSEGUIPOP.png";
 const Login = () => {
   const navigate = useNavigate();
   return (
@@ -15,6 +16,7 @@ const Login = () => {
                 style={{ borderRadius: "1.5rem" }}
               >
                 <div className="card-body p-5 text-center">
+                  <img src={logo} alt="" width={150} />
                   <h3 className="mb-5">Inicio Sesion</h3>
 
                   <form action="">
