@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
-
+import Swal from "sweetalert2";
 const EnfoqueTres = () => {
   const [show, setShow] = useState(false);
   const [maxIdEnfoqueTres, setmaxIdEnfoqueTres] = useState([]);
@@ -13,6 +13,8 @@ const EnfoqueTres = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
   useEffect(() => {
     fetch("http://127.0.0.1:3900/api/enfoqueNivelDos/listarTodos")
       .then((response) => {
@@ -188,7 +190,17 @@ const EnfoqueTres = () => {
                         {" "}
                         <button
                           className="btn btn-secondary fa fa-pencil "
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                          }}
                         ></button>
                       </td>
                     </tr>
@@ -238,16 +250,22 @@ const EnfoqueTres = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setEnfoqueTres([
-                    ...EnfoqueTres,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Nivel_uno: nivelUno.value,
-                      Nivel_dos: nivelDos.value,
-                      Estado: estado.value,
-                    },
-                  ]);
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/enfoqueNivelTres/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setEnfoqueTres(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   setIncersionEnfoqueTres(true);
                   handleClose();
                 });
@@ -341,27 +359,45 @@ const EnfoqueTres = () => {
             method="post"
             onSubmit={(e) => {
               e.preventDefault();
-              let id = document.querySelector("#idEnfoqueTres");
-              let nombre = document.querySelector("#nombreEnfoqueNivelTres");
-              let nivelUno = document.querySelector("#nivelUnoEnfoqueTres");
-              let nivelDos = document.querySelector("#nivelDosEnfoqueTres");
-              let estado = document.querySelector("#enfoqueTresEstado");
-              fetch("http://127.0.0.1:3900/api/enfoqueNivelTres/agregar", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: `id=${id.value}&Nombre=${nombre.value}&Nivel_uno=${nivelUno.value}&Nivel_dos=${nivelDos.value}&Estado=${estado.value}`,
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIncersionEnfoqueTres(true);
-                  listar();
-                  maxId();
+              let idEditar = document.querySelector("#idEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let nivelUnoEditar = document.querySelector("#nivelUnoEditar");
+              let nivelDosEditar = document.querySelector("#nivelDosEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              if (nombreEditar.value.length > 0) {
+                fetch(
+                  `http://127.0.0.1:3900/api/enfoqueNivelTres/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Nivel_uno=${nivelUnoEditar.value}&Nivel_dos=${nivelDosEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    fetch(
+                      `http://127.0.0.1:3900/api/enfoqueNivelTres/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setEnfoqueTres(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
                 });
+              }
             }}
           >
             <Modal.Body>
@@ -372,9 +408,9 @@ const EnfoqueTres = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="idEnfoqueTres"
+                  id="idEditar"
                   disabled
-                  value={maxIdEnfoqueTres + 1}
+                  defaultValue={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -384,8 +420,9 @@ const EnfoqueTres = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="nombreEnfoqueNivelTres"
+                  id="nombreEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={nombreEditar}
                 />
               </div>
               <div className="mb-3">
@@ -395,7 +432,7 @@ const EnfoqueTres = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="nivelUnoEnfoqueTres"
+                  id="nivelUnoEditar"
                 >
                   {Enfoque.map((element) => (
                     <option key={element.id} value={element.Nombre}>
@@ -411,7 +448,7 @@ const EnfoqueTres = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="nivelDosEnfoqueTres"
+                  id="nivelDosEditar"
                 >
                   {EnfoqueDos.map((element) => (
                     <option key={element.id} value={element.Nombre}>
@@ -427,7 +464,7 @@ const EnfoqueTres = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="enfoqueTresEstado"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

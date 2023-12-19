@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
+import Swal from "sweetalert2";
 const PlanDesarrollo = () => {
   const [show, setShow] = useState(false);
   const [maxIdPlan, setmaxIdPlan] = useState([]);
@@ -10,6 +11,9 @@ const PlanDesarrollo = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
+  const [descripcionEditar, setDescripcionEditar] = useState("");
   useEffect(() => {
     fetch(`http://127.0.0.1:3900/api/plan/listar?page=${pagina}&size=${fila}`)
       .then((response) => {
@@ -161,7 +165,21 @@ const PlanDesarrollo = () => {
                         {" "}
                         <button
                           className="btn btn-secondary fa fa-pencil"
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                            setDescripcionEditar(
+                              e.target.parentElement.parentElement.children[2]
+                                .textContent
+                            );
+                          }}
                         ></button>
                       </td>
                     </tr>
@@ -212,15 +230,22 @@ const PlanDesarrollo = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setPlan([
-                    ...Plan,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Descripcion: descripcion.value,
-                      Estado: estado.value,
-                    },
-                  ]);
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/plan/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setPlan(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   setIncersionPlan(true);
                   handleClose();
                 });
@@ -294,28 +319,53 @@ const PlanDesarrollo = () => {
             method="post"
             onSubmit={(e) => {
               e.preventDefault();
-              let id = document.querySelector("#idPlan");
-              let nombre = document.querySelector("#nombrePlanDesarrollo");
-              let descripcion = document.querySelector(
-                "#descripcionPlanDesarrollo"
-              );
-              let estado = document.querySelector("#estadoPlan");
-              fetch("http://127.0.0.1:3900/api/plan/agregar", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIncersionPlan(true);
-                  listar();
-                  maxId();
+              let idEditar = document.querySelector("#idEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let descripcionEditar =
+                document.querySelector("#descripcionEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              if (
+                nombreEditar.value.length > 0 &&
+                descripcionEditar.value.length > 0
+              ) {
+                fetch(
+                  `http://127.0.0.1:3900/api/plan/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Descripcion=${descripcionEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    Swal.fire({
+                      title: "Buen trabajo!",
+                      text: "Editado correctamente!",
+                      icon: "success",
+                    });
+                    fetch(
+                      `http://127.0.0.1:3900/api/plan/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setPlan(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
                 });
+              }
             }}
           >
             <Modal.Body>
@@ -326,9 +376,9 @@ const PlanDesarrollo = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="idPlan"
+                  id="idEditar"
                   disabled
-                  value={maxIdPlan + 1}
+                  defaultValue={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -338,8 +388,9 @@ const PlanDesarrollo = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="nombrePlanDesarrollo"
+                  id="nombreEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={nombreEditar}
                 />
               </div>
               <div className="mb-3">
@@ -349,9 +400,10 @@ const PlanDesarrollo = () => {
                 <textarea
                   className="form-control"
                   name=""
-                  id="descripcionPlanDesarrollo"
+                  id="descripcionEditar"
                   rows="5"
                   style={{ resize: "none" }}
+                  defaultValue={descripcionEditar}
                 ></textarea>
               </div>
               <div className="mb-3">
@@ -361,7 +413,7 @@ const PlanDesarrollo = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="estadoPlan"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

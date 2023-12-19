@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Chrono } from "react-chrono";
+import Swal from "sweetalert2";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -726,27 +727,6 @@ const Producto = () => {
                             return response.json();
                           })
                           .then((res) => {});
-                        /* for (let i = 0; i < checkboxes.length; i++) {
-                          // Envía los valores seleccionados al servidor, por ejemplo, como un JSON en el cuerpo de la solicitud
-                          fetch(
-                            "http://127.0.0.1:3900/api/resultadoDatosGeneralesHasEnfoques/agregar",
-                            {
-                              method: "POST",
-                              body: `enfoque=${checkboxes[i].value}&id_resultado_datos_generales=${idResultado}`,
-                              headers: {
-                                "Content-Type":
-                                  "application/x-www-form-urlencoded",
-                              },
-                            }
-                          )
-                            .then((response) => response.json())
-                            .then((data) => {
-                              // Maneja la respuesta del servidor
-                            })
-                            .catch((error) => {
-                              // Maneja errores
-                            });
-                        } */
                         enfoqueCheckedItems.forEach((value) => {
                           fetch(
                             `http://127.0.0.1:3900/api/productoDatosGeneralesHasEnfoques/agregar`,
@@ -761,10 +741,18 @@ const Producto = () => {
                           )
                             .then((response) => response.json())
                             .then((data) => {
-                              // Maneja la respuesta del servidor si es necesario
+                              Swal.fire({
+                                title: "Buen trabajo!",
+                                text: "Insertado correctamente!",
+                                icon: "success",
+                              });
                             })
                             .catch((error) => {
-                              // Maneja errores si los hay
+                              Swal.fire({
+                                icon: "error",
+                                title: "Error!",
+                                text: "Ha ocurrido un error.",
+                              });
                             });
                         });
                         objetivosCheckedItems.forEach((value) => {
@@ -789,7 +777,11 @@ const Producto = () => {
                         });
                       });
                   } else {
-                    alert("Revisar los datos");
+                    Swal.fire({
+                      icon: "error",
+                      title: "Error!",
+                      text: "Ingresa todos los datos",
+                    });
                   }
                 }}
               >
@@ -1070,7 +1062,19 @@ const Producto = () => {
                           .then((response) => {
                             return response.json();
                           })
-                          .then((res) => {});
+                          .then((res) => {
+                            Swal.fire({
+                              title: "Buen trabajo!",
+                              text: "Insertado correctamente!",
+                              icon: "success",
+                            });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
                       }
                     } else {
                       if (
@@ -1110,7 +1114,19 @@ const Producto = () => {
                           .then((response) => {
                             return response.json();
                           })
-                          .then((res) => {});
+                          .then((res) => {
+                            Swal.fire({
+                              title: "Buen trabajo!",
+                              text: "Insertado correctamente!",
+                              icon: "success",
+                            });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
                       }
                     }
                   } else {
@@ -1156,7 +1172,19 @@ const Producto = () => {
                           .then((response) => {
                             return response.json();
                           })
-                          .then((res) => {});
+                          .then((res) => {
+                            Swal.fire({
+                              title: "Buen trabajo!",
+                              text: "Insertado correctamente!",
+                              icon: "success",
+                            });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
                       }
                     } else {
                       if (
@@ -1196,7 +1224,19 @@ const Producto = () => {
                           .then((response) => {
                             return response.json();
                           })
-                          .then((res) => {});
+                          .then((res) => {
+                            Swal.fire({
+                              title: "Buen trabajo!",
+                              text: "Insertado correctamente!",
+                              icon: "success",
+                            });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
                       }
                     }
                   }
@@ -1468,6 +1508,11 @@ const Producto = () => {
                                     return response.json();
                                   })
                                   .then((res) => {
+                                    Swal.fire({
+                                      title: "Buen trabajo!",
+                                      text: "Insertado correctamente!",
+                                      icon: "success",
+                                    });
                                     fetch(
                                       `http://127.0.0.1:3900/api/prodcuctoHasMeta/listarMeta/` +
                                         localStorage.getItem("idObjetivo")

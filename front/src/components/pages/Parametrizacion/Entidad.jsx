@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
+import Swal from "sweetalert2";
 const Entidad = () => {
   const [show, setShow] = useState(false);
   const [maxIdEntidad, setmaxIDEntidad] = useState([]);
@@ -11,6 +12,9 @@ const Entidad = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
+  const [descripcionEditar, setDescripcionEditar] = useState("");
 
   useEffect(() => {
     fetch(
@@ -177,7 +181,21 @@ const Entidad = () => {
                         {" "}
                         <button
                           className="btn btn-secondary fa fa-pencil"
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                            setDescripcionEditar(
+                              e.target.parentElement.parentElement.children[2]
+                                .textContent
+                            );
+                          }}
                         ></button>
                       </td>
                     </tr>
@@ -227,16 +245,22 @@ const Entidad = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setEntidades([
-                    ...entidad,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Descripcion: descripcion.value,
-                      Sector: sectorEn.value,
-                      Estado: estado.value,
-                    },
-                  ]);
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/entidad/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setEntidades(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   setIncersionEntidad(true);
                   handleClose();
                 });
@@ -329,40 +353,67 @@ const Entidad = () => {
             method="post"
             onSubmit={(e) => {
               e.preventDefault();
-              let id = document.querySelector("#idEntidad");
-              let sectorEn = document.querySelector("#sectorEntidad");
-              let nombre = document.querySelector("#nombreEntidad");
-              let estado = document.querySelector("#estadoEntidad");
-              let descripcion = document.querySelector("#descripcionEntidad");
-              fetch("http://127.0.0.1:3900/api/entidad/agregar", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Sector=${sectorEn.value}&Estado=${estado.value}`,
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIncersionEntidad(true);
-                  listar();
-                  maxId();
+              let idEditar = document.querySelector("#idEditar");
+              let sectorEditar = document.querySelector("#sectorEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              let descripcionEditar =
+                document.querySelector("#descripcionEditar");
+              if (
+                nombreEditar.value.length > 0 &&
+                descripcionEditar.value.length > 0
+              ) {
+                fetch(
+                  `http://127.0.0.1:3900/api/entidad/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Descripcion=${descripcionEditar.value}&Sector=${sectorEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    Swal.fire({
+                      title: "Buen trabajo!",
+                      text: "Editado correctamente!",
+                      icon: "success",
+                    });
+                    fetch(
+                      `http://127.0.0.1:3900/api/entidad/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setEntidades(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
                 });
+              }
             }}
           >
             <Modal.Body>
-              <div className="mb-3">
+              <div className="mb-3" hidden>
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="idEntidad"
+                  id="idEditar"
                   disabled
-                  value={maxIdEntidad + 1}
+                  value={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -372,13 +423,10 @@ const Entidad = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
+                  id="sectorEditar"
                 >
                   {sector.map((element) => (
-                    <option
-                      key={element.id}
-                      value={element.Nombre}
-                      id="sectorEntidad"
-                    >
+                    <option key={element.id} value={element.Nombre}>
                       {element.Nombre}
                     </option>
                   ))}
@@ -391,8 +439,9 @@ const Entidad = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="nombreEntidad"
+                  id="nombreEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={nombreEditar}
                 />
               </div>
               <div className="mb-3">
@@ -402,9 +451,10 @@ const Entidad = () => {
                 <textarea
                   className="form-control"
                   name=""
-                  id="descripcionEntidad"
+                  id="descripcionEditar"
                   rows="5"
                   style={{ resize: "none" }}
+                  defaultValue={descripcionEditar}
                 ></textarea>
               </div>
               <div className="mb-3">
@@ -414,7 +464,7 @@ const Entidad = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="estadoEntidad"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

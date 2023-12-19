@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Chrono } from "react-chrono";
+import Swal from "sweetalert2";
 const Resultado = () => {
   const [enable, setEnable] = useState(false);
   const [sector, setSectores] = useState([]);
@@ -337,15 +338,27 @@ const Resultado = () => {
                           )
                             .then((response) => response.json())
                             .then((data) => {
-                              // Maneja la respuesta del servidor
+                              Swal.fire({
+                                title: "Buen trabajo!",
+                                text: "Insertado correctamente!",
+                                icon: "success",
+                              });
                             })
                             .catch((error) => {
-                              // Maneja errores
+                              Swal.fire({
+                                icon: "error",
+                                title: "Error!",
+                                text: "Ha ocurrido un error",
+                              });
                             });
                         }
                       });
                   } else {
-                    alert("Revisar los datos");
+                    Swal.fire({
+                      icon: "error",
+                      title: "Error!",
+                      text: "Ingresa todos los datos",
+                    });
                   }
                 }}
               >
@@ -561,7 +574,19 @@ const Resultado = () => {
                           .then((response) => {
                             return response.json();
                           })
-                          .then((res) => {});
+                          .then((res) => {
+                            Swal.fire({
+                              title: "Buen trabajo!",
+                              text: "Insertado correctamente!",
+                              icon: "success",
+                            });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
                       }
                     } else {
                       if (
@@ -601,7 +626,19 @@ const Resultado = () => {
                           .then((response) => {
                             return response.json();
                           })
-                          .then((res) => {});
+                          .then((res) => {
+                            Swal.fire({
+                              title: "Buen trabajo!",
+                              text: "Insertado correctamente!",
+                              icon: "success",
+                            });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
                       }
                     }
                   } else {
@@ -647,7 +684,19 @@ const Resultado = () => {
                           .then((response) => {
                             return response.json();
                           })
-                          .then((res) => {});
+                          .then((res) => {
+                            Swal.fire({
+                              title: "Buen trabajo!",
+                              text: "Insertado correctamente!",
+                              icon: "success",
+                            });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
                       }
                     } else {
                       if (
@@ -687,7 +736,19 @@ const Resultado = () => {
                           .then((response) => {
                             return response.json();
                           })
-                          .then((res) => {});
+                          .then((res) => {
+                            Swal.fire({
+                              title: "Buen trabajo!",
+                              text: "Insertado correctamente!",
+                              icon: "success",
+                            });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
                       }
                     }
                   }
@@ -964,6 +1025,11 @@ const Resultado = () => {
                                     return response.json();
                                   })
                                   .then((res) => {
+                                    Swal.fire({
+                                      title: "Buen trabajo!",
+                                      text: "Insertado correctamente!",
+                                      icon: "success",
+                                    });
                                     fetch(
                                       `http://127.0.0.1:3900/api/resultadoHasMeta/listarMeta/` +
                                         localStorage.getItem("idObjetivo")
@@ -997,7 +1063,11 @@ const Resultado = () => {
                                 j++;
                               }
                             } else {
-                              alert("No hay datos");
+                              Swal.fire({
+                                icon: "error",
+                                title: "Error!",
+                                text: "Ingresa todos los datos",
+                              });
                             }
                           }}
                         >

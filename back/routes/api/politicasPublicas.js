@@ -104,4 +104,13 @@ router.get("/traerFechas", async (req, res) => {
   );
   res.json({ resultado: busqueda });
 });
+router.put("/editar/:id", async (req, res) => {
+  await politicasPublicas.update(req.body, {
+    where: { id: req.params.id },
+  });
+  res.json({
+    status: "OK",
+    mensaje: "Actualizado Correctamente",
+  });
+});
 module.exports = router;

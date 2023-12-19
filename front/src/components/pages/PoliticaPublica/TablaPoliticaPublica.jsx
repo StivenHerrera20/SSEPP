@@ -143,7 +143,6 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
                   <th>Sector Líder</th>
                   <th>Entidad Líder</th>
                   <th>Estado</th>
-                  <th className="text-center">Editar</th>
                 </tr>
               </thead>
 
@@ -165,10 +164,6 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
                       <td>{res.sector_lider}</td>
                       <td>{res.entidad_lider}</td>
                       <td>{res.estado}</td>
-                      <td className="text-center">
-                        {" "}
-                        <button className="btn btn-secondary fa fa-pencil "></button>
-                      </td>
                     </tr>
                   );
                 })}

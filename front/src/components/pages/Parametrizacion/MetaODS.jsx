@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
+import Swal from "sweetalert2";
 const MetaODS = () => {
   const [show, setShow] = useState(false);
   const [maxIdMetaODS, setmaxIdMetaODS] = useState([]);
@@ -11,6 +12,9 @@ const MetaODS = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
+  const [descripcionEditar, setDescripcionEditar] = useState("");
   useEffect(() => {
     fetch(`http://127.0.0.1:3900/api/desarrolloSostenible/listarTodos`)
       .then((response) => {
@@ -178,7 +182,21 @@ const MetaODS = () => {
                         {" "}
                         <button
                           className="btn btn-secondary fa fa-pencil"
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                            setDescripcionEditar(
+                              e.target.parentElement.parentElement.children[2]
+                                .textContent
+                            );
+                          }}
                         ></button>
                       </td>
                     </tr>
@@ -228,16 +246,22 @@ const MetaODS = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setMetaODS([
-                    ...MetaODS,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Descripcion: descripcion.value,
-                      Ods: ods.value,
-                      Estado: estado.value,
-                    },
-                  ]);
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/metaOds/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setMetaODS(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   setIncersionMetaODS(true);
                 });
             }}
@@ -325,24 +349,54 @@ const MetaODS = () => {
             method="post"
             onSubmit={(e) => {
               e.preventDefault();
-              let id = document.querySelector("#idMetaOds");
-              let nombre = document.querySelector("#nombreMetaODS");
-              let descripcion = document.querySelector("#descripcionMetaODS");
-              let estado = document.querySelector("#estadoMetaOds");
-              fetch("http://127.0.0.1:3900/api/metaOds/agregar", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIncersionMetaODS(true);
+              let idEditar = document.querySelector("#idEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let descripcionEditar =
+                document.querySelector("#descripcionEditar");
+              let odsEditar = document.querySelector("#odsEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              if (
+                nombreEditar.value.length > 0 &&
+                descripcionEditar.value.length > 0
+              ) {
+                fetch(
+                  `http://127.0.0.1:3900/api/metaOds/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Descripcion=${descripcionEditar.value}&Ods=${odsEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    Swal.fire({
+                      title: "Buen trabajo!",
+                      text: "Editado correctamente!",
+                      icon: "success",
+                    });
+                    fetch(
+                      `http://127.0.0.1:3900/api/metaOds/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setMetaODS(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
                 });
+              }
             }}
           >
             <Modal.Body>
@@ -353,9 +407,9 @@ const MetaODS = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="idMetaOds"
+                  id="idEditar"
                   disabled
-                  value={maxIdMetaODS + 1}
+                  value={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -365,9 +419,10 @@ const MetaODS = () => {
                 <textarea
                   className="form-control"
                   name=""
-                  id="nombreMetaODS"
+                  id="nombreEditar"
                   rows="5"
                   style={{ resize: "none" }}
+                  defaultValue={nombreEditar}
                 ></textarea>
               </div>
               <div className="mb-3">
@@ -377,8 +432,25 @@ const MetaODS = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="descripcionMetaODS"
+                  id="descripcionEditar"
+                  defaultValue={descripcionEditar}
                 />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="" className="form-label">
+                  ODS
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="odsEditar"
+                >
+                  {ODS.map((element) => (
+                    <option key={element.id} value={element.Nombre}>
+                      {element.Nombre}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
@@ -387,7 +459,7 @@ const MetaODS = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="estadoMetaOds"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

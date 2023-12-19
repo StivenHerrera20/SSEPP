@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
+import Swal from "sweetalert2";
 const DocumentosAsociados = () => {
   const [show, setShow] = useState(false);
   const [maxId, setmaxID] = useState([]);
@@ -10,6 +11,9 @@ const DocumentosAsociados = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
+  const [descripcionEditar, setDescripcionEditar] = useState("");
   useEffect(() => {
     fetch(
       `http://127.0.0.1:3900/api/documentosAsociados/listar?page=${pagina}&size=${fila}`
@@ -169,7 +173,21 @@ const DocumentosAsociados = () => {
                         <Button
                           className="btn btn-secondary fa fa-pencil "
                           variant="secondary"
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                            setDescripcionEditar(
+                              e.target.parentElement.parentElement.children[2]
+                                .textContent
+                            );
+                          }}
                         ></Button>
                       </td>
                     </tr>
@@ -220,20 +238,22 @@ const DocumentosAsociados = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setDocumentos([
-                    ...documentos,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Descripcion: descripcion.value,
-                      Estado: estado.value,
-                    },
-                  ]);
-                  setIncersion(true);
-                  if (insercion == true) {
-                    alert("Agregado correctamente");
-                    setIncersion(false);
-                  }
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/documentosAsociados/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setDocumentos(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   handleClose();
                 });
             }}
@@ -304,17 +324,71 @@ const DocumentosAsociados = () => {
           <Modal.Header className="bg-light" closeButton>
             <Modal.Title>Editar Documento Asociado</Modal.Title>
           </Modal.Header>
-          <form method="" onSubmit={(e) => {}}>
+          <form
+            method=""
+            onSubmit={(e) => {
+              e.preventDefault();
+              let idEditar = document.querySelector("#idEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              let descripcionEditar =
+                document.querySelector("#descripcionEditar");
+              if (
+                nombreEditar.value.length > 0 &&
+                descripcionEditar.value.length > 0
+              ) {
+                fetch(
+                  `http://127.0.0.1:3900/api/documentosAsociados/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Descripcion=${descripcionEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    Swal.fire({
+                      title: "Buen trabajo!",
+                      text: "Editado correctamente!",
+                      icon: "success",
+                    });
+                    fetch(
+                      `http://127.0.0.1:3900/api/documentosAsociados/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setDocumentos(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                    setIncersionSector(true);
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
+                });
+              }
+            }}
+          >
             <Modal.Body>
-              <div className="mb-3">
+              <div className="mb-3" hidden>
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="idDocumentosAsociadosEdit"
+                  id="idEditar"
                   disabled
+                  value={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -324,8 +398,9 @@ const DocumentosAsociados = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="nombreDocumentosAsociadosEdit"
+                  id="nombreEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={nombreEditar}
                 />
               </div>
               <div className="mb-3">
@@ -335,9 +410,10 @@ const DocumentosAsociados = () => {
                 <textarea
                   className="form-control"
                   name=""
-                  id="descripcionDocumentosAsociadosEdit"
+                  id="descripcionEditar"
                   rows="5"
                   style={{ resize: "none" }}
+                  defaultValue={descripcionEditar}
                 ></textarea>
               </div>
               <div className="mb-3">
@@ -347,7 +423,7 @@ const DocumentosAsociados = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="estadoDocumentosAsociadosEdit"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

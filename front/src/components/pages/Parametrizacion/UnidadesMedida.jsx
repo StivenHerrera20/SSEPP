@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
+import Swal from "sweetalert2";
 const UnidadesMedida = () => {
   const [show, setShow] = useState(false);
   const [maxIdUnidadesDeMedida, setmaxIdUnidadesDeMedida] = useState([]);
@@ -11,6 +12,9 @@ const UnidadesMedida = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
+  const [descripcionEditar, setDescripcionEditar] = useState("");
   useEffect(() => {
     fetch(
       `http://127.0.0.1:3900/api/unidadDeMedida/listar?page=${pagina}&size=${fila}`
@@ -167,7 +171,21 @@ const UnidadesMedida = () => {
                         {" "}
                         <button
                           className="btn btn-secondary fa fa-pencil "
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                            setDescripcionEditar(
+                              e.target.parentElement.parentElement.children[2]
+                                .textContent
+                            );
+                          }}
                         ></button>
                       </td>
                     </tr>
@@ -218,15 +236,22 @@ const UnidadesMedida = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setUnidadesDeMedida([
-                    ...UnidadesDeMedida,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Descripcion: descripcion.value,
-                      Estado: estado.value,
-                    },
-                  ]);
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/unidadDeMedida/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setUnidadesDeMedida(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   setIncersionUnidadesDeMedida(true);
                   handleClose();
                 });
@@ -300,39 +325,66 @@ const UnidadesMedida = () => {
             method="post"
             onSubmit={(e) => {
               e.preventDefault();
-              let id = document.querySelector("#idUnidadesDeMedida");
-              let nombre = document.querySelector("#nombreUnidadMedida");
-              let estado = document.querySelector("#estadoUnidadDeMedida");
-              let descripcion = document.querySelector(
-                "#descripcionUnidadMedida"
-              );
-              fetch("http://127.0.0.1:3900/api/unidadDeMedida/agregar", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIncersionUnidadesDeMedida(true);
+              let idEditar = document.querySelector("#idEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let descripcionEditar =
+                document.querySelector("#descripcionEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              if (
+                nombreEditar.value.length > 0 &&
+                descripcionEditar.value.length > 0
+              ) {
+                fetch(
+                  `http://127.0.0.1:3900/api/unidadDeMedida/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Descripcion=${descripcionEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    Swal.fire({
+                      title: "Buen trabajo!",
+                      text: "Editado correctamente!",
+                      icon: "success",
+                    });
+                    fetch(
+                      `http://127.0.0.1:3900/api/unidadDeMedida/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setUnidadesDeMedida(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
                 });
+              }
             }}
           >
             <Modal.Body>
-              <div className="mb-3">
+              <div className="mb-3" hidden>
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="idUnidadesDeMedida"
+                  id="idEditar"
                   disabled
-                  value={maxIdUnidadesDeMedida + 1}
+                  defaultValue={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -342,8 +394,9 @@ const UnidadesMedida = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="nombreUnidadMedida"
+                  id="nombreEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={nombreEditar}
                 />
               </div>
               <div className="mb-3">
@@ -353,9 +406,10 @@ const UnidadesMedida = () => {
                 <textarea
                   className="form-control"
                   name=""
-                  id="descripcionUnidadMedida"
+                  id="descripcionEditar"
                   rows="5"
                   style={{ resize: "none" }}
+                  defaultValue={descripcionEditar}
                 ></textarea>
               </div>
               <div className="mb-3">
@@ -365,7 +419,7 @@ const UnidadesMedida = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="estadoUnidadDeMedida"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

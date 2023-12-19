@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
-
+import Swal from "sweetalert2";
 const EnfoqueCuatro = () => {
   const [show, setShow] = useState(false);
   const [maxIdEnfoqueCuatro, setmaxIdEnfoqueCuatro] = useState([]);
@@ -14,6 +14,8 @@ const EnfoqueCuatro = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
   useEffect(() => {
     fetch("http://127.0.0.1:3900/api/enfoqueNivelTres/listarTodos")
       .then((response) => {
@@ -197,7 +199,17 @@ const EnfoqueCuatro = () => {
                         {" "}
                         <button
                           className="btn btn-secondary fa fa-pencil "
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                          }}
                         ></button>
                       </td>
                     </tr>
@@ -248,18 +260,22 @@ const EnfoqueCuatro = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setEnfoqueCuatro([
-                    ...EnfoqueCuatro,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Nivel_tres: nivelTres.value,
-                      Nivel_dos: nivelDos.value,
-                      Nivel_uno: nivelUno.value,
-                      Estado: estado.value,
-                    },
-                  ]);
-                  setIncersionEnfoqueCuatro(true);
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/enfoqueNivelCuatro/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setEnfoqueCuatro(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   handleClose();
                 });
             }}
@@ -368,41 +384,59 @@ const EnfoqueCuatro = () => {
             method="post"
             onSubmit={(e) => {
               e.preventDefault();
-              let id = document.querySelector("#idEnfoqueCuatro");
-              let nombre = document.querySelector("#nombreEnfoqueNivelCuatro");
-              let nivelUno = document.querySelector("#nivelUnoEnfoqueCuatro");
-              let nivelDos = document.querySelector("#nivelDosEnfoqueCuatro");
-              let nivelTres = document.querySelector("#nivelTresEnfoqueCuatro");
-              let estado = document.querySelector("#estadoEnfoqueCuatro");
-              fetch("http://127.0.0.1:3900/api/enfoqueNivelCuatro/agregar", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: `id=${id.value}&Nombre=${nombre.value}&Nivel_tres=${nivelTres.value}&Nivel_dos=${nivelDos.value}&Nivel_uno=${nivelUno.value}&Estado=${estado.value}`,
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIncersionEnfoqueCuatro(true);
-                  listar();
-                  maxId();
+              let idEditar = document.querySelector("#idEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let nivelUnoEditar = document.querySelector("#nivelUnoEditar");
+              let nivelDosEditar = document.querySelector("#nivelDosEditar");
+              let nivelTresEditar = document.querySelector("#nivelTresEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              if (nombreEditar.value.length > 0) {
+                fetch(
+                  `http://127.0.0.1:3900/api/enfoqueNivelCuatro/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Nivel_tres=${nivelTresEditar.value}&Nivel_dos=${nivelDosEditar.value}&Nivel_uno=${nivelUnoEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    fetch(
+                      `http://127.0.0.1:3900/api/enfoqueNivelCuatro/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setEnfoqueCuatro(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
                 });
+              }
             }}
           >
             <Modal.Body>
-              <div className="mb-3">
+              <div className="mb-3" hidden>
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="idEnfoqueCuatro"
+                  id="idEditar"
                   disabled
-                  value={maxIdEnfoqueCuatro + 1}
+                  defaultValue={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -412,8 +446,9 @@ const EnfoqueCuatro = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="nombreEnfoqueNivelCuatro"
+                  id="nombreEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={nombreEditar}
                 />
               </div>
               <div className="mb-3">
@@ -423,7 +458,7 @@ const EnfoqueCuatro = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="nivelUnoEnfoqueCuatro"
+                  id="nivelUnoEditar"
                 >
                   {Enfoque.map((element) => (
                     <option key={element.id} value={element.Nombre}>
@@ -439,7 +474,7 @@ const EnfoqueCuatro = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="nivelDosEnfoqueCuatro"
+                  id="nivelDosEditar"
                 >
                   {EnfoqueDos.map((element) => (
                     <option key={element.id} value={element.Nombre}>
@@ -455,7 +490,7 @@ const EnfoqueCuatro = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="nivelTresEnfoqueCuatro"
+                  id="nivelTresEditar"
                 >
                   {EnfoqueTres.map((element) => (
                     <option key={element.id} value={element.Nombre}>
@@ -471,7 +506,7 @@ const EnfoqueCuatro = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="estadoEnfoqueCuatro"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

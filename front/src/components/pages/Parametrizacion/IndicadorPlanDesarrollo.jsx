@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
+import Swal from "sweetalert2";
 const IndicadorPlanDesarrollo = () => {
   const [show, setShow] = useState(false);
   const [maxIdIndicador, setmaxIdIndicador] = useState([]);
@@ -12,6 +13,9 @@ const IndicadorPlanDesarrollo = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
+  const [descripcionEditar, setDescripcionEditar] = useState("");
   useEffect(() => {
     fetch("http://127.0.0.1:3900/api/plan/listarTodos")
       .then((response) => {
@@ -187,7 +191,21 @@ const IndicadorPlanDesarrollo = () => {
                         {" "}
                         <button
                           className="btn btn-secondary fa fa-pencil"
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                            setDescripcionEditar(
+                              e.target.parentElement.parentElement.children[2]
+                                .textContent
+                            );
+                          }}
                         ></button>
                       </td>
                     </tr>
@@ -244,17 +262,22 @@ const IndicadorPlanDesarrollo = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setIndicador([
-                    ...Indicador,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Descripcion: descripcion.value,
-                      Sector: sector.value,
-                      Plan_de_desarrollo: planDes.value,
-                      Estado: estado.value,
-                    },
-                  ]);
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/planDeDesarrollo/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setIndicador(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   setIncersionIndicador(true);
                   handleClose();
                 });
@@ -360,32 +383,55 @@ const IndicadorPlanDesarrollo = () => {
             method="post"
             onSubmit={(e) => {
               e.preventDefault();
-              let id = document.querySelector("#idIndicador");
-              let nombre = document.querySelector(
-                "#nombreIndicadorPlanDesarrollo"
-              );
-              let descripcion = document.querySelector(
-                "#descripcionIndicadorPlanDesarrollo"
-              );
-              let estado = document.querySelector("#estadoIndicador");
-              let planDes = document.querySelector("#planIndicador");
-              let sector = document.querySelector(
-                "#sectorIndicadorPlanDesarrollo"
-              );
-              fetch("http://127.0.0.1:3900/api/planDeDesarrollo/agregar", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Sector=${sector.value}&Plan_de_desarrollo=${planDes.value}&Estado=${estado.value}`,
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIncersionIndicador(true);
+              let idEditar = document.querySelector("#idEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let descripcionEditar =
+                document.querySelector("#descripcionEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              let planEditar = document.querySelector("#planEditar");
+              let sectorEditar = document.querySelector("#sectorEditar");
+              if (
+                nombreEditar.value.length > 0 &&
+                descripcionEditar.value.length > 0
+              ) {
+                fetch(
+                  `http://127.0.0.1:3900/api/planDeDesarrollo/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Descripcion=${descripcionEditar.value}&Sector=${sectorEditar.value}&Plan_de_desarrollo=${planEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    Swal.fire({
+                      title: "Buen trabajo!",
+                      text: "Editado correctamente!",
+                      icon: "success",
+                    });
+                    fetch(
+                      `http://127.0.0.1:3900/api/planDeDesarrollo/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setIndicador(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
                 });
+              }
             }}
           >
             <Modal.Body>
@@ -396,9 +442,9 @@ const IndicadorPlanDesarrollo = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="idIndicador"
+                  id="idEditar"
                   disabled
-                  value={maxIdIndicador + 1}
+                  defaultValue={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -408,8 +454,9 @@ const IndicadorPlanDesarrollo = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="nombreIndicadorPlanDesarrollo"
+                  id="nombreEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={nombreEditar}
                 />
               </div>
               <div className="mb-3">
@@ -419,21 +466,27 @@ const IndicadorPlanDesarrollo = () => {
                 <textarea
                   className="form-control"
                   name=""
-                  id="descripcionIndicadorPlanDesarrollo"
+                  id="descripcionEditar"
                   rows="5"
                   style={{ resize: "none" }}
+                  defaultValue={descripcionEditar}
                 ></textarea>
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   Sector <b className="text-danger">*</b>
                 </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="sectorIndicadorPlanDesarrollo"
-                  aria-describedby="emailHelp"
-                />
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  id="sectorEditar"
+                >
+                  {Sector.map((element) => (
+                    <option key={element.id} value={element.Nombre}>
+                      {element.Nombre}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
@@ -442,7 +495,7 @@ const IndicadorPlanDesarrollo = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="planIndicador"
+                  id="planEditar"
                 >
                   {Plan.map((element) => (
                     <option key={element.id} value={element.Nombre}>
@@ -458,7 +511,7 @@ const IndicadorPlanDesarrollo = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="estadoIndicador"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

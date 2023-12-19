@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Chrono } from "react-chrono";
+import Swal from "sweetalert2";
 const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
   const [enable, setEnable] = useState("");
   const [publicar, setPublicar] = useState(0);
@@ -433,9 +434,19 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                 .then((response) => {
                                   return response.json();
                                 })
-                                .then((res) => {});
+                                .then((res) => {
+                                  Swal.fire({
+                                    title: "Buen trabajo!",
+                                    text: "Insertado correctamente!",
+                                    icon: "success",
+                                  });
+                                });
                             } else {
-                              alert("Datos Incompletos");
+                              Swal.fire({
+                                icon: "error",
+                                title: "Error!",
+                                text: "Ingresa todos los datos",
+                              });
                             }
                           }}
                         >
@@ -549,9 +560,19 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                             .then((response) => {
                               return response.json();
                             })
-                            .then((res) => {});
+                            .then((res) => {
+                              Swal.fire({
+                                title: "Buen trabajo!",
+                                text: "Insertado correctamente!",
+                                icon: "success",
+                              });
+                            });
                         } else {
-                          alert("Datos Incompletos");
+                          Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: "Ingresa todos los datos",
+                          });
                         }
                       }}
                     >
@@ -982,9 +1003,19 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                             .then((response) => {
                               return response.json();
                             })
-                            .then((res) => {});
+                            .then((res) => {
+                              Swal.fire({
+                                title: "Buen trabajo!",
+                                text: "Insertado correctamente!",
+                                icon: "success",
+                              });
+                            });
                         } else {
-                          alert("Datos Incompletos");
+                          Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: "Ingresa todos los datos",
+                          });
                         }
                       }}
                     >
@@ -1384,11 +1415,22 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                                           .then((response) => {
                                                             return response.json();
                                                           })
-                                                          .then((res) => {});
+                                                          .then((res) => {
+                                                            Swal.fire({
+                                                              title:
+                                                                "Buen trabajo!",
+                                                              text: "Agregado correctamente!",
+                                                              icon: "success",
+                                                            });
+                                                          });
                                                       }
                                                     });
                                                 } else {
-                                                  alert("Datos Incompletos");
+                                                  Swal.fire({
+                                                    icon: "error",
+                                                    title: "Error!",
+                                                    text: "Ingresa todos los datos",
+                                                  });
                                                 }
                                                 setPublicar(1);
                                               }}

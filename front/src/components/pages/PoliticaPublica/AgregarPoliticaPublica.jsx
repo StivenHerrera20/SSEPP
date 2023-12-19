@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import "../../../assets/css/style.css";
+import Swal from "sweetalert2";
 const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
   const [objetivoGeneral, setObjetivoGeneral] = useState(0);
   const [publicar, setPublicar] = useState(0);
@@ -31,6 +32,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
   const [objetivosEspecificos, setobjetivosEspecificos] = useState([]);
   const [documentosDeAdopcion, setdocumentosDeAdopcion] = useState([]);
   const [documentosAsociados, setdocumentosAsociados] = useState([]);
+  const [pubPolitica, setPubPolitica] = useState([]);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
   const [fila, setFila] = useState(5);
@@ -438,15 +440,27 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                             )
                               .then((response) => response.json())
                               .then((data) => {
-                                // Maneja la respuesta del servidor
+                                Swal.fire({
+                                  title: "Buen trabajo!",
+                                  text: "Agregado correctamente!",
+                                  icon: "success",
+                                });
                               })
                               .catch((error) => {
-                                // Maneja errores
+                                Swal.fire({
+                                  icon: "error",
+                                  title: "Error!",
+                                  text: "Ha ocurrido un error",
+                                });
                               });
                           }
                         });
                     } else {
-                      alert("revisar los datos");
+                      Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: "Ingresa todos los datos",
+                      });
                     }
                   }}
                 >
@@ -770,6 +784,11 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                                         return response.json();
                                       })
                                       .then((res) => {
+                                        Swal.fire({
+                                          title: "Buen trabajo!",
+                                          text: "Eliminado correctamente!",
+                                          icon: "success",
+                                        });
                                         fetch(
                                           `http://127.0.0.1:3900/api/documentoDeAdopcionPP/listar?page=${pagina}&size=${fila}`
                                         )
@@ -855,6 +874,11 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                             return response.json();
                           })
                           .then((res) => {
+                            Swal.fire({
+                              title: "Buen trabajo!",
+                              text: "Agregado correctamente!",
+                              icon: "success",
+                            });
                             fetch(
                               `http://127.0.0.1:3900/api/documentoDeAdopcionPP/listar?page=${pagina}&size=${fila}`
                             )
@@ -866,10 +890,13 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                                 setTotalRegistros(doc.total);
                                 setTotalPaginas(Math.ceil(doc.total / fila));
                               });
-                            console.log(res);
                           });
                       } else {
-                        alert("revisar los datos");
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
                       }
                     }}
                   >
@@ -1007,34 +1034,48 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       e.preventDefault();
                       const objetivo =
                         document.querySelector("#objetivoGeneral");
-                      fetch(
-                        "http://127.0.0.1:3900/api/politicasPublicas/maximo/id"
-                      )
-                        .then((response) => {
-                          return response.json();
-                        })
-                        .then((res) => {
-                          let id = res.maximo;
-                          fetch(
-                            "http://127.0.0.1:3900/api/PPHasObjetivoGeneral/agregar",
-                            {
-                              method: "POST",
-                              headers: {
-                                "Content-Type":
-                                  "application/x-www-form-urlencoded",
-                              },
-                              body: `objetivo=${objetivo.value}&id_politica=${id}`,
-                            }
-                          )
-                            .then((response) => {
-                              return response.json();
-                            })
-                            .then((res) => {
-                              let objetivoP =
-                                document.querySelector("#objetivo");
-                              objetivoP.innerHTML = objetivo.value;
-                            });
+                      if (objetivo.value.length > 0) {
+                        fetch(
+                          "http://127.0.0.1:3900/api/politicasPublicas/maximo/id"
+                        )
+                          .then((response) => {
+                            return response.json();
+                          })
+                          .then((res) => {
+                            let id = res.maximo;
+                            fetch(
+                              "http://127.0.0.1:3900/api/PPHasObjetivoGeneral/agregar",
+                              {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type":
+                                    "application/x-www-form-urlencoded",
+                                },
+                                body: `objetivo=${objetivo.value}&id_politica=${id}`,
+                              }
+                            )
+                              .then((response) => {
+                                return response.json();
+                              })
+                              .then((res) => {
+                                setObjetivoGeneral(1);
+                                Swal.fire({
+                                  title: "Buen trabajo!",
+                                  text: "Agregado correctamente!",
+                                  icon: "success",
+                                });
+                                let objetivoP =
+                                  document.querySelector("#objetivo");
+                                objetivoP.innerHTML = objetivo.value;
+                              });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
                         });
+                      }
                     }}
                   >
                     <Modal.Body>
@@ -1059,7 +1100,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         type="submit"
                         variant="primary"
                         onClick={() => {
-                          setObjetivoGeneral(1);
                           handleCloseDos();
                         }}
                       >
@@ -1137,7 +1177,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         <tr>
                           <th hidden>#</th>
                           <th>Descripción del Objetivo</th>
-                          <th className="text-center">Editar</th>
                           <th className="text-center">Eliminar</th>
                         </tr>
                       </thead>
@@ -1148,10 +1187,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                             <tr key={res.id}>
                               <td hidden>{res.id}</td>
                               <td>{res.objetivo}</td>
-                              <td className="text-center">
-                                {" "}
-                                <button className="btn btn-secondary fa fa-pencil "></button>
-                              </td>
                               <td className="text-center">
                                 {" "}
                                 <button
@@ -1168,6 +1203,11 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                                         return response.json();
                                       })
                                       .then((res) => {
+                                        Swal.fire({
+                                          title: "Buen trabajo!",
+                                          text: "Eliminado correctamente!",
+                                          icon: "success",
+                                        });
                                         fetch(
                                           `http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/listar?page=${paginaEspecificos}&size=${filaEspecificos}`
                                         )
@@ -1223,44 +1263,57 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       const objetivo = document.querySelector(
                         "#objetivoEspecifico"
                       );
-                      fetch(
-                        "http://127.0.0.1:3900/api/politicasPublicas/maximo/id"
-                      )
-                        .then((response) => {
-                          return response.json();
-                        })
-                        .then((res) => {
-                          let id = res.maximo;
-                          fetch(
-                            "http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/agregar",
-                            {
-                              method: "POST",
-                              headers: {
-                                "Content-Type":
-                                  "application/x-www-form-urlencoded",
-                              },
-                              body: `objetivo=${objetivo.value}&id_politica=${id}`,
-                            }
-                          )
-                            .then((response) => {
-                              return response.json();
-                            })
-                            .then((res) => {
-                              fetch(
-                                `http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/listar?page=${paginaEspecificos}&size=${filaEspecificos}`
-                              )
-                                .then((response) => {
-                                  return response.json();
-                                })
-                                .then((doc) => {
-                                  setobjetivosEspecificos(doc.desarrollo);
-                                  setTotalRegistrosEspecificos(doc.total);
-                                  setTotalPaginasEspecificos(
-                                    Math.ceil(doc.total / filaEspecificos)
-                                  );
+                      if (objetivo.value.length > 0) {
+                        fetch(
+                          "http://127.0.0.1:3900/api/politicasPublicas/maximo/id"
+                        )
+                          .then((response) => {
+                            return response.json();
+                          })
+                          .then((res) => {
+                            let id = res.maximo;
+                            fetch(
+                              "http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/agregar",
+                              {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type":
+                                    "application/x-www-form-urlencoded",
+                                },
+                                body: `objetivo=${objetivo.value}&id_politica=${id}`,
+                              }
+                            )
+                              .then((response) => {
+                                return response.json();
+                              })
+                              .then((res) => {
+                                Swal.fire({
+                                  title: "Buen trabajo!",
+                                  text: "Agregado correctamente!",
+                                  icon: "success",
                                 });
-                            });
+                                fetch(
+                                  `http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/listar?page=${paginaEspecificos}&size=${filaEspecificos}`
+                                )
+                                  .then((response) => {
+                                    return response.json();
+                                  })
+                                  .then((doc) => {
+                                    setobjetivosEspecificos(doc.desarrollo);
+                                    setTotalRegistrosEspecificos(doc.total);
+                                    setTotalPaginasEspecificos(
+                                      Math.ceil(doc.total / filaEspecificos)
+                                    );
+                                  });
+                              });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
                         });
+                      }
                     }}
                   >
                     <Modal.Body>
@@ -1392,6 +1445,11 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                                         return response.json();
                                       })
                                       .then((res) => {
+                                        Swal.fire({
+                                          title: "Buen trabajo!",
+                                          text: "Eliminado correctamente!",
+                                          icon: "success",
+                                        });
                                         fetch(
                                           `http://127.0.0.1:3900/api/documentosAsociadosPP/listar?page=${paginaAsociados}&size=${filaAsociados}`
                                         )
@@ -1482,6 +1540,11 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                             return response.json();
                           })
                           .then((res) => {
+                            Swal.fire({
+                              title: "Buen trabajo!",
+                              text: "Agregado correctamente!",
+                              icon: "success",
+                            });
                             fetch(
                               `http://127.0.0.1:3900/api/documentosAsociadosPP/listar?page=${paginaAsociados}&size=${filaAsociados}`
                             )
@@ -1497,7 +1560,11 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                               });
                           });
                       } else {
-                        alert("revisar los datos");
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
                       }
                     }}
                   >
@@ -1586,9 +1653,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                           </div>
                           <div className="row">
                             <div className="col d-flex justify-content-center">
-                              <button className="btn m-2 p-2">
-                                <i className="fa fa-close "></i> Omitir
-                              </button>
                               <button
                                 className="btn btn-primary  m-2 p-2"
                                 onClick={handleShowCinco}
@@ -1612,7 +1676,45 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                             </div>
                             <div className="row">
                               <div className="col d-flex justify-content-center">
-                                <button className="btn btn-primary m-2 p-2">
+                                <button
+                                  className="btn btn-primary m-2 p-2"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    fetch(
+                                      "http://127.0.0.1:3900/api/politicasPublicas/maximo/id"
+                                    )
+                                      .then((response) => {
+                                        return response.json();
+                                      })
+                                      .then((res) => {
+                                        let id = res.maximo;
+                                        fetch(
+                                          `http://127.0.0.1:3900/api/politicasPublicas/editar/${id}`,
+                                          {
+                                            method: "PUT",
+                                            headers: {
+                                              "Content-Type":
+                                                "application/x-www-form-urlencoded",
+                                            },
+                                            body: `estado=Aprobado`,
+                                          }
+                                        )
+                                          .then((response) => {
+                                            return response.json();
+                                          })
+                                          .then((res) => {
+                                            setTimeout(() => {
+                                              Swal.fire({
+                                                title: "Buen trabajo!",
+                                                text: "Aprobado correctamente!",
+                                                icon: "success",
+                                              });
+                                              window.location.reload();
+                                            }, 1000);
+                                          });
+                                      });
+                                  }}
+                                >
                                   <i className="fa fa-check "></i> Aprobar
                                 </button>
                               </div>
@@ -1646,11 +1748,21 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                             Entrada en vigencia en versiones de la política
                           </th>
                           <th>Justificación</th>
-                          <th className="text-center">Eliminar</th>
                         </tr>
                       </thead>
 
-                      <tbody></tbody>
+                      <tbody>
+                        {pubPolitica.map((res) => {
+                          return (
+                            <tr key={res.id}>
+                              <td>{res.version}</td>
+                              <td>{res.fecha}</td>
+                              <td>{res.vigencia}</td>
+                              <td>{res.justificacion}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
                     </table>
                   </div>
                 </div>
@@ -1658,7 +1770,72 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                   <Modal.Header className="bg-light" closeButton>
                     <Modal.Title>Publicación de Política Pública</Modal.Title>
                   </Modal.Header>
-                  <form>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      let justificacion =
+                        document.querySelector("#justificacion");
+                      let vigencia = document.querySelector("#vigencia");
+                      let version = document.querySelector("#version");
+                      if (
+                        justificacion.value.length > 0 &&
+                        vigencia.value.length > 0 &&
+                        version.value.length > 0
+                      ) {
+                        setPublicar(1);
+                        fetch(
+                          "http://127.0.0.1:3900/api/politicasPublicas/maximo/id"
+                        )
+                          .then((response) => {
+                            return response.json();
+                          })
+                          .then((res) => {
+                            let id = res.maximo;
+                            let fechaActual = new Date();
+                            // Formatear la fecha en el formato que necesitas (por ejemplo, YYYY-MM-DD)
+                            let fechaFormateada = fechaActual
+                              .toISOString()
+                              .split("T")[0];
+                            fetch(
+                              "http://127.0.0.1:3900/api/publicacionPolitica/agregar",
+                              {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type":
+                                    "application/x-www-form-urlencoded",
+                                },
+                                body: `version=${version.value}&fecha=${fechaFormateada}&vigencia=${vigencia.value}&justificacion=${justificacion.value}&idPolitica=${id}`,
+                              }
+                            )
+                              .then((response) => {
+                                return response.json();
+                              })
+                              .then((res) => {
+                                Swal.fire({
+                                  title: "Buen trabajo!",
+                                  text: "Publicado correctamente!",
+                                  icon: "success",
+                                });
+                                fetch(
+                                  `http://127.0.0.1:3900/api/publicacionPolitica/listar/${id}`
+                                )
+                                  .then((response) => {
+                                    return response.json();
+                                  })
+                                  .then((doc) => {
+                                    setPubPolitica(doc);
+                                  });
+                              });
+                          });
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
+                      }
+                    }}
+                  >
                     <Modal.Body>
                       <div className="mb-3">
                         <label
@@ -1670,10 +1847,23 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         <textarea
                           className="form-control"
                           name=""
-                          id="descripcionDocumentosAdopcion"
+                          id="justificacion"
                           rows="5"
                           style={{ resize: "none" }}
                         ></textarea>
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="exampleInputPassword1"
+                          className="form-label"
+                        >
+                          Versión <b className="text-danger">*</b>
+                        </label>
+                        <input
+                          className="form-control"
+                          name=""
+                          id="version"
+                        ></input>
                       </div>
                       <div className="mb-3">
                         <label
@@ -1686,7 +1876,7 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         <input
                           type="date"
                           name=""
-                          id=""
+                          id="vigencia"
                           className="form-control"
                         />
                       </div>
@@ -1695,7 +1885,9 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                       <Button
                         type="submit"
                         variant="primary"
-                        onClick={handleCloseCinco}
+                        onClick={() => {
+                          handleCloseCinco();
+                        }}
                       >
                         Guardar
                       </Button>
@@ -1703,7 +1895,6 @@ const AgregarPoliticaPublica = ({ setControlPP, controlPP }) => {
                         variant="secondary"
                         onClick={() => {
                           handleCloseCinco();
-                          setPublicar(1);
                         }}
                       >
                         Cancelar

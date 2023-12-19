@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
-
+import Swal from "sweetalert2";
 const Parametros = () => {
   const [show, setShow] = useState(false);
   const [maxIdParametros, setmaxIdParametros] = useState([]);
@@ -11,6 +11,10 @@ const Parametros = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
+  const [descripcionEditar, setDescripcionEditar] = useState("");
+  const [valorEditar, setValorEditar] = useState("");
   useEffect(() => {
     fetch(
       `http://127.0.0.1:3900/api/parametro/listar?page=${pagina}&size=${fila}`
@@ -170,7 +174,25 @@ const Parametros = () => {
                         {" "}
                         <button
                           className="btn btn-secondary fa fa-pencil"
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                            setDescripcionEditar(
+                              e.target.parentElement.parentElement.children[2]
+                                .textContent
+                            );
+                            setValorEditar(
+                              e.target.parentElement.parentElement.children[3]
+                                .textContent
+                            );
+                          }}
                         ></button>
                       </td>
                     </tr>
@@ -220,15 +242,22 @@ const Parametros = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setParametros([
-                    ...Parametros,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Descripcion: descripcion.value,
-                      Estado: estado.value,
-                    },
-                  ]);
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/parametro/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setParametros(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   setIncersionParametros(true);
                   handleClose();
                 });
@@ -314,27 +343,55 @@ const Parametros = () => {
             method="post"
             onSubmit={(e) => {
               e.preventDefault();
-              let id = document.querySelector("#idParametro");
-              let nombre = document.querySelector("#nombreParametro");
-              let descripcion = document.querySelector("#descripcionParametro");
-              let estado = document.querySelector("#estadoParametro");
-              let valor = document.querySelector("#valorParametro");
-              fetch("http://127.0.0.1:3900/api/parametro/agregar", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Valor=${valor.value}&Estado=${estado.value}`,
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIncersionParametros(true);
-                  listar();
-                  maxId();
+              let idEditar = document.querySelector("#idEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let descripcionEditar =
+                document.querySelector("#descripcionEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              let valorEditar = document.querySelector("#valorEditar");
+              if (
+                nombreEditar.value.length > 0 &&
+                descripcionEditar.value.length > 0 &&
+                valorEditar.value.length
+              ) {
+                fetch(
+                  `http://127.0.0.1:3900/api/parametro/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Descripcion=${descripcionEditar.value}&Valor=${valorEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    Swal.fire({
+                      title: "Buen trabajo!",
+                      text: "Editado correctamente!",
+                      icon: "success",
+                    });
+                    fetch(
+                      `http://127.0.0.1:3900/api/parametro/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setParametros(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
                 });
+              }
             }}
           >
             <Modal.Body>
@@ -345,9 +402,9 @@ const Parametros = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="idParametro"
+                  id="idEditar"
                   disabled
-                  value={maxIdParametros + 1}
+                  defaultValue={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -357,8 +414,9 @@ const Parametros = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="nombreParametro"
+                  id="nombreEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={nombreEditar}
                 />
               </div>
               <div className="mb-3">
@@ -368,9 +426,10 @@ const Parametros = () => {
                 <textarea
                   className="form-control"
                   name=""
-                  id="descripcionParametro"
+                  id="descripcionEditar"
                   rows="5"
                   style={{ resize: "none" }}
+                  defaultValue={descripcionEditar}
                 ></textarea>
               </div>
 
@@ -381,8 +440,9 @@ const Parametros = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="valorParametro"
+                  id="valorEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={valorEditar}
                 />
               </div>
               <div className="mb-3">
@@ -392,7 +452,7 @@ const Parametros = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="estadoParametro"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

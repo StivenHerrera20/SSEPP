@@ -41,12 +41,14 @@ const fichaTecnicaResponsableModel = require("./FichaTecnicaResponsable");
 const fichaTecnicaAprobacionModel = require("./FichaTecnicaAprobacion");
 const avanceCostosModel = require("./AvanceCostos");
 const avanceCualitativoModel = require("./AvanceCualitativo");
+const publicacionPoliticaModel = require("./PublicacionPolitica");
 
 // metodo para conectarnos a la bd, usando async -- await funciones asincronicas
 const sequelize = new Sequelize("politicas_publicas", "root", "", {
   host: "localhost",
   dialect: "mysql",
 });
+const PublicacionPolitica = publicacionPoliticaModel(sequelize, Sequelize);
 const DocumentoDeAdopcion = DocumentoDeAdopcionModel(sequelize, Sequelize);
 const DocumentoAsociado = DocumentoAsociadoModel(sequelize, Sequelize);
 const enfoqueNivelCuatro = enfoqueNivelCuatroModel(sequelize, Sequelize);
@@ -160,4 +162,5 @@ module.exports = {
   FichaTecnicaAprobacion,
   AvanceCostos,
   AvanceCualitativo,
+  PublicacionPolitica,
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
-
+import Swal from "sweetalert2";
 const Enfoque = () => {
   const [show, setShow] = useState(false);
   const [maxIdEnfoque, setmaxIdEnfoque] = useState([]);
@@ -11,6 +11,8 @@ const Enfoque = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
   useEffect(() => {
     fetch(
       `http://127.0.0.1:3900/api/enfoqueNivelUno/listar?page=${pagina}&size=${fila}`
@@ -165,7 +167,17 @@ const Enfoque = () => {
                         {" "}
                         <button
                           className="btn btn-secondary fa fa-pencil "
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                          }}
                         ></button>
                       </td>
                     </tr>
@@ -213,14 +225,22 @@ const Enfoque = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setEnfoque([
-                    ...Enfoque,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Estado: estado.value,
-                    },
-                  ]);
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/enfoqueNivelUno/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setEnfoque(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   setIncersionEnfoque(true);
                   handleClose();
                 });
@@ -282,38 +302,61 @@ const Enfoque = () => {
             method="post"
             onSubmit={(e) => {
               e.preventDefault();
-              let id = document.querySelector("#idEnfoque");
-              let nombre = document.querySelector("#nombreEnfoqueNivelUno");
-              let estado = document.querySelector("#estadoEnfoque");
-              fetch("http://127.0.0.1:3900/api/enfoqueNivelUno/agregar", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: `id=${id.value}&Nombre=${nombre.value}&Estado=${estado.value}`,
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIncersionEnfoque(true);
-                  listar();
-                  maxId();
+              let idEditar = document.querySelector("#idEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              if (nombreEditar.value.length > 0) {
+                fetch(
+                  `http://127.0.0.1:3900/api/enfoqueNivelUno/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    Swal.fire({
+                      title: "Buen trabajo!",
+                      text: "Editado correctamente!",
+                      icon: "success",
+                    });
+                    fetch(
+                      `http://127.0.0.1:3900/api/enfoqueNivelUno/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setEnfoque(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
                 });
+              }
             }}
           >
             <Modal.Body>
-              <div className="mb-3">
+              <div className="mb-3" hidden>
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   id <b className="text-danger">*</b>
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="idEnfoque"
+                  id="idEditar"
                   disabled
-                  value={maxIdEnfoque + 1}
+                  defaultValue={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -323,8 +366,9 @@ const Enfoque = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="nombreEnfoqueNivelUno"
+                  id="nombreEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={nombreEditar}
                 />
               </div>
               <div className="mb-3">
@@ -334,7 +378,7 @@ const Enfoque = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="estadoEnfoque"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

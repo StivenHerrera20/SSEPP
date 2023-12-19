@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
+import Swal from "sweetalert2";
 const NivelTerritorializacion = () => {
   const [show, setShow] = useState(false);
   const [maxIdNivel, setmaxIdNivel] = useState([]);
@@ -10,6 +11,9 @@ const NivelTerritorializacion = () => {
   const [busqueda, setBusqueda] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
+  const [idEditar, setIdEditar] = useState(0);
+  const [nombreEditar, setNombreEditar] = useState("");
+  const [descripcionEditar, setDescripcionEditar] = useState("");
   useEffect(() => {
     fetch(
       `http://127.0.0.1:3900/api/nivelDeTerritorializacion/listar?page=${pagina}&size=${fila}`
@@ -167,7 +171,21 @@ const NivelTerritorializacion = () => {
                         {" "}
                         <button
                           className="btn btn-secondary fa fa-pencil"
-                          onClick={handleShowEdit}
+                          onClick={(e) => {
+                            handleShowEdit();
+                            setIdEditar(
+                              e.target.parentElement.parentElement.children[0]
+                                .textContent
+                            );
+                            setNombreEditar(
+                              e.target.parentElement.parentElement.children[1]
+                                .textContent
+                            );
+                            setDescripcionEditar(
+                              e.target.parentElement.parentElement.children[2]
+                                .textContent
+                            );
+                          }}
                         ></button>
                       </td>
                     </tr>
@@ -223,15 +241,22 @@ const NivelTerritorializacion = () => {
                   return response.json();
                 })
                 .then((res) => {
-                  setNivel([
-                    ...Nivel,
-                    {
-                      id: id.value,
-                      Nombre: nombre.value,
-                      Descripcion: descripcion.value,
-                      Estado: estado.value,
-                    },
-                  ]);
+                  Swal.fire({
+                    title: "Buen trabajo!",
+                    text: "Agregado correctamente!",
+                    icon: "success",
+                  });
+                  fetch(
+                    `http://127.0.0.1:3900/api/nivelDeTerritorializacion/listar?page=${pagina}&size=${fila}`
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((doc) => {
+                      setNivel(doc.desarrollo);
+                      setTotalRegistros(doc.total);
+                      setTotalPaginas(Math.ceil(doc.total / fila));
+                    });
                   setIncersionNivel(true);
                   handleClose();
                 });
@@ -305,33 +330,53 @@ const NivelTerritorializacion = () => {
             method="post"
             onSubmit={(e) => {
               e.preventDefault();
-              let id = document.querySelector("#idNivel");
-              let nombre = document.querySelector(
-                "#nombreNivelDeTerritorializacion"
-              );
-              let descripcion = document.querySelector(
-                "#descripcionNivelDeTerritorializacion"
-              );
-              let estado = document.querySelector("#estadoNivel");
-              fetch(
-                "http://127.0.0.1:3900/api/nivelDeTerritorializacion/agregar",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                  },
-                  body: `id=${id.value}&Nombre=${nombre.value}&Descripcion=${descripcion.value}&Estado=${estado.value}`,
-                }
-              )
-                .then((response) => {
-                  return response.json();
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIncersionNivel(true);
-                  listar();
-                  maxId();
+              let idEditar = document.querySelector("#idEditar");
+              let nombreEditar = document.querySelector("#nombreEditar");
+              let descripcionEditar =
+                document.querySelector("#descripcionEditar");
+              let estadoEditar = document.querySelector("#estadoEditar");
+              if (
+                nombreEditar.value.length > 0 &&
+                descripcionEditar.value.length > 0
+              ) {
+                fetch(
+                  `http://127.0.0.1:3900/api/nivelDeTerritorializacion/editar/${idEditar.value}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `Nombre=${nombreEditar.value}&Descripcion=${descripcionEditar.value}&Estado=${estadoEditar.value}`,
+                  }
+                )
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((res) => {
+                    Swal.fire({
+                      title: "Buen trabajo!",
+                      text: "Editado correctamente!",
+                      icon: "success",
+                    });
+                    fetch(
+                      `http://127.0.0.1:3900/api/nivelDeTerritorializacion/listar?page=${pagina}&size=${fila}`
+                    )
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((doc) => {
+                        setNivel(doc.desarrollo);
+                        setTotalRegistros(doc.total);
+                        setTotalPaginas(Math.ceil(doc.total / fila));
+                      });
+                  });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error!",
+                  text: "Ingresa todos los datos",
                 });
+              }
             }}
           >
             <Modal.Body>
@@ -342,9 +387,9 @@ const NivelTerritorializacion = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="idNivel"
+                  id="idEditar"
                   disabled
-                  value={maxIdNivel + 1}
+                  defaultValue={idEditar}
                 />
               </div>
               <div className="mb-3">
@@ -354,8 +399,9 @@ const NivelTerritorializacion = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="nombreNivelDeTerritorializacion"
+                  id="nombreEditar"
                   aria-describedby="emailHelp"
+                  defaultValue={nombreEditar}
                 />
               </div>
               <div className="mb-3">
@@ -365,9 +411,10 @@ const NivelTerritorializacion = () => {
                 <textarea
                   className="form-control"
                   name=""
-                  id="descripcionNivelDeTerritorializacion"
+                  id="descripcionEditar"
                   rows="5"
                   style={{ resize: "none" }}
+                  defaultValue={descripcionEditar}
                 ></textarea>
               </div>
               <div className="mb-3">
@@ -377,7 +424,7 @@ const NivelTerritorializacion = () => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="estadoNivel"
+                  id="estadoEditar"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>

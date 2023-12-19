@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
+import Swal from "sweetalert2";
 const AvanceCualitativo = () => {
   const [enfoques, setEnfoques] = useState([]);
   const [pagina, setPagina] = useState(0);
@@ -353,6 +354,11 @@ const AvanceCualitativo = () => {
                         return response.json();
                       })
                       .then((doc) => {
+                        Swal.fire({
+                          title: "Buen trabajo!",
+                          text: "Insertado correctamente!",
+                          icon: "success",
+                        });
                         fetch(
                           `http://127.0.0.1:3900/api/avanceCualitativo/listarTabla?page=${pagina}&size=${fila}&filtro=${localStorage.getItem(
                             "idIndicadorSeg"
@@ -368,7 +374,11 @@ const AvanceCualitativo = () => {
                           });
                       });
                   } else {
-                    alert("Datos Incompletos");
+                    Swal.fire({
+                      icon: "error",
+                      title: "Error!",
+                      text: "Ingresa todos los datos",
+                    });
                   }
                 }}
               >
