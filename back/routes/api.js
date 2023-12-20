@@ -42,6 +42,8 @@ const avanceCostosRouter = require("./api/avanceCostos");
 const avanceCualitativoRouter = require("./api/avanceCualitativo");
 const publicacionPoliticaRouter = require("./api/publicacionPolitica");
 const usuarioRouter = require("./api/usuario");
+const avanceSeguimientoRouter = require("./api/avanceSeguimiento");
+router.use("/avanceSeguimiento", avanceSeguimientoRouter);
 router.use("/usuario", usuarioRouter);
 router.use("/documentosAsociados", apiDocumentosAsociadosRouter);
 router.use("/publicacionPolitica", publicacionPoliticaRouter);

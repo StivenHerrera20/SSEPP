@@ -9,6 +9,7 @@ import {
 } from "chart.js";
 ChartJS.register(LinearScale, CategoryScale, Tooltip, Legend, BarElement);
 import { Bar } from "react-chartjs-2";
+import Swal from "sweetalert2";
 const SeguimientoTecnico = () => {
   const [data, setData] = useState({
     labels: [],
@@ -41,40 +42,43 @@ const SeguimientoTecnico = () => {
       },
     },
   });
-  /* const data = {
-    labels: ["2020", "2021", "2022"],
-    datasets: [
-      {
-        label: "Meta",
-        data: [4, 3, 7],
-        responsive: true,
-        backgroundColor: "#4d72a6",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-      {
-        label: "Ejecutado",
-        data: [4, 3, 7],
-        backgroundColor: "#74b458 ",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const config = {
-    type: "bar",
-    data: data,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  }; */
+  const [por, setPor] = useState("");
+  const [enfoques, setEnfoques] = useState([]);
   useEffect(() => {
+    fetch(
+      `http://127.0.0.1:3900/api/avanceSeguimiento/traerAcumulado/${localStorage.getItem(
+        "idIndicadorSeg"
+      )}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        let suma = 0;
+        if (doc.resultado[0].total == null) {
+          suma = "0%";
+          setPor(suma);
+        } else {
+          suma = doc.resultado[0].total + "%";
+          setPor(suma);
+        }
+      });
     if (localStorage.getItem("tiposSeg") == "producto") {
+      fetch(
+        `http://127.0.0.1:3900/api/productoDatosGeneralesHasEnfoques/listar/${localStorage.getItem(
+          "idEnfoquesSeg"
+        )}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          let array = [];
+          for (let i = 0; i < doc.resultado.rows.length; i++) {
+            array.push(doc.resultado.rows[i].enfoque);
+          }
+          setEnfoques(array);
+        });
       fetch(
         `http://127.0.0.1:3900/api/prodcuctoHasMeta/listarMeta/${localStorage.getItem(
           "idObjSeg"
@@ -119,6 +123,21 @@ const SeguimientoTecnico = () => {
         });
     } else if (localStorage.getItem("tiposSeg") == "resultado") {
       fetch(
+        `http://127.0.0.1:3900/api/resultadoDatosGeneralesHasEnfoques/listar/${localStorage.getItem(
+          "idEnfoquesSeg"
+        )}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((doc) => {
+          let array = [];
+          for (let i = 0; i < doc.resultado.rows.length; i++) {
+            array.push(doc.resultado.rows[i].enfoque);
+          }
+          setEnfoques(array);
+        });
+      fetch(
         `http://127.0.0.1:3900/api/resultadoHasMeta/listarMeta/${localStorage.getItem(
           "idObjSeg"
         )}`
@@ -162,6 +181,20 @@ const SeguimientoTecnico = () => {
         });
     }
   }, []);
+  let fin = localStorage.getItem("finSeg");
+  let inicio = localStorage.getItem("inicioSeg");
+  let yearFin = fin.split("-");
+  let totalFin = yearFin[0];
+  let yearInicio = inicio.split("-");
+  let totalInicio = yearInicio[0];
+  const opciones = [];
+  for (let i = totalInicio; i <= totalFin; i++) {
+    opciones.push(
+      <option key={i} value={i}>
+        {i}
+      </option>
+    );
+  }
   return (
     <>
       <div className="row mb-3">
@@ -181,12 +214,13 @@ const SeguimientoTecnico = () => {
             className="progress"
             role="progressbar"
             aria-label="Example with label"
-            aria-valuenow="25"
+            aria-valuenow={por}
             aria-valuemin="0"
             aria-valuemax="100"
           >
-            <div className="progress-bar" style={{ width: "25%" }}>
-              25%
+            {console.log(por)}
+            <div className="progress-bar" style={{ width: por }}>
+              {por}
             </div>
           </div>
         </div>
@@ -249,18 +283,58 @@ const SeguimientoTecnico = () => {
                   <label for="exampleInputPassword1" className="form-label">
                     Año del Periodo
                   </label>
-                  <select name="" id="" className="form-select">
-                    <option value="enero">...</option>
+                  <select name="" id="year" className="form-select">
+                    {opciones}
                   </select>
                 </div>
                 <div className="col-3">
                   <label for="exampleInputPassword1" className="form-label">
                     Avance del Periodo
                   </label>
-                  <input type="text" className="form-control" />
+                  <input type="text" className="form-control" id="avance" />
                 </div>
                 <div className="col-3 d-flex align-items-end">
-                  <button type="button" className="btn btn-primary w-100">
+                  <button
+                    type="button"
+                    className="btn btn-primary w-100"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      let avance = document.querySelector("#avance");
+                      let year = document.querySelector("#year");
+                      if (avance.value.length > 0) {
+                        let porcentajeYear =
+                          document.querySelector("#porcentajeYear");
+                        let acumuladoYear =
+                          document.querySelector("#acumuladoYear");
+                        if (localStorage.getItem("tiposSeg") == "producto") {
+                          fetch(
+                            `http://127.0.0.1:3900/api/prodcuctoHasMeta/listarYear/${localStorage.getItem(
+                              "idObjSeg"
+                            )}/${year.value}`
+                          )
+                            .then((response) => response.json())
+                            .then((apiData) => {
+                              console.log(apiData);
+                            })
+                            .catch((error) => {
+                              console.error(
+                                "Error al obtener datos de la API:",
+                                error
+                              );
+                            });
+                        } else if (
+                          localStorage.getItem("tiposSeg") == "resultado"
+                        ) {
+                        }
+                      } else {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Error!",
+                          text: "Ingresa todos los datos",
+                        });
+                      }
+                    }}
+                  >
                     Validar Avance
                   </button>
                 </div>
@@ -271,14 +345,24 @@ const SeguimientoTecnico = () => {
                   <label for="exampleInputPassword1" className="form-label">
                     Porcentaje de Avance Año
                   </label>
-                  <input type="text" className="form-control" disabled />
+                  <input
+                    type="text"
+                    className="form-control"
+                    disabled
+                    id="porcentajeYear"
+                  />
                 </div>
                 <div className="col-6">
                   {" "}
                   <label for="exampleInputPassword1" className="form-label">
                     Porcentaje de Avance Acumulado
                   </label>
-                  <input type="text" className="form-control" disabled />
+                  <input
+                    type="text"
+                    className="form-control"
+                    disabled
+                    id="acumuladoYear"
+                  />
                 </div>
               </div>
               <div className="row">
@@ -293,6 +377,7 @@ const SeguimientoTecnico = () => {
                     style={{ resize: "none" }}
                     className="form-control"
                     disabled
+                    defaultValue={enfoques}
                   ></textarea>
                 </div>
               </div>

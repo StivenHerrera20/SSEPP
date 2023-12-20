@@ -1,10 +1,79 @@
 import React, { useState, useEffect } from "react";
-
+import { Button, Modal } from "react-bootstrap";
 const TablaSeguimientoTecnico = () => {
+  const [pagina, setPagina] = useState(0);
+  const [fila, setFila] = useState(5);
+  const [totalRegistros, setTotalRegistros] = useState(0);
+  const [totalPaginas, setTotalPaginas] = useState(0);
+  const [seguimiento, setSeguimiento] = useState([]);
+  useEffect(() => {
+    fetch(
+      `http://127.0.0.1:3900/api/avanceSeguimiento/listarTabla?page=${pagina}&size=${fila}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setSeguimiento(doc.desarrollo);
+        setTotalRegistros(doc.total);
+        setTotalPaginas(Math.ceil(doc.total / fila));
+      });
+  }, [pagina, fila]);
+  const selectPagina = (e) => {
+    const selectedValue = e.target.value;
+    let nRegistros = totalRegistros;
+    let nRegistrosPP = selectedValue;
+    setTotalPaginas(Math.ceil(nRegistros / nRegistrosPP));
+    fetch(
+      "http://127.0.0.1:3900/api/avanceCostos/listarTabla?page=" +
+        pagina +
+        "&size=" +
+        selectedValue
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setCostos(doc.desarrollo);
+        setFila(parseInt(selectedValue));
+      });
+  };
+  const handleSiguiente = () => {
+    if (pagina < totalPaginas - 1) {
+      setPagina(pagina + 1);
+    }
+  };
+
+  const handleAnterior = () => {
+    if (pagina > 0) {
+      setPagina(pagina - 1);
+    }
+  };
   return (
     <>
       <div className="card-body ">
         <h5 className="m-0 font-weight-bold ">Avances del Indicador</h5>
+      </div>
+      <div className="col-2">
+        <select
+          name=""
+          id="numeroFilas"
+          className="form-select ms-3 w-25"
+          onChange={selectPagina}
+        >
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option selected value="5">
+            5
+          </option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
       </div>
       <hr className="sidebar-divider my-0 " />
       <div className="card-body">
@@ -21,33 +90,46 @@ const TablaSeguimientoTecnico = () => {
                 <th className="align-middle text-center">
                   Porcentaje de <br /> Avance Acumulado
                 </th>
-                <th className="align-middle text-center"> Estado </th>
-                <th className="align-middle text-center">Editar</th>
-                <th className="align-middle text-center">Ver Avance</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr>
+              {seguimiento.map((res) => {
+                return (
+                  <tr key={res.id}>
+                    <td>{res.fecha}</td>
+                    <td>{res.periodo}</td>
+                    <td>{res.avance_periodo}</td>
+                    <td>{res.porcentaje_avance}</td>
+                    <td>{res.porcentaje_acumulado}</td>
+                  </tr>
+                );
+              })}
+              {/* <tr>
                 <td>2020-05-27</td>
                 <td>DICIEMBRE 2019</td>
                 <td>180</td>
                 <td>56,96%</td>
                 <td>8,23%</td>
-                <td>Pendiente de aprobación</td>
-                <td className="text-center">
-                  <button className="btn btn-success fa fa-pencil"></button>
-                </td>
-                <td className="text-center">
-                  <button
-                    className="btn btn-success fa fa-search"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editarAvance"
-                  ></button>
-                </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
+        </div>
+        <div className="d-flex justify-content-center">
+          <Button
+            className="btn btn-secondary m-2"
+            variant="primary"
+            onClick={handleAnterior}
+          >
+            Anterior
+          </Button>
+          <Button
+            className="btn btn-secondary m-2"
+            variant="primary"
+            onClick={handleSiguiente}
+          >
+            Siguiente
+          </Button>
         </div>
       </div>
       <div

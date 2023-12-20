@@ -14,8 +14,22 @@ const CargueAvance = () => {
   const [unidadMedida, setUnidadMedida] = useState([]);
   const [diasRezago, setDiasRezago] = useState([]);
   const [periodicidad, setPeriodicidad] = useState([]);
+  const [metaTotal, setMetaTotal] = useState([]);
   useEffect(() => {
     if (localStorage.getItem("tiposSeg") == "producto") {
+      fetch(
+        `http://127.0.0.1:3900/api/prodcuctoHasMeta/listarMeta/${localStorage.getItem(
+          "idObjSeg"
+        )}`
+      )
+        .then((response) => response.json())
+        .then((apiData) => {
+          let total = apiData.resultado[0].meta_total;
+          setMetaTotal(total);
+        })
+        .catch((error) => {
+          console.error("Error al obtener datos de la API:", error);
+        });
       fetch(
         `http://127.0.0.1:3900/api/productoDatosGenerales/listarTodos/${localStorage.getItem(
           "idObjSeg"
@@ -228,7 +242,7 @@ const CargueAvance = () => {
                       id=""
                       className="form-control"
                       disabled
-                      value={""}
+                      value={metaTotal}
                     />
                   </div>
                   <div className="row mb-3">

@@ -43,12 +43,14 @@ const avanceCostosModel = require("./AvanceCostos");
 const avanceCualitativoModel = require("./AvanceCualitativo");
 const publicacionPoliticaModel = require("./PublicacionPolitica");
 const usuarioModel = require("./Usuario");
+const avanceSeguimientoModel = require("./AvanceSeguimiento");
 
 // metodo para conectarnos a la bd, usando async -- await funciones asincronicas
 const sequelize = new Sequelize("politicas_publicas", "root", "", {
   host: "localhost",
   dialect: "mysql",
 });
+const AvanceSeguimiento = avanceSeguimientoModel(sequelize, Sequelize);
 const Usuario = usuarioModel(sequelize, Sequelize);
 const PublicacionPolitica = publicacionPoliticaModel(sequelize, Sequelize);
 const DocumentoDeAdopcion = DocumentoDeAdopcionModel(sequelize, Sequelize);
@@ -166,4 +168,5 @@ module.exports = {
   AvanceCualitativo,
   PublicacionPolitica,
   Usuario,
+  AvanceSeguimiento,
 };
