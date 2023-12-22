@@ -147,12 +147,12 @@ const InformeEjecutivo = () => {
             </div>
             <div className="row">
               <div className="col d-flex justify-content-end">
-                {/* <button className="btn btn-primary" onClick={generarPDF}>
+                <button className="btn btn-primary" onClick={generarPDF}>
                   Consultar
-                </button> */}
-                <a href={pdfDown} download className="btn btn-primary">
+                </button>
+                {/* <a href={pdfDown} download className="btn btn-primary">
                   Consultar
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
