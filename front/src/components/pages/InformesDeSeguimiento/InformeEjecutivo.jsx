@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import PDF from "./PDF";
-import pdfDown from "../../../assets/document/InformePoliticaPublica.pdf";
+import logo from "../../../assets/images/FooterUno.png";
+
+/* import PDF from "./PDF";
+import pdfDown from "../../../assets/document/InformePoliticaPublica.pdf"; */
+import autoTable from "jspdf-autotable";
+import { jsPDF } from "jspdf";
 
 const InformeEjecutivo = () => {
   const navigate = useNavigate();
@@ -14,7 +18,86 @@ const InformeEjecutivo = () => {
   };
 
   const generarPDF = () => {
-    navigate("/pdf");
+    /* navigate("/pdf"); */
+
+    const doc = new jsPDF();
+
+    //Logo
+    doc.addImage(logo, "PNG", 10, 10, 40, 40);
+
+    //Titulo
+    //Tamaño de la letra del titulo
+    doc.setFontSize(25);
+    doc.text("Informe Ejecutivo De La Política", 60, 30);
+
+    //Tamaño de la letra
+    doc.setFontSize(12);
+
+    doc.setFont(undefined, "bold").text(`Política Pública :`, 15, 60);
+    //Nombre politica publica
+    doc.setFont("helvetica", "normal").text(`Lorem, ipsum dolor.`, 50, 60);
+
+    doc.setFont(undefined, "bold").text(`Sector Responsable :`, 15, 70);
+    //Nombre Sector Responsable
+    doc.setFont("helvetica", "normal").text(`Lorem, ipsum dolor.`, 60, 70);
+
+    doc.setFont(undefined, "bold").text(`Entidad Responsable :`, 108, 70);
+    //Nombre Entidad Responsable
+    doc.setFont("helvetica", "normal").text(`Lorem, ipsum dolor.`, 155, 70);
+
+    doc.setFont(undefined, "bold").text(`Periodo de Corte :`, 15, 80);
+    //Nombre Periodo de corte
+    doc.setFont("helvetica", "normal").text(`Lorem, ipsum dolor.`, 54, 80);
+
+    doc.setFont(undefined, "bold").text(`Fecha de Impresión :`, 108, 80);
+    //Nombre Fecha de Impresión
+    doc.setFont("helvetica", "normal").text(`Lorem, ipsum dolor.`, 152, 80);
+
+    autoTable(doc, {
+      theme: "grid",
+      columnStyles: {
+        0: {
+          fillColor: [169, 169, 169],
+          fontStyle: "bold",
+          textColor: "black",
+          cellWidth: 45,
+          lineColor: [0, 0, 0],
+          halign: "center",
+        },
+        1: {
+          textColor: "black",
+          lineColor: [0, 0, 0],
+        },
+      },
+      body: [
+        //Aca se cambia el contenido, todo se cambia en la segunda posición de los arrays
+        ["Objetivo Especifico:", "Lorem, ipsum dolor."],
+        ["Importancia Relativa:", "12%"],
+        ["Tipo Indicador:", " Lorem, ipsum."],
+        ["Tipo Anualización:", " Lorem, ipsum."],
+        ["Periodicidad:", " Lorem, ipsum."],
+        ["Resultado:", " Lorem, ipsum."],
+        ["Indicador:", " Lorem, ipsum."],
+        ["Enfoques Asociables:", " Lorem, ipsum."],
+        ["ODS:", " Lorem, ipsum."],
+        ["Unidad de Medida:", " Lorem, ipsum."],
+        ["Importancia Relativa:", " Lorem, ipsum."],
+        ["Meta Total:", " Lorem, ipsum."],
+        ["Avance Acumulado:", " Lorem, ipsum."],
+        ["% Acumulado:", " Lorem, ipsum."],
+        ["Vigencia:", " Lorem, ipsum."],
+        ["Meta Año Actual:", " Lorem, ipsum."],
+        ["Avance Año Actual:", " Lorem, ipsum."],
+        ["% Avance:", " Lorem, ipsum."],
+      ],
+      startY: 90,
+    });
+
+    //La tabla tiene 137 de alto (y) los espacios de separación son de 10
+    //ejemplo inicio de la primer tabla esta en 90 el fin de esta es en 227
+    //por lo tanto la segunda empieza en 237
+
+    doc.save(`reporteEjecutivo${Date.now()}.pdf`);
   };
 
   return (
