@@ -55,7 +55,7 @@ router.get("/maximo/:campo", async (req, res) => {
     });
 });
 router.get("/listarEscrito", async (req, res) => {
-  console.log(req.query.Nombre);
+  /* console.log(req.query.Nombre); */
   const busqueda = await sequelize.query(
     "select * from unidad_de_medida where Nombre like '%" +
       req.query.Nombre +

@@ -113,4 +113,18 @@ router.put("/editar/:id", async (req, res) => {
     mensaje: "Actualizado Correctamente",
   });
 });
+router.get("/listarTodos", async (req, res) => {
+  const unidad = await politicasPublicas.findAll();
+  res.json(unidad);
+});
+router.get("/traerSector", async (req, res) => {
+  /* console.log(req.query.Nombre); */
+  const busqueda = await sequelize.query(
+    "select * from politica_publica where id =" + req.query.id + "",
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  res.json({ resultado: busqueda });
+});
 module.exports = router;

@@ -69,4 +69,16 @@ router.get("/listarTodos/:id", async (req, res) => {
   });
   res.json(unidad);
 });
+router.get("/traerObjetivos", async (req, res) => {
+  /* console.log(req.query.Nombre); */
+  const busqueda = await sequelize.query(
+    "select * from politica_publica_has_objetivo_especifico where id_politica =" +
+      req.query.id +
+      "",
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  res.json({ resultado: busqueda });
+});
 module.exports = router;

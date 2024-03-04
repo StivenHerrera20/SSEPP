@@ -152,12 +152,12 @@ const TablaPoliticaPublica = ({ setControlPP, controlPP }) => {
                     <tr key={res.id}>
                       <td>{res.id}</td>
                       <td width={320}>
-                        <img
+                        {/* <img
                           className="img-fluid"
                           src={res.imagen}
                           width={300}
                           height={300}
-                        />
+                        /> */}
                       </td>
                       <td>{res.nemotecnico}</td>
                       <td>{res.nombre}</td>

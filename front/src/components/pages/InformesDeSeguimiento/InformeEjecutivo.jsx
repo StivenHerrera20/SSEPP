@@ -9,12 +9,46 @@ import { jsPDF } from "jspdf";
 
 const InformeEjecutivo = () => {
   const navigate = useNavigate();
+  const [politica, setPolitica] = useState([]);
+  const [objetivo, setObjetivo] = useState([]);
+  const [sector, setSector] = useState([]);
+  const [entidad, setEntidad] = useState([]);
 
   const [rangoImportancia, setRangoImportancia] = useState(100);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/politicasPublicas/listarTodos")
+      .then((response) => {
+        return response.json();
+      })
+      .then((doc) => {
+        setPolitica(doc);
+      });
+    console.log("Sector actualizado:", sector);
+    console.log("Entidad actualizada:", entidad);
+  }, [sector, entidad]);
   const cambiar = () => {
     let rangoI = document.getElementById("rango");
     setRangoImportancia(rangoI.value);
+  };
+  const traerObjetivos = async (selectedId) => {
+    try {
+      const responseObjetivos = await fetch(
+        `http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/traerObjetivos?id=${selectedId}`
+      );
+      const objetivosData = await responseObjetivos.json();
+      setObjetivo(objetivosData.resultado);
+
+      const responseSectorEntidad = await fetch(
+        `http://127.0.0.1:3900/api/politicasPublicas/traerSector?id=${selectedId}`
+      );
+      const sectorEntidadData = await responseSectorEntidad.json();
+      setSector(sectorEntidadData.resultado[0].sector_lider);
+      setEntidad(sectorEntidadData.resultado[0].entidad_lider);
+      console.log(sector);
+      console.log(entidad);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const generarPDF = () => {
@@ -35,23 +69,23 @@ const InformeEjecutivo = () => {
 
     doc.setFont(undefined, "bold").text(`Política Pública :`, 15, 60);
     //Nombre politica publica
-    doc.setFont("helvetica", "normal").text(`Lorem, ipsum dolor.`, 50, 60);
+    doc.setFont("helvetica", "normal").text(`Prueba`, 50, 60);
 
     doc.setFont(undefined, "bold").text(`Sector Responsable :`, 15, 70);
     //Nombre Sector Responsable
-    doc.setFont("helvetica", "normal").text(`Lorem, ipsum dolor.`, 60, 70);
+    doc.setFont("helvetica", "normal").text(`CONGRESO`, 60, 70);
 
     doc.setFont(undefined, "bold").text(`Entidad Responsable :`, 108, 70);
     //Nombre Entidad Responsable
-    doc.setFont("helvetica", "normal").text(`Lorem, ipsum dolor.`, 155, 70);
+    doc.setFont("helvetica", "normal").text(`Despacho del Alcalde`, 155, 70);
 
     doc.setFont(undefined, "bold").text(`Periodo de Corte :`, 15, 80);
     //Nombre Periodo de corte
-    doc.setFont("helvetica", "normal").text(`Lorem, ipsum dolor.`, 54, 80);
+    doc.setFont("helvetica", "normal").text(`Ene. 2024`, 54, 80);
 
     doc.setFont(undefined, "bold").text(`Fecha de Impresión :`, 108, 80);
     //Nombre Fecha de Impresión
-    doc.setFont("helvetica", "normal").text(`Lorem, ipsum dolor.`, 152, 80);
+    doc.setFont("helvetica", "normal").text(`30 Ene. 2024`, 152, 80);
 
     autoTable(doc, {
       theme: "grid",
@@ -71,24 +105,27 @@ const InformeEjecutivo = () => {
       },
       body: [
         //Aca se cambia el contenido, todo se cambia en la segunda posición de los arrays
-        ["Objetivo Especifico:", "Lorem, ipsum dolor."],
-        ["Importancia Relativa:", "12%"],
-        ["Tipo Indicador:", " Lorem, ipsum."],
-        ["Tipo Anualización:", " Lorem, ipsum."],
-        ["Periodicidad:", " Lorem, ipsum."],
-        ["Resultado:", " Lorem, ipsum."],
-        ["Indicador:", " Lorem, ipsum."],
-        ["Enfoques Asociables:", " Lorem, ipsum."],
-        ["ODS:", " Lorem, ipsum."],
-        ["Unidad de Medida:", " Lorem, ipsum."],
-        ["Importancia Relativa:", " Lorem, ipsum."],
-        ["Meta Total:", " Lorem, ipsum."],
-        ["Avance Acumulado:", " Lorem, ipsum."],
-        ["% Acumulado:", " Lorem, ipsum."],
-        ["Vigencia:", " Lorem, ipsum."],
-        ["Meta Año Actual:", " Lorem, ipsum."],
-        ["Avance Año Actual:", " Lorem, ipsum."],
-        ["% Avance:", " Lorem, ipsum."],
+        ["Objetivo Especifico:", "Prueba 1"],
+        ["Importancia Relativa:", "45%"],
+        /* ["Tipo Indicador:", " Lorem, ipsum."], */
+        ["Tipo Anualización:", "Creciente"],
+        ["Periodicidad:", "Mensual"],
+        ["Resultado:", "pruebaImp"],
+        /* ["Indicador:", " Lorem, ipsum."], */
+        [
+          "Enfoques Asociables:",
+          "01. Enfoque de derechos humanos en políticas públicas,02. Enfoque de género en políticas públicas",
+        ],
+        /* ["ODS:", " Lorem, ipsum."], */
+        ["Unidad de Medida:", " Acuerdos"],
+        /* ["Importancia Relativa:", " Lorem, ipsum."], */
+        ["Meta Total:", " 800"],
+        ["Avance Acumulado:", " 9"],
+        ["% Acumulado:", " 0%"],
+        /* ["Vigencia:", " Lorem, ipsum."], */
+        ["Meta Año Actual:", "400"],
+        ["Avance Año Actual:", "0%"],
+        /* ["% Avance:", " Lorem, ipsum."], */
       ],
       startY: 90,
     });
@@ -119,7 +156,18 @@ const InformeEjecutivo = () => {
                   className="form-select"
                   aria-label="Default select example"
                   id="politicaPublicaInfoEjecutivo"
-                ></select>
+                  onChange={(e) => traerObjetivos(e.target.value)}
+                >
+                  {politica.map((element) => (
+                    <option
+                      key={element.id}
+                      value={element.id}
+                      id="politicaPublica"
+                    >
+                      {element.nombre}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             <div className="row mb-3">
@@ -131,7 +179,17 @@ const InformeEjecutivo = () => {
                   className="form-select"
                   aria-label="Default select example"
                   id="objetivoEspecificoInfoEjecutivo"
-                ></select>
+                >
+                  {objetivo.map((element) => (
+                    <option
+                      key={element.id}
+                      value={element.objetivo}
+                      id="politicaPublica"
+                    >
+                      {element.objetivo}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             <div className="row mb-3">
@@ -143,7 +201,9 @@ const InformeEjecutivo = () => {
                   className="form-select"
                   aria-label="Default select example"
                   id="sectorResponsableInfoEjecutivo"
-                ></select>
+                >
+                  <option value={{ sector }}>{sector}</option>
+                </select>
               </div>
             </div>
             <div className="row mb-3">
@@ -155,10 +215,12 @@ const InformeEjecutivo = () => {
                   className="form-select"
                   aria-label="Default select example"
                   id="entidadResponsableInfoEjecutivo"
-                ></select>
+                >
+                  <option value={{ entidad }}>{entidad}</option>
+                </select>
               </div>
             </div>
-            <div className="row mb-3">
+            {/*<div className="row mb-3">
               <div className="col">
                 <label htmlFor="" className="form-label">
                   Rango de importancia relativa : 0% - {rangoImportancia}%
@@ -173,61 +235,7 @@ const InformeEjecutivo = () => {
                   id="rango"
                 />
               </div>
-            </div>
-            <div className="row mb-3">
-              <div className="col">
-                <label htmlFor="" className="form-label">
-                  Metas ODS
-                </label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  id="metasODSInfoEjecutivo"
-                ></select>
-              </div>
-            </div>
-            <div className="row mb-3">
-              <div className="col">
-                <label htmlFor="" className="form-label">
-                  Enfoques
-                </label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  id="enfoquesInfoEjecutivo"
-                ></select>
-              </div>
-            </div>
-            <div className="row mb-3">
-              <label htmlFor="" className="form-label">
-                Periodo de corte
-              </label>
-              <div className="col d-flex">
-                <select
-                  className="form-select w-25 me-2"
-                  aria-label="Default select example"
-                  id="periodoCorteInfoEjecutivoMes"
-                >
-                  <option value="enero">ENERO</option>
-                  <option value="febrero">FEBRERO</option>
-                  <option value="marzo">MARZO</option>
-                  <option value="abril">ABRIL</option>
-                  <option value="mayo">MAYO</option>
-                  <option value="junio">JUNIO</option>
-                  <option value="julio">JULIO</option>
-                  <option value="agosto">AGOSTO</option>
-                  <option value="septiembre">SEPTIEMBRE</option>
-                  <option value="octubre">OCTUBRE</option>
-                  <option value="noviembre">NOVIEMBRE</option>
-                  <option value="diciembre">DICIEMBRE</option>
-                </select>
-                <select
-                  className="form-select w-25"
-                  aria-label="Default select example"
-                  id="periodoCorteInfoEjecutivoAño"
-                ></select>
-              </div>
-            </div>
+            </div>*/}
             <div className="row">
               <div className="col d-flex justify-content-end">
                 <button className="btn btn-primary" onClick={generarPDF}>
