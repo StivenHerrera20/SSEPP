@@ -35,7 +35,7 @@ module.exports = (sequelize, type) => {
       },
     },
     {
-      timestamps: false, // Desactiva la funcionalidad de timestamps
+      timestamps: false,
       tableName: "resultado_has_metas",
     }
   );

@@ -434,8 +434,8 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                     indicador.value
                                   }&descripcion=${descripcion.value}&aspectos=${
                                     aspectos.value
-                                  }&idIndicador=${localStorage.getItem(
-                                    "idIndicador"
+                                  }&idObjetivo=${localStorage.getItem(
+                                    "idObj"
                                   )}`,
                                 }
                               )
@@ -573,8 +573,8 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                     fuentes.value
                                   }&dias_rezago=${dias.value}&serie=${
                                     serie.value
-                                  }&idIndicador=${localStorage.getItem(
-                                    "idIndicador"
+                                  }&idObjetivo=${localStorage.getItem(
+                                    "idObj"
                                   )}`,
                                 }
                               )
@@ -613,8 +613,8 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                     fuentes.value
                                   }&dias_rezago=${dias.value}&serie=${
                                     serie.value
-                                  }&idIndicador=${localStorage.getItem(
-                                    "idIndicador"
+                                  }&idObjetivo=${localStorage.getItem(
+                                    "idObj"
                                   )}`,
                                 }
                               )
@@ -661,8 +661,8 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                     fuentes.value
                                   }&dias_rezago=${dias.value}&serie=${
                                     serie.value
-                                  }&idIndicador=${localStorage.getItem(
-                                    "idIndicador"
+                                  }&idObjetivo=${localStorage.getItem(
+                                    "idObj"
                                   )}`,
                                 }
                               )
@@ -701,8 +701,8 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                     fuentes.value
                                   }&dias_rezago=${dias.value}&serie=${
                                     serie.value
-                                  }&idIndicador=${localStorage.getItem(
-                                    "idIndicador"
+                                  }&idObejtivo=${localStorage.getItem(
+                                    "idObj"
                                   )}`,
                                 }
                               )
@@ -1157,9 +1157,7 @@ const CrearFichaTecnica = ({ controlBI, setControlBI }) => {
                                 correo.value
                               }&telefono=${
                                 telefono.value
-                              }&idIndicador=${localStorage.getItem(
-                                "idIndicador"
-                              )}`,
+                              }&idObjetivo=${localStorage.getItem("idObj")}`,
                             }
                           )
                             .then((response) => {

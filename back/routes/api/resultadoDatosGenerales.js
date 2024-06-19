@@ -13,6 +13,10 @@ router.post("/agregar", async (req, res) => {
     mensaje: "Agregado Correctamente",
   });
 });
+router.get("/listarTodos", async (req, res) => {
+  const rango = await resultadoDatosGenerales.findAll();
+  res.json(rango);
+});
 router.put("/editar/:id", async (req, res) => {
   await resultadoDatosGenerales.update(req.body, {
     where: { id: req.params.id },

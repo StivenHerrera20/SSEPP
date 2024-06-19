@@ -25,4 +25,14 @@ router.put("/editar/:id", async (req, res) => {
     mensaje: "Actualizado Correctamente",
   });
 });
+router.get("/listarObj/:id", async (req, res) => {
+  const rango = await resultadoIndicador.findAll({
+    where: { id_objetivo: req.params.id },
+  });
+  res.json(rango);
+});
+router.get("/listarTodos", async (req, res) => {
+  const rango = await resultadoIndicador.findAll();
+  res.json(rango);
+});
 module.exports = router;

@@ -9,7 +9,7 @@ router.post("/agregar", async (req, res) => {
 });
 router.get("/listar/:id", async (req, res) => {
   const doc = await FichaTecnicaMedicion.findAndCountAll({
-    where: { idIndicador: req.params.id },
+    where: { idObjetivo: req.params.id },
   });
   res.json({ resultado: doc });
 });

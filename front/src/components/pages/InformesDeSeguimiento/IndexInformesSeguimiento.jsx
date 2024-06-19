@@ -99,7 +99,7 @@ const IndexInformesSeguimiento = () => {
                 <span>Seguimiento Cualitativo</span>
               </NavLink>
             </li>
-            <li
+            {/* <li
               className="nav-item"
               onClick={(e) => {
                 e.preventDefault();
@@ -114,7 +114,7 @@ const IndexInformesSeguimiento = () => {
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Hoja de Vida del Indicador</span>
               </NavLink>
-            </li>
+            </li> */}
             <li
               className="nav-item"
               onClick={(e) => {
@@ -131,7 +131,7 @@ const IndexInformesSeguimiento = () => {
                 <span>Consulta productos</span>
               </NavLink>
             </li>
-            <li
+            {/* <li
               className="nav-item"
               onClick={(e) => {
                 e.preventDefault();
@@ -146,7 +146,7 @@ const IndexInformesSeguimiento = () => {
                 <i className="fas fa-fw fa-tachometer-alt"></i>
                 <span>Plan de acción y avance</span>
               </NavLink>
-            </li>
+            </li> */}
           </div>
         </nav>
         <div id="content-wrapper" className="d-flex flex-column">

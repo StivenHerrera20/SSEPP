@@ -10,27 +10,79 @@ import {
 } from "chart.js";
 ChartJS.register(LinearScale, CategoryScale, Tooltip, Legend, BarElement);
 
-const RegistroRecursosEjecutados = ({ controlDetalle, setControlDetalle }) => {
-  const [data, setData] = useState({
-    labels: [],
-    datasets: [
-      {
-        label: "Estimado",
-        data: [],
-        responsive: true,
-        backgroundColor: "aqua",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-      {
-        label: "Disponible",
-        data: [],
-        backgroundColor: "green",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-    ],
-  });
+const RegistroRecursosEjecutados = ({
+  controlDetalle,
+  setControlDetalle,
+  objetivo,
+}) => {
+  const [resultados, setResultados] = useState([]);
+  const [resultados2, setResultados2] = useState([]);
+
+  useEffect(() => {
+    console.log(localStorage.getItem("idImb"));
+    if (objetivo && objetivo.id) {
+      fetch(`http://127.0.0.1:3900/api/productoIndicador/listarTodos`)
+        .then((response) => response.json())
+        .then((data) => {
+          const encontrados = data.filter(
+            (item) => item.id == localStorage.getItem("idImb")
+          );
+          console.log("Resultados filtrados:", encontrados);
+          setResultados2(encontrados);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setResultados([]);
+        });
+    }
+  }, [objetivo]);
+
+  useEffect(() => {
+    if (objetivo && objetivo.id) {
+      fetch(
+        `http://127.0.0.1:3900/api/productoHasCosto//listarCosto/${objetivo.id}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setResultados(data.resultado); // Guardamos solo el array resultado en setResultados
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setResultados([]);
+        });
+    }
+  }, [objetivo]);
+
+  // Preparar datos para la gráfica de barras
+  const prepareChartData = () => {
+    const labels = resultados.map((item) => item.year); // Array de años
+    const dataEstimado = resultados.map((item) => item.estimado); // Array de costos estimados
+    const dataEjecutado = resultados.map((item) => item.ejecutado); // Array de recursos ejecutados
+
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: "Costo Estimado",
+          data: dataEstimado,
+          backgroundColor: "aqua",
+          borderColor: "black",
+          borderWidth: 1,
+        },
+        {
+          label: "Recursos Ejecutados",
+          data: dataEjecutado,
+          backgroundColor: "green",
+          borderColor: "black",
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+
+  const [data, setData] = useState(prepareChartData());
+
   const [config, setConfig] = useState({
     type: "bar",
     data: data,
@@ -48,11 +100,25 @@ const RegistroRecursosEjecutados = ({ controlDetalle, setControlDetalle }) => {
         fontSize: 20,
       },
       legend: {
-        display: false,
+        display: true,
         position: "top",
       },
     },
   });
+
+  // Calcular recursos ejecutados acumulados
+  const calculateRecursosAcumulados = () => {
+    let acumulado = 0;
+    return resultados.map((item) => {
+      acumulado += item.ejecutado;
+      return acumulado;
+    });
+  };
+
+  // Actualizar el gráfico cuando cambian los datos
+  useEffect(() => {
+    setData(prepareChartData());
+  }, [resultados]);
 
   return (
     <>
@@ -72,17 +138,17 @@ const RegistroRecursosEjecutados = ({ controlDetalle, setControlDetalle }) => {
           </div>
           <div className="row mb-3">
             <div className="row">
-              {" "}
               <div className="col-12 d-flex">
                 <p className="me-2">Nombre del Indicador:</p>
-                <p>Lorem ipsum dolor sit amet consectetur.</p>
+                <p>{localStorage.getItem("nombImb")}</p>
               </div>
             </div>
             <div className="row">
-              {" "}
-              <div className="col-12 d-flex ">
+              <div className="col-12 d-flex">
                 <p className="me-2">Tipo de Anualización:</p>
-                <p>Lorem ipsum dolor sit amet consectetur.</p>
+                {resultados2.length > 0 && (
+                  <p>{resultados2[0].tipo_anulacion}</p>
+                )}
               </div>
             </div>
             <div className="row mt-2 mb-1">
@@ -91,20 +157,17 @@ const RegistroRecursosEjecutados = ({ controlDetalle, setControlDetalle }) => {
               </h5>
             </div>
             <div className="row">
-              {" "}
               <div className="col-5 d-flex">
                 <p>Inicio: </p>
-                <p className="ms-2">2019-12-01</p>
+                {resultados2.length > 0 && (
+                  <p className="ms-2">{resultados2[0].inicio}</p>
+                )}
               </div>
               <div className="col-5 d-flex">
                 <p>Fin: </p>
-                <p className="ms-2">2030-12-01</p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-12 d-flex">
-                <b className="me-2">Linea Base:</b>
-                <b>ND</b>
+                {resultados2.length > 0 && (
+                  <p className="ms-2">{resultados2[0].fin}</p>
+                )}
               </div>
             </div>
           </div>
@@ -132,15 +195,22 @@ const RegistroRecursosEjecutados = ({ controlDetalle, setControlDetalle }) => {
                         <tr>
                           <th>#</th>
                           <th>Fecha</th>
-                          <th>Periodo Reportado</th>
                           <th>Costo Estimado</th>
                           <th>Recursos Ejecutados</th>
                           <th>Recursos Ejecutados Acumulados</th>
-                          <th>Obsevación</th>
                         </tr>
                       </thead>
-
-                      <tbody></tbody>
+                      <tbody>
+                        {resultados.map((item, index) => (
+                          <tr key={item.id}>
+                            <td>{index + 1}</td>
+                            <td>{item.year}</td>
+                            <td>{item.estimado}</td>
+                            <td>{item.ejecutado}</td>
+                            <td>{calculateRecursosAcumulados()[index]}</td>
+                          </tr>
+                        ))}
+                      </tbody>
                     </table>
                   </div>
                 </div>

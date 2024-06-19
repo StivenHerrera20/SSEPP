@@ -22,4 +22,10 @@ router.get("/listarTabla", async (req, res) => {
   const { count, rows } = await AvanceCualitativo.findAndCountAll(options);
   res.json({ total: count, desarrollo: rows, fila: size, page: page });
 });
+router.get("/listarTodos/:idIndicador", async (req, res) => {
+  const doc = await AvanceCualitativo.findAndCountAll({
+    where: { idIndicador: req.params.idIndicador },
+  });
+  res.json({ resultado: doc });
+});
 module.exports = router;

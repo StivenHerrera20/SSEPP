@@ -64,7 +64,7 @@ module.exports = (sequelize, type) => {
         type: type.INTEGER,
         allowNull: false,
       },
-      idIndicador: {
+      idObjetivo: {
         type: type.INTEGER,
         allowNull: false,
       },

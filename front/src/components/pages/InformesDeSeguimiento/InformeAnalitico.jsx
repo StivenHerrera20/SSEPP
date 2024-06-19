@@ -6,7 +6,38 @@ import RegistroRecursosEjecutados from "./InformeAnalitico/RegistroRecursosEjecu
 
 const InformeAnalitico = () => {
   const [controlDetalle, setControlDetalle] = useState(0);
-  useEffect(() => {}, []);
+  const [politicas, setPoliticas] = useState([]);
+  const [objEsp, setObjEsp] = useState([]);
+  const [idPolitica, setIdPolitica] = useState(0);
+  const [politicaSeleccionada, setPoliticaSeleccionada] = useState(null);
+  const [objetivoSeleccionado, setObjetivoSeleccionado] = useState(null);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:3900/api/politicasPublicas/listarTodos")
+      .then((response) => response.json())
+      .then((data) => {
+        setPoliticas(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching politicas:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (idPolitica !== 0) {
+      fetch(
+        `http://127.0.0.1:3900/api/PPHasObjetivoEspecifico/listarTodos/${idPolitica}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setObjEsp(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching objetivos específicos:", error);
+        });
+    }
+  }, [idPolitica]);
 
   return (
     <>
@@ -21,46 +52,35 @@ const InformeAnalitico = () => {
             <div className="row mb-3">
               <div className="col">
                 <label htmlFor="" className="form-label">
-                  Politica Pública
+                  Política Pública
                 </label>
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  id="politicaPublicaInfoAnalitico"
-                ></select>
+                  id="politicaPublicaInfoEjecutivo"
+                  onChange={(e) => {
+                    const selectedId = e.target.value;
+                    setIdPolitica(parseInt(selectedId));
+                    const selectedPolitica = politicas.find(
+                      (p) => p.id === parseInt(selectedId)
+                    );
+                    setPoliticaSeleccionada(selectedPolitica);
+                  }}
+                >
+                  <option value="0">Seleccione una política</option>
+                  {politicas.map((element) => (
+                    <option
+                      key={element.id}
+                      value={element.id}
+                      id="politicaPublica"
+                    >
+                      {element.nombre}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
-            <div className="row mb-3">
-              <label htmlFor="" className="form-label">
-                Periodo de corte
-              </label>
-              <div className="col d-flex">
-                <select
-                  className="form-select w-25 me-2"
-                  aria-label="Default select example"
-                  id="periodoCorteInfoAnaliticoMes"
-                >
-                  <option value="enero">ENERO</option>
-                  <option value="febrero">FEBRERO</option>
-                  <option value="marzo">MARZO</option>
-                  <option value="abril">ABRIL</option>
-                  <option value="mayo">MAYO</option>
-                  <option value="junio">JUNIO</option>
-                  <option value="julio">JULIO</option>
-                  <option value="agosto">AGOSTO</option>
-                  <option value="septiembre">SEPTIEMBRE</option>
-                  <option value="octubre">OCTUBRE</option>
-                  <option value="noviembre">NOVIEMBRE</option>
-                  <option value="diciembre">DICIEMBRE</option>
-                </select>
-                <select
-                  className="form-select w-25"
-                  aria-label="Default select example"
-                  id="periodoCorteInfoAnaliticoAño"
-                ></select>
-              </div>
-            </div>
             <div className="row">
               <div className="col d-flex justify-content-end">
                 <button
@@ -82,28 +102,33 @@ const InformeAnalitico = () => {
             <PorcentajeAvancePolitica
               controlDetalle={controlDetalle}
               setControlDetalle={setControlDetalle}
-            ></PorcentajeAvancePolitica>
+              objEsp={objEsp} // Pasar objEsp como prop
+              setObjetivoSeleccionado={setObjetivoSeleccionado} // Pasar setter para objetivo seleccionado
+            />
           );
         } else if (controlDetalle === 2) {
           return (
             <AvanceObjetivoEspecifico
               controlDetalle={controlDetalle}
               setControlDetalle={setControlDetalle}
-            ></AvanceObjetivoEspecifico>
+              objetivo={objetivoSeleccionado} // Pasar el objetivo seleccionado
+            />
           );
         } else if (controlDetalle === 3) {
           return (
             <AvanceIndicadores
               controlDetalle={controlDetalle}
               setControlDetalle={setControlDetalle}
-            ></AvanceIndicadores>
+              objetivo={objetivoSeleccionado}
+            />
           );
         } else if (controlDetalle === 4) {
           return (
             <RegistroRecursosEjecutados
               controlDetalle={controlDetalle}
               setControlDetalle={setControlDetalle}
-            ></RegistroRecursosEjecutados>
+              objetivo={objetivoSeleccionado}
+            />
           );
         }
       })()}

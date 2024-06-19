@@ -7,6 +7,10 @@ router.post("/agregar", async (req, res) => {
     mensaje: "Agregado Correctamente",
   });
 });
+router.get("/listarTodos", async (req, res) => {
+  const rango = await productoIndicador.findAll();
+  res.json(rango);
+});
 router.get("/listar", async (req, res) => {
   const { page = 0, size = 5 } = req.query;
   let options = {
@@ -24,5 +28,11 @@ router.put("/editar/:id", async (req, res) => {
     status: "OK",
     mensaje: "Actualizado Correctamente",
   });
+});
+router.get("/listarObj/:id", async (req, res) => {
+  const rango = await productoIndicador.findAll({
+    where: { id_objetivo: req.params.id },
+  });
+  res.json(rango);
 });
 module.exports = router;

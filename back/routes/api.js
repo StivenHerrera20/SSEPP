@@ -43,6 +43,7 @@ const avanceCualitativoRouter = require("./api/avanceCualitativo");
 const publicacionPoliticaRouter = require("./api/publicacionPolitica");
 const usuarioRouter = require("./api/usuario");
 const avanceSeguimientoRouter = require("./api/avanceSeguimiento");
+//const productoDatosGeneralesHasEnfoquesRouter = require("./api/productoDatosGeneralesHasEnfoques");
 router.use("/avanceSeguimiento", avanceSeguimientoRouter);
 router.use("/usuario", usuarioRouter);
 router.use("/documentosAsociados", apiDocumentosAsociadosRouter);
@@ -83,6 +84,7 @@ router.use("/fichaTecnicaInformacion", fichaTecnicaInformacionRouter);
 router.use("/fichaTecnicaMedicion", fichaTecnicaMedicionRouter);
 router.use("/fichaTecnicaResponsable", fichaTecnicaResponsableRouter);
 router.use("/fichaTecnicaAprobacion", fichaTecnicaAprobacionRouter);
+//router.use("/prodDatosHasEnfoques", fichaTecnicaAprobacionRouter);
 router.use(
   "/productoDatosGeneralesHasObjetivos",
   productoDatosGeneralesHasObjetivosRouter
