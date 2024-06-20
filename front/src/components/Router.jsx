@@ -3,6 +3,7 @@ import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Index from "./pages/Index";
 import "../assets/css/sb-admin-2.css";
+import { AuthProvider } from "../context/AuthProvider";
 
 /* Parametrización */
 import Sector from "./pages/Parametrizacion/Sector";
@@ -48,124 +49,135 @@ import HojaDeVidaIndicador from "./pages/InformesDeSeguimiento/HojaDeVidaIndicad
 import ConsultaProductos from "./pages/InformesDeSeguimiento/ConsultaProductos";
 import PlanAccionAvance from "./pages/InformesDeSeguimiento/PlanAccionAvance";
 import PDF from "./pages/InformesDeSeguimiento/PDF";
+import LayoutPrivado from "./pages/LayoutPrivado";
 
 const Router = () => {
   return (
     <>
       <BrowserRouter>
+      <AuthProvider>
         <Routes>
-          {/* <Route path="/login" element={<Login />} /> */}
-
+          {/* Publico */}
           <Route index element={<Login />} />
-          <Route path="/inicio" element={<Index />} />
 
-          {/* Parametrización */}
-          <Route
-            path="/inicio/parametrizacion/"
-            element={<IndexParametrizacion />}
-          >
-            <Route index element={<Sector></Sector>} />
-            <Route path="sector" element={<Sector></Sector>} />
+{/* Privado */}
+<Route path="/inicio/" element={<LayoutPrivado></LayoutPrivado>}>
 
-            <Route path="Entidad" element={<Entidad></Entidad>} />
-            <Route
-              path="documentosDeAdopcion"
-              element={<DocumentosAdopcion></DocumentosAdopcion>}
-            />
-            <Route
-              path="unidadesDeMedida"
-              element={<UnidadesMedida></UnidadesMedida>}
-            />
-            <Route path="enfoqueNivelUno" element={<Enfoque></Enfoque>} />
-            <Route path="enfoqueNivelDos" element={<EnfoqueDos></EnfoqueDos>} />
-            <Route
-              path="enfoqueNivelTres"
-              element={<EnfoqueTres></EnfoqueTres>}
-            />
-            <Route
-              path="enfoqueNivelCuatro"
-              element={<EnfoqueCuatro></EnfoqueCuatro>}
-            />
-            <Route
-              path="rangoSemaforo"
-              element={<RangoSemaforo></RangoSemaforo>}
-            />
-            <Route path="metaODS" element={<MetaODS></MetaODS>} />
-            <Route
-              path="documentosAsociados"
-              element={<DocumentosAsociados></DocumentosAsociados>}
-            />
-            <Route
-              path="fuentesDeFinanciacion"
-              element={<FuentesFinanciacion></FuentesFinanciacion>}
-            />
-            <Route
-              path="desarrolloSostenible"
-              element={
-                <ObjetivoDesarrolloSostenible></ObjetivoDesarrolloSostenible>
-              }
-            />
-            <Route
-              path="nivelTerritorializacion"
-              element={<NivelTerritorializacion></NivelTerritorializacion>}
-            />
-            <Route
-              path="planDesarrollo"
-              element={<PlanDesarrollo></PlanDesarrollo>}
-            />
-            <Route
-              path="indicadorPlanDesarrollo"
-              element={<IndicadorPlanDesarrollo></IndicadorPlanDesarrollo>}
-            />
-            <Route path="parametros" element={<Parametros></Parametros>} />
-          </Route>
+<Route index element={<Index />} />
 
-          {/* Politicas Publicas */}
-          <Route
-            path="/inicio/politicasPublicas"
-            element={<IndexPoliticaPublica />}
-          />
+{/* Parametrización */}
+<Route
+  path="parametrizacion"
+  element={<IndexParametrizacion />}
+>
+  <Route index element={<Sector></Sector>} />
+  <Route path="sector" element={<Sector></Sector>} />
 
-          {/* Plan de acción */}
-          <Route path="/inicio/plandeaccion" element={<IndexPlanAccion />} />
+  <Route path="Entidad" element={<Entidad></Entidad>} />
+  <Route
+    path="documentosDeAdopcion"
+    element={<DocumentosAdopcion></DocumentosAdopcion>}
+  />
+  <Route
+    path="unidadesDeMedida"
+    element={<UnidadesMedida></UnidadesMedida>}
+  />
+  <Route path="enfoqueNivelUno" element={<Enfoque></Enfoque>} />
+  <Route path="enfoqueNivelDos" element={<EnfoqueDos></EnfoqueDos>} />
+  <Route
+    path="enfoqueNivelTres"
+    element={<EnfoqueTres></EnfoqueTres>}
+  />
+  <Route
+    path="enfoqueNivelCuatro"
+    element={<EnfoqueCuatro></EnfoqueCuatro>}
+  />
+  <Route
+    path="rangoSemaforo"
+    element={<RangoSemaforo></RangoSemaforo>}
+  />
+  <Route path="metaODS" element={<MetaODS></MetaODS>} />
+  <Route
+    path="documentosAsociados"
+    element={<DocumentosAsociados></DocumentosAsociados>}
+  />
+  <Route
+    path="fuentesDeFinanciacion"
+    element={<FuentesFinanciacion></FuentesFinanciacion>}
+  />
+  <Route
+    path="desarrolloSostenible"
+    element={
+      <ObjetivoDesarrolloSostenible></ObjetivoDesarrolloSostenible>
+    }
+  />
+  <Route
+    path="nivelTerritorializacion"
+    element={<NivelTerritorializacion></NivelTerritorializacion>}
+  />
+  <Route
+    path="planDesarrollo"
+    element={<PlanDesarrollo></PlanDesarrollo>}
+  />
+  <Route
+    path="indicadorPlanDesarrollo"
+    element={<IndicadorPlanDesarrollo></IndicadorPlanDesarrollo>}
+  />
+  <Route path="parametros" element={<Parametros></Parametros>} />
+</Route>
 
-          {/* Bacteria de Indicadores */}
-          <Route
-            path="/inicio/bateriadeindicadores"
-            element={<IndexBateriaDeIndicadores />}
-          />
+{/* Politicas Publicas */}
+<Route
+  path="politicasPublicas"
+  element={<IndexPoliticaPublica />}
+/>
 
-          {/* Registro de seguimiento */}
-          <Route
-            path="/inicio/registrodeseguimiento"
-            element={<IndexRegistroSeguimiento />}
-          >
-            <Route index element={<TablaRegistroSeguimiento />} />
-            <Route path="cargueavance" element={<CargueAvance />} />
-          </Route>
+{/* Plan de acción */}
+<Route path="plandeaccion" element={<IndexPlanAccion />} />
 
-          {/* Informes de Seguimiento */}
-          <Route
-            path="/inicio/informesdeseguimiento"
-            element={<IndexInformesSeguimiento />}
-          >
-            <Route index element={<InformeEjecutivo />} />
-            <Route path="informeejecutivo" element={<InformeEjecutivo />} />
-            <Route path="informeanalitico" element={<InformeAnalitico />} />
-            <Route path="informecostos" element={<InformeCostos />} />
-            <Route
-              path="seguimientocualitativo"
-              element={<SeguimientoCualitativo />}
-            />
-            <Route
-              path="hojadevidadelindicador"
-              element={<HojaDeVidaIndicador />}
-            />
-            <Route path="consultaproductos" element={<ConsultaProductos />} />
-            <Route path="plandeaccionyavance" element={<PlanAccionAvance />} />
-          </Route>
-          <Route path="pdf" element={<PDF />} />
+{/* Bacteria de Indicadores */}
+<Route
+  path="bateriadeindicadores"
+  element={<IndexBateriaDeIndicadores />}
+/>
+
+{/* Registro de seguimiento */}
+<Route
+  path="registrodeseguimiento"
+  element={<IndexRegistroSeguimiento />}
+>
+  <Route index element={<TablaRegistroSeguimiento />} />
+  <Route path="cargueavance" element={<CargueAvance />} />
+</Route>
+
+{/* Informes de Seguimiento */}
+<Route
+  path="informesdeseguimiento"
+  element={<IndexInformesSeguimiento />}
+>
+  <Route index element={<InformeEjecutivo />} />
+  <Route path="informeejecutivo" element={<InformeEjecutivo />} />
+  <Route path="informeanalitico" element={<InformeAnalitico />} />
+  <Route path="informecostos" element={<InformeCostos />} />
+  <Route
+    path="seguimientocualitativo"
+    element={<SeguimientoCualitativo />}
+  />
+  <Route
+    path="hojadevidadelindicador"
+    element={<HojaDeVidaIndicador />}
+  />
+  <Route path="consultaproductos" element={<ConsultaProductos />} />
+  <Route path="plandeaccionyavance" element={<PlanAccionAvance />} />
+</Route>
+<Route path="pdf" element={<PDF />} />
+
+</Route>
+
+
+
         </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </>
   );

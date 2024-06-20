@@ -14,17 +14,16 @@ const IndexRegistroSeguimiento = () => {
               className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
             >
               <h3 className="d-flex">
-                <a
-                  href="/inicio"
+                <NavLink
+                  to="/inicio"
                   className="text-secondary mx-0 px-1"
                   style={{ textDecoration: "none" }}
                 >
                   Inicio
-                </a>{" "}
+                </NavLink>{" "}
                 <a
-                  href=""
                   className="text-secondary mx-0 px-1"
-                  style={{ textDecoration: "none" }}
+                  style={{ textDecoration: "none" , cursor: "pointer" }}
                 >
                   / Registro de Seguimiento
                 </a>{" "}

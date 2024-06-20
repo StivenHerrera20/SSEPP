@@ -1,10 +1,60 @@
 import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/LogoSEGUIPOP.png";
+import UseAuth from "../../helpers/UseAuth";
+import HelperForm from "../../helpers/HelperForm";
+import { Global } from "../../helpers/Global";
+
+
 const Login = () => {
+  const { form, cambiar } = HelperForm({});
+  const [guardado, setGuardado] = useState("no_enviado");
   const navigate = useNavigate();
+  const { setAutenticado } = UseAuth();
+
+  const loginUsuario = async (e) => {
+    e.preventDefault();
+    let usuarioLogin = form;
+    //guardar en la api
+    const request = await fetch(Global.url + "/usuario/login", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await request.json();
+
+    console.log(usuarioLogin)
+    console.log(data)
+
+    const usuario = data.find(user => user.correo === form.emailUser);
+
+    if (usuario) {
+      if (usuario.pass === form.passUser) {
+        console.log('Usuario autenticado correctamente');
+      localStorage.setItem("user", JSON.stringify(usuario));
+
+      setGuardado("Guardado");
+      setAutenticado(usuario);
+      setTimeout(() => {
+        navigate("/inicio");
+      }, 2000);
+        // Aquí puedes realizar alguna acción adicional, como redireccionar a otra página, guardar en el estado global, etc.
+    } else {
+        console.log('Contraseña incorrecta');
+    }
+      
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Correo o contraseña incorrectos",
+      });
+    }
+  };
+
   return (
     <>
       <div className="row">
@@ -24,11 +74,13 @@ const Login = () => {
                   <img src={logo} alt="" width={150} />
                   <h3 className="mb-5">Inicio Sesion</h3>
 
-                  <form action="">
+                  <form onSubmit={loginUsuario}>
                     <div className="form-outline mb-4">
                       <input
+                      onChange={cambiar}
                         type="email"
                         id="emailUser"
+                        name="emailUser"
                         className="form-control form-control-lg"
                       />
                       <label className="form-label" for="typeEmailX-2">
@@ -38,8 +90,10 @@ const Login = () => {
 
                     <div className="form-outline mb-4">
                       <input
+                      onChange={cambiar}
                         type="password"
                         id="passUser"
+                        name="passUser"
                         className="form-control form-control-lg"
                       />
                       <label className="form-label" for="typePasswordX-2">
@@ -50,44 +104,16 @@ const Login = () => {
                     <button
                       className="btn btn-primary btn-lg btn-block"
                       type="submit"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        let passUser = document.querySelector("#passUser");
-                        let emailUser = document.querySelector("#emailUser");
-                        if (
-                          emailUser.value.length > 0 &&
-                          passUser.value.length > 0
-                        ) {
-                          fetch("http://127.0.0.1:3900/api/usuario/login")
-                            .then((response) => {
-                              return response.json();
-                            })
-                            .then((doc) => {
-                              if (
-                                doc[0].correo == emailUser.value &&
-                                doc[0].pass == passUser.value
-                              ) {
-                                navigate("/inicio");
-                              } else {
-                                Swal.fire({
-                                  icon: "error",
-                                  title: "Error!",
-                                  text: "Correo o contraseña incorrectos",
-                                });
-                              }
-                            });
-                        } else {
-                          Swal.fire({
-                            icon: "error",
-                            title: "Error!",
-                            text: "Ingresa todos los datos",
-                          });
-                        }
-                      }}
                     >
                       Iniciar
                     </button>
                   </form>
+                  {guardado == "Guardado" ? (
+              <div className="alert alert-success mt-3 p-2 alert-dismissible fade show" role="alert">
+                <strong>Bienvenido {form.correo}</strong> </div>
+            ) : (
+              ""
+            )}
                 </div>
               </div>
             </div>

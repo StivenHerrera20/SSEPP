@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import graph from "../../assets/images/graph.png";
 import indicadores from "../../assets/images/indicadores.png";
 import informes from "../../assets/images/informes.png";
@@ -34,10 +35,9 @@ const Index = () => {
                 </div>
               </div>
               <div className="row">
-                <a
-                  href="inicio/parametrizacion"
-                  className="col-xl-4 col-md-6 mb-4 optionsCard"
-                  style={{ textDecoration: "none" }}
+                <NavLink to="parametrizacion"
+                  className="col-xl-4 col-md-6 mb-4 optionsCard "
+                  style={{textDecoration: "none"}}
                 >
                   <div className="card border-left-primary shadow h-100 py-2">
                     <div className="card-body">
@@ -51,12 +51,11 @@ const Index = () => {
                       Parametrización
                     </h3>
                   </div>
-                </a>
-                <a
-                  href="inicio/politicasPublicas"
-                  className="col-xl-4 col-md-6 mb-4 optionsCard"
-                  style={{ textDecoration: "none" }}
-                >
+                  </NavLink>
+                <NavLink to="politicasPublicas"
+                  className="col-xl-4 col-md-6 mb-4 optionsCard "
+                  style={{textDecoration: "none"}}
+                                  >
                   <div className="card border-left-warning shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -70,12 +69,11 @@ const Index = () => {
                       Politica pública
                     </h3>
                   </div>
-                </a>
-                <a
-                  href="/inicio/plandeaccion"
-                  className="col-xl-4 col-md-6 mb-4 optionsCard"
-                  style={{ textDecoration: "none" }}
-                >
+                </NavLink>
+                <NavLink to="plandeaccion"
+                  className="col-xl-4 col-md-6 mb-4 optionsCard "
+                  style={{textDecoration: "none"}}
+                                  >
                   <div className="card border-left-danger shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -88,12 +86,11 @@ const Index = () => {
                       Plan de acción
                     </h3>
                   </div>
-                </a>
-                <a
-                  href="/inicio/bateriadeindicadores"
-                  className="col-xl-4 col-md-6 mb-4 optionsCard"
-                  style={{ textDecoration: "none" }}
-                >
+                </NavLink>
+                <NavLink to="bateriadeindicadores"
+                  className="col-xl-4 col-md-6 mb-4 optionsCard "
+                  style={{textDecoration: "none"}}
+                                  >
                   <div className="card border-left-dark shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -107,12 +104,11 @@ const Index = () => {
                       Bateria de indicadores
                     </h3>
                   </div>
-                </a>
-                <a
-                  href="/inicio/registrodeseguimiento"
-                  className="col-xl-4 col-md-6 mb-4 optionsCard"
-                  style={{ textDecoration: "none" }}
-                >
+                </NavLink>
+                <NavLink to="registrodeseguimiento"
+                  className="col-xl-4 col-md-6 mb-4 optionsCard "
+                  style={{textDecoration: "none"}}
+                                  >
                   <div className="card border-left-success shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -126,13 +122,12 @@ const Index = () => {
                       Registro de seguimiento
                     </h3>
                   </div>
-                </a>
+                </NavLink>
 
-                <a
-                  href="/inicio/informesdeseguimiento"
-                  className="col-xl-4 col-md-6 mb-4 optionsCard"
-                  style={{ textDecoration: "none" }}
-                >
+                <NavLink to="informesdeseguimiento"
+                  className="col-xl-4 col-md-6 mb-4 optionsCard "
+                  style={{textDecoration: "none"}}
+                                  >
                   <div className="card border-left-primary shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -146,7 +141,7 @@ const Index = () => {
                       Informes de seguimientos
                     </h3>
                   </div>
-                </a>
+                </NavLink>
               </div>
             </div>
           </div>

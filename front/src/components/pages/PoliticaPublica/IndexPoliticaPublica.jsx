@@ -4,6 +4,7 @@ import AgregarPoliticaPublica from "./AgregarPoliticaPublica";
 import logo from "../../../assets/images/LogoSEGUIPOP.png";
 import footerUno from "../../../assets/images/FooterUno.png";
 import footerDos from "../../../assets/images/FooterDos.png";
+import { NavLink } from "react-router-dom";
 const IndexPoliticaPublica = () => {
   const [controlPP, setControlPP] = useState(0);
   useEffect(() => {}, []);
@@ -17,17 +18,15 @@ const IndexPoliticaPublica = () => {
               className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
             >
               <h2 className="d-flex">
-                <a
-                  href="/inicio"
+                <NavLink to="/inicio"
                   className="text-secondary mx-0 px-1"
                   style={{ textDecoration: "none" }}
                 >
                   Inicio
-                </a>{" "}
+                </NavLink>{" "}
                 <a
-                  href=""
                   className="text-secondary mx-0 px-1"
-                  style={{ textDecoration: "none" }}
+                  style={{ textDecoration: "none" , cursor: "pointer" }}
                 >
                   / Politicas Publicas
                 </a>{" "}

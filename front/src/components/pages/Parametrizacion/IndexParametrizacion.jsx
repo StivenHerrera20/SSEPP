@@ -34,13 +34,13 @@ const IndexParametrizacion = () => {
           /* style={{ height: window.innerHeight + 226 }} */
           id="accordionSidebar"
         >
-          <a
+          <NavLink
             className="sidebar-brand d-flex align-items-center justify-content-center "
-            href="/inicio"
+            to="/inicio"
             style={{ height: "7rem" }}
           >
             <div className="text-monospace mx-3">Parametrizacion</div>
-          </a>
+          </NavLink>
 
           <hr className="sidebar-divider my-0" />
 
@@ -336,17 +336,16 @@ const IndexParametrizacion = () => {
               style={{ height: "7rem" }}
             >
               <h2 className="d-flex">
-                <a
-                  href="/inicio"
+                <NavLink
+                  to="/inicio"
                   className="text-secondary mx-0 px-1"
                   style={{ textDecoration: "none" }}
                 >
                   Inicio
-                </a>{" "}
+                </NavLink>{" "}
                 <a
-                  href="/inicio/parametrizacion"
                   className="text-secondary mx-0 px-1"
-                  style={{ textDecoration: "none" }}
+                  style={{ textDecoration: "none" , cursor: "pointer" }}
                 >
                   / Parametrizacion{" "}
                   {(() => {
